@@ -14,7 +14,7 @@ This Role-Based Access Control (RBAC) implementation for Laravel, including data
 
 ## Dependencies
 
-...
+`laravel/ui`
 
 ## Installation
 
