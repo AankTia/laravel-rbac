@@ -913,6 +913,91 @@ class Resource extends Model
     php artisan migrate:fresh --seed
     ```
 
+#### Resource Permission Seeder
+
+| Resource        | Read               | Create             | Update             | delete             |
+| --------------- | ------------------ | ------------------ | ------------------ | ------------------ |
+| User management | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Role management | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| System reports  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Dashboard       | :white_check_mark: |                    |                    |                    |
+
+1. Create ResourcePermissionSeeder:
+
+    ```bash
+    php artisan make:seeder ResourcePermissionSeeder
+    ```
+
+2. Update ResourcePermissionSeeder (`database/seeders/ResourcePermissionSeeder.php`)
+
+    ```php
+    <?php
+
+    namespace Database\Seeders;
+
+    use App\Models\User;
+    use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\Hash;
+
+    class ResourcePermissionSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         */
+        public function run(): void
+        {
+            $users = [
+                [
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Manager User',
+                    'email' => 'manager@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Regular User',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                ]
+            ];
+
+            foreach ($users as $user) {
+                User::create($user);
+            }
+        }
+    }
+    ```
+
+3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
+
+    ```php
+    public function run()
+    {
+        $this->call([
+            // ...
+            ResourcePermissionSeeder::class
+        ]);
+    }
+    ```
+
+4. Run Seeder
+
+    An individual seeder:
+
+    ```bash
+    php artisan db:seed --class=ResourcePermissionSeeder
+    ```
+
+    Or re-run migrations with seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+
 ---
 
 ### Seeders
@@ -938,10 +1023,6 @@ class RbacSeeder extends Seeder
      */
     public function run(): void
     {
-
-
-
-
 
         // Assign permissions to resources
         $createPermission->resources()->attach($userResource);
