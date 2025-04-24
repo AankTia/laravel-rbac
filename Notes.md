@@ -604,8 +604,8 @@ class Resource extends Model
     class UserSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
             $users = [
@@ -680,41 +680,41 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
-    use App\Models\User;
+    use App\Models\Role;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class RoleSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
+            $roles = [
                 [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'admin',
+                    'display_name' => 'Administrator',
+                    'description' => 'Administrator with full system access',
                 ],
                 [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'manager',
+                    'display_name' => 'Manager',
+                    'description' => 'Manager with limited administrative access',
                 ],
                 [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'user',
+                    'display_name' => 'User',
+                    'description' => 'Regular user with basic access',
                 ]
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+            foreach ($roles as $role) {
+                Role::create($role);
             }
         }
     }
+
     ```
 
 3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
@@ -765,38 +765,42 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
-    use App\Models\User;
+    use App\Models\Permission;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class PermissionSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
+            $permissions = [
                 [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'create',
+                    'display_name' => 'Create',
+                    'description' => 'Create new items',
                 ],
                 [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'read',
+                    'display_name' => 'Read',
+                    'description' => 'Read items',
                 ],
                 [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'update',
+                    'display_name' => 'Update',
+                    'description' => 'Update existing items',
+                ],
+                [
+                    'name' => 'delete',
+                    'display_name' => 'Delete',
+                    'description' => 'Delete items',
                 ]
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+            foreach ($permissions as $permission) {
+                Permission::create($permission);
             }
         }
     }
@@ -850,38 +854,42 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
-    use App\Models\User;
+    use App\Models\Resource;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class ResourceSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
+            $resources = [
                 [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'users',
+                    'resource_type' => 'model',
+                    'description' => 'User management',
                 ],
                 [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'roles',
+                    'resource_type' => 'model',
+                    'description' => 'Role management',
                 ],
                 [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
+                    'name' => 'reports',
+                    'resource_type' => 'page',
+                    'description' => 'System reports',
+                ],
+                [
+                    'name' => 'dashboard',
+                    'resource_type' => 'page',
+                    'description' => 'Dashboard',
                 ]
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+            foreach ($resources as $resource) {
+                Resource::create($resource);
             }
         }
     }
@@ -935,38 +943,34 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
-    use App\Models\User;
+    use App\Models\Permission;
+    use App\Models\Resource;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class ResourcePermissionSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
-                [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
-                ]
+            $resourcePermission = [
+                'users' => ['read', 'create', 'update', 'delete'],
+                'roles' => ['read', 'create', 'update', 'delete'],
+                'reports' => ['read', 'create', 'update', 'delete'],
+                'dashboard' => ['read'],
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+            foreach ($resourcePermission as $resourceName => $permissionsName) {
+                $resource = Resource::firstWhere('name', $resourceName);
+                if ($resource) {
+                    $permissions = Permission::whereIn('name', $permissionsName)->get();
+
+                    foreach ($permissions as $permission) {
+                        $permission->resources()->attach($resource);
+                    }
+                }
             }
         }
     }
@@ -1019,38 +1023,31 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
-    use App\Models\User;
+    use App\Models\Permission;
+    use App\Models\Role;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class RolePermissionSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
-                [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
-                ]
+            $rolePermissions = [
+                'admin' => ['read', 'create', 'update', 'delete'],
+                'manager' => ['read', 'create', 'update'],
+                'user' => ['read'],
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+
+            foreach ($rolePermissions as $roleName => $permissionsName) {
+                $role = Role::firstWhere('name', $roleName);
+                if ($role) {
+                    $permissionIds = Permission::whereIn('name', $permissionsName)->pluck('id')->toArray();
+                    $role->permissions()->attach($permissionIds);
+                }
             }
         }
     }
@@ -1103,38 +1100,31 @@ class Resource extends Model
 
     namespace Database\Seeders;
 
+    use App\Models\Role;
     use App\Models\User;
     use Illuminate\Database\Console\Seeds\WithoutModelEvents;
     use Illuminate\Database\Seeder;
-    use Illuminate\Support\Facades\Hash;
 
     class UserRoleSeeder extends Seeder
     {
         /**
-         * Run the database seeds.
-         */
+        * Run the database seeds.
+        */
         public function run(): void
         {
-            $users = [
-                [
-                    'name' => 'Admin User',
-                    'email' => 'admin@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Manager User',
-                    'email' => 'manager@example.com',
-                    'password' => Hash::make('password'),
-                ],
-                [
-                    'name' => 'Regular User',
-                    'email' => 'user@example.com',
-                    'password' => Hash::make('password'),
-                ]
+            $userRole = [
+                'admin@example.com' => 'admin',
+                'manager@example.com' => 'manager',
+                'user@example.com' => 'user'
             ];
 
-            foreach ($users as $user) {
-                User::create($user);
+            foreach ($userRole as $userEmail => $roleName) {
+                $user = User::firstWhere('email', $userEmail);
+                $role = Role::firstWhere('name', $roleName);
+
+                if ($user && $role) {
+                    $user->roles()->attach($role);
+                }
             }
         }
     }
@@ -1167,64 +1157,6 @@ class Resource extends Model
     ```
 
 ---
-
-### Seeders
-
-#### database/seeders/RbacSeeder.php
-
-```php
-<?php
-
-namespace Database\Seeders;
-
-use App\Models\Permission;
-use App\Models\Resource;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-
-class RbacSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-
-        // Assign roles to users
-        $admin->roles()->attach($adminRole);
-        $manager->roles()->attach($managerRole);
-        $user->roles()->attach($userRole);
-    }
-}
-```
-
-Update the main DatabaseSeeder to include our RBAC seeder
-
-```php
-// database/seeders/DatabaseSeeder.php
-<?php
-
-namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        $this->call([
-            RbacSeeder::class,
-        ]);
-    }
-}
-```
-
-It also establishes the relationships between them.
 
 # Role-Based Access Control (RBAC) Schema for Laravel
 
