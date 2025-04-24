@@ -91,9 +91,19 @@ And these junction tables for relationships:
 php artisan make:model Permission -a
 ```
 
-Table Migration
-Model
-Seeder
+### Roles
+
+```bash
+php artisan make:model Role -a
+```
+
+### Resources
+
+```bash
+php artisan make:model Resource -a
+```
+
+
 
 ### Migrations
 
