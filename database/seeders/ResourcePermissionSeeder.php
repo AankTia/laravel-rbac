@@ -14,30 +14,22 @@ class ResourcePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $userResource = Resource::where('name', 'users')->first();
-        $roleResource = Resource::where('name', 'roles')->first();
-        $reportResource = Resource::where('name', 'reports')->first();
-        $dashboardResource = Resource::where('name', 'dashboard')->first();
+        $resourcePermission = [
+            'users' => ['read', 'create', 'update', 'delete'],
+            'roles' => ['read', 'create', 'update', 'delete'],
+            'reports' => ['read', 'create', 'update', 'delete'],
+            'dashboard' => ['read'],
+        ];
 
-        $createPermission = Permission::where('name', 'create')->first();
-        $createPermission->resources()->attach($userResource);
-        $createPermission->resources()->attach($roleResource);
-        $createPermission->resources()->attach($reportResource);
+        foreach ($resourcePermission as $resourceName => $permissionsName) {
+            $resource = Resource::firstWhere('name', $resourceName);
+            if ($resource) {
+                $permissions = Permission::whereIn('name', $permissionsName)->get();
 
-        $readPermission = Permission::where('name', 'read')->first();
-        $readPermission->resources()->attach($userResource);
-        $readPermission->resources()->attach($roleResource);
-        $readPermission->resources()->attach($reportResource);
-        $readPermission->resources()->attach($dashboardResource);
-
-        $updatePermission = Permission::where('name', 'update')->first();
-        $updatePermission->resources()->attach($userResource);
-        $updatePermission->resources()->attach($roleResource);
-        $updatePermission->resources()->attach($reportResource);
-
-        $deletePermission = Permission::where('name', 'delete')->first();
-        $deletePermission->resources()->attach($userResource);
-        $deletePermission->resources()->attach($roleResource);
-        $deletePermission->resources()->attach($reportResource);
+                foreach ($permissions as $permission) {
+                    $permission->resources()->attach($resource);
+                }
+            }
+        }
     }
 }
