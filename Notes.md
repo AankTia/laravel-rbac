@@ -85,9 +85,23 @@ And these junction tables for relationships:
 
 ## Laravel Components
 
+### Permissions
+
+```bash
+php artisan make:model Permission -a
+```
+
+Table Migration
+Model
+Seeder
+
 ### Migrations
 
-#### Create Permissions Table Migration
+#### [-] Create Permissions Table Migration
+
+```bash
+php artisan make:model Product
+```
 
 ```php
 // database/migrations/xxx_create_roles_table.php
