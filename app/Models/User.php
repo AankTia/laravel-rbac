@@ -45,4 +45,50 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get te roles for the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    /**
+     * Check if the user has a specific role.
+     */
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    /**
+     * Check if the user has a permission through any of their roles.
+     */
+    public function hasPermission($permissionName)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->permissions()->where('name', $permissionName)->exists()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the user has access to a specific rousource.
+     */
+    public function hasResourceAccess($resourceName, $permissionName)
+    {
+        foreach ($this->roles as $role) {
+            foreach ($role->permissions as $permission) {
+                if ($permission->name === $permissionName) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
