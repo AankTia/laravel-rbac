@@ -915,7 +915,7 @@ class Resource extends Model
 
 #### Resource Permission Seeder
 
-| Resource        | Read               | Create             | Update             | delete             |
+| Resource Name   | Read               | Create             | Update             | delete             |
 | --------------- | ------------------ | ------------------ | ------------------ | ------------------ |
 | User management | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Role management | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -998,6 +998,90 @@ class Resource extends Model
     php artisan migrate:fresh --seed
     ```
 
+#### Role Permission Seeder
+
+| Role Name | Read               | Create             | Update             | Delete             |
+| --------- | ------------------ | ------------------ | ------------------ | ------------------ |
+| Admin     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Manajer   | :white_check_mark: | :white_check_mark: | :white_check_mark: |                    |
+| User      | :white_check_mark: |                    |                    |                    |
+
+1. Create RolePermissionSeeder:
+
+    ```bash
+    php artisan make:seeder RolePermissionSeeder
+    ```
+
+2. Update RolePermissionSeeder (`database/seeders/RolePermissionSeeder.php`)
+
+    ```php
+    <?php
+
+    namespace Database\Seeders;
+
+    use App\Models\User;
+    use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\Hash;
+
+    class RolePermissionSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         */
+        public function run(): void
+        {
+            $users = [
+                [
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Manager User',
+                    'email' => 'manager@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Regular User',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                ]
+            ];
+
+            foreach ($users as $user) {
+                User::create($user);
+            }
+        }
+    }
+    ```
+
+3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
+
+    ```php
+    public function run()
+    {
+        $this->call([
+            // ...
+            RolePermissionSeeder::class
+        ]);
+    }
+    ```
+
+4. Run Seeder
+
+    An individual seeder:
+
+    ```bash
+    php artisan db:seed --class=RolePermissionSeeder
+    ```
+
+    Or re-run migrations with seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+
 ---
 
 ### Seeders
@@ -1023,24 +1107,6 @@ class RbacSeeder extends Seeder
      */
     public function run(): void
     {
-
-        // Assign permissions to resources
-        $createPermission->resources()->attach($userResource);
-        $createPermission->resources()->attach($roleResource);
-        $createPermission->resources()->attach($reportResource);
-
-        $readPermission->resources()->attach($userResource);
-        $readPermission->resources()->attach($roleResource);
-        $readPermission->resources()->attach($reportResource);
-        $readPermission->resources()->attach($dashboardResource);
-
-        $updatePermission->resources()->attach($userResource);
-        $updatePermission->resources()->attach($roleResource);
-        $updatePermission->resources()->attach($reportResource);
-
-        $deletePermission->resources()->attach($userResource);
-        $deletePermission->resources()->attach($roleResource);
-        $deletePermission->resources()->attach($reportResource);
 
         // Assign permissions to roles
         $adminRole->permissions()->attach([$createPermission->id, $readPermission->id, $updatePermission->id, $deletePermission->id]);
