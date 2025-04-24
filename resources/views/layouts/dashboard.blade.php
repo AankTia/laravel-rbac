@@ -10,7 +10,7 @@
     <meta name="author" content="Tia Widi">
     <meta name="robots" content="noindex, nofollow">
 
-    <title>Laravel RBAC | Sign In</title>
+    <title>Laravel RBAC | @yield('title')</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
@@ -434,7 +434,7 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3 class="page-title">Blank Page</h3>
+                            <h3 class="page-title">@yield('title')</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                                 <li class="breadcrumb-item active">Blank Page</li>
