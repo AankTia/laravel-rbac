@@ -83,35 +83,17 @@ And these junction tables for relationships:
         }
 ```
 
+---
+
 ## Laravel Components
-
-### Permissions
-
-```bash
-php artisan make:model Permission -a
-```
-
-### Roles
 
 ```bash
 php artisan make:model Role -a
 ```
 
-### Resources
-
-```bash
-php artisan make:model Resource -a
-```
-
-
-
 ### Migrations
 
-#### [-] Create Permissions Table Migration
-
-```bash
-php artisan make:model Product
-```
+#### Role
 
 ```php
 // database/migrations/xxx_create_roles_table.php
@@ -140,6 +122,115 @@ class CreateRolesTable extends Migration
         Schema::dropIfExists('roles');
     }
 }
+```
+
+#### Permissions
+
+...
+
+### Models
+
+#### Role
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'display_name',
+        'description',
+    ];
+
+    /**
+     * Get the users that have this role.
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_roles');
+    }
+
+    /**
+     * Get the permissions for this role.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
+    }
+
+    /**
+     * Assign a permission to the role.
+     */
+    public function givePermissionTo($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permission::whereName($permission)->firstOrFail();
+        }
+
+        $this->permissions()->syncWithoutDetaching([$permission->id]);
+    }
+}
+```
+
+### Permissions
+
+...
+
+### Seeders
+
+#### Role
+
+...
+
+### Permissions
+
+...
+
+---
+
+### Roles Model Migration
+
+2. **Model**
+
+### Permissions
+
+```bash
+php artisan make:model Permission -a
+```
+
+1. **Migration**
+2. **Model**
+3. **Seeder**
+
+### Resources
+
+```bash
+php artisan make:model Resource -a
+```
+
+1. **Migration**
+2. **Model**
+3. **Seeder**
+
+### Migrations
+
+#### [-] Create Permissions Table Migration
+
+```bash
+php artisan make:model Product
 ```
 
 #### Create Permissions Table Migration
@@ -333,14 +424,15 @@ class CreatePermissionResourcesTable extends Migration
 
 The implementation includes four model classes:
 
-- **User** (extended from Laravel's default user model)
-- **Role**
-- **Permission**
-- **Resource**
+-   **User** (extended from Laravel's default user model)
+-   **Role**
+-   **Permission**
+-   **Resource**
 
 Each model includes relationship methods and helper functions to check permissions or assign roles.
 
 #### `app/Models/User.php`
+
 ```php
 <?php
 
@@ -437,60 +529,9 @@ class User extends Authenticatable
 ```
 
 #### `app/Models/Role.php`
-```php
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Role extends Model
-{
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'display_name',
-        'description',
-    ];
-
-    /**
-     * Get the users that have this role.
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_roles');
-    }
-
-    /**
-     * Get the permissions for this role.
-     */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'role_permissions');
-    }
-
-    /**
-     * Assign a permission to the role.
-     */
-    public function givePermissionTo($permission)
-    {
-        if (is_string($permission)) {
-            $permission = Permission::whereName($permission)->firstOrFail();
-        }
-
-        $this->permissions()->syncWithoutDetaching([$permission->id]);
-    }
-}
-```
 
 #### app/Models/Permission.php
+
 ```php
 <?php
 
@@ -545,6 +586,7 @@ class Permission extends Model
 ```
 
 #### app/Models/Resource.php
+
 ```php
 <?php
 
@@ -579,13 +621,16 @@ class Resource extends Model
 ```
 
 ### Seeders
+
 The `RbacSeeder` class populates the database with sample data:
-- 3 users (admin, manager, regular user)
-- 3 roles (admin, manager, user)
-- 4 permissions (create, read, update, delete)
-- 4 resources (users, roles, reports, dashboard)
+
+-   3 users (admin, manager, regular user)
+-   3 roles (admin, manager, user)
+-   4 permissions (create, read, update, delete)
+-   4 resources (users, roles, reports, dashboard)
 
 #### database/seeders/RbacSeeder.php
+
 ```php
 <?php
 
@@ -725,6 +770,7 @@ class RbacSeeder extends Seeder
 ```
 
 Update the main DatabaseSeeder to include our RBAC seeder
+
 ```php
 // database/seeders/DatabaseSeeder.php
 <?php
@@ -754,68 +800,75 @@ It also establishes the relationships between them.
 ## Database Tables
 
 ### users
-- `id` - bigIncrements PRIMARY KEY
-- `name` - string
-- `email` - string UNIQUE
-- `email_verified_at` - timestamp NULL
-- `password` - string
-- `remember_token` - string NULL
-- `created_at` - timestamp
-- `updated_at` - timestamp
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `name` - string
+-   `email` - string UNIQUE
+-   `email_verified_at` - timestamp NULL
+-   `password` - string
+-   `remember_token` - string NULL
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
 
 ### roles
-- `id` - bigIncrements PRIMARY KEY
-- `name` - string UNIQUE
-- `display_name` - string NULL
-- `description` - string NULL
-- `created_at` - timestamp
-- `updated_at` - timestamp
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `name` - string UNIQUE
+-   `display_name` - string NULL
+-   `description` - string NULL
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
 
 ### permissions
-- `id` - bigIncrements PRIMARY KEY
-- `name` - string UNIQUE
-- `display_name` - string NULL
-- `description` - string NULL
-- `created_at` - timestamp
-- `updated_at` - timestamp
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `name` - string UNIQUE
+-   `display_name` - string NULL
+-   `description` - string NULL
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
 
 ### resources
-- `id` - bigIncrements PRIMARY KEY
-- `name` - string UNIQUE
-- `resource_type` - string
-- `description` - string NULL
-- `created_at` - timestamp
-- `updated_at` - timestamp
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `name` - string UNIQUE
+-   `resource_type` - string
+-   `description` - string NULL
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
 
 ### user_roles (Junction Table)
-- `id` - bigIncrements PRIMARY KEY
-- `user_id` - unsignedBigInteger FOREIGN KEY
-- `role_id` - unsignedBigInteger FOREIGN KEY
-- `created_at` - timestamp
-- `updated_at` - timestamp
-- UNIQUE (`user_id`, `role_id`)
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `user_id` - unsignedBigInteger FOREIGN KEY
+-   `role_id` - unsignedBigInteger FOREIGN KEY
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
+-   UNIQUE (`user_id`, `role_id`)
 
 ### role_permissions (Junction Table)
-- `id` - bigIncrements PRIMARY KEY
-- `role_id` - unsignedBigInteger FOREIGN KEY
-- `permission_id` - unsignedBigInteger FOREIGN KEY
-- `created_at` - timestamp
-- `updated_at` - timestamp
-- UNIQUE (`role_id`, `permission_id`)
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `role_id` - unsignedBigInteger FOREIGN KEY
+-   `permission_id` - unsignedBigInteger FOREIGN KEY
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
+-   UNIQUE (`role_id`, `permission_id`)
 
 ### permission_resources (Junction Table)
-- `id` - bigIncrements PRIMARY KEY
-- `permission_id` - unsignedBigInteger FOREIGN KEY
-- `resource_id` - unsignedBigInteger FOREIGN KEY
-- `created_at` - timestamp
-- `updated_at` - timestamp
-- UNIQUE (`permission_id`, `resource_id`)
+
+-   `id` - bigIncrements PRIMARY KEY
+-   `permission_id` - unsignedBigInteger FOREIGN KEY
+-   `resource_id` - unsignedBigInteger FOREIGN KEY
+-   `created_at` - timestamp
+-   `updated_at` - timestamp
+-   UNIQUE (`permission_id`, `resource_id`)
 
 ## Relationships
 
-- **Users to Roles**: Many-to-Many (via `user_roles` table)
-- **Roles to Permissions**: Many-to-Many (via `role_permissions` table)
-- **Permissions to Resources**: Many-to-Many (via `permission_resources` table)
+-   **Users to Roles**: Many-to-Many (via `user_roles` table)
+-   **Roles to Permissions**: Many-to-Many (via `role_permissions` table)
+-   **Permissions to Resources**: Many-to-Many (via `permission_resources` table)
 
 ## Example Usage
 
@@ -859,9 +912,11 @@ Route::get('/admin/users', function () {
 ```
 
 ### Middleware
+
 I've included a custom middleware that checks if a user has access to a specific resource with a specific permission, which can be used to protect routes.
 
 // app/Http/Middleware/CheckResourceAccess.php
+
 <?php
 
 namespace App\Http\Middleware;
