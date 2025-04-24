@@ -830,18 +830,92 @@ class Resource extends Model
 
 #### Resource Seeder
 
-```bash
-php artisan make:seeder ResourceSeeder
-```
+| Name      | Resource Type | Description     |
+| --------- | ------------- | --------------- |
+| users     | model         | User management |
+| roles     | model         | Role management |
+| reports   | page          | System reports  |
+| dashboard | page          | Dashboard       |
+
+1. Create ResourceSeeder:
+
+    ```bash
+    php artisan make:seeder ResourceSeeder
+    ```
+
+2. Update ResourceSeeder (`database/seeders/ResourceSeeder.php`)
+
+    ```php
+    <?php
+
+    namespace Database\Seeders;
+
+    use App\Models\User;
+    use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\Hash;
+
+    class ResourceSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         */
+        public function run(): void
+        {
+            $users = [
+                [
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Manager User',
+                    'email' => 'manager@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Regular User',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                ]
+            ];
+
+            foreach ($users as $user) {
+                User::create($user);
+            }
+        }
+    }
+    ```
+
+3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
+
+    ```php
+    public function run()
+    {
+        $this->call([
+            // ...
+            ResourceSeeder::class
+        ]);
+    }
+    ```
+
+4. Run Seeder
+
+    An individual seeder:
+
+    ```bash
+    php artisan db:seed --class=ResourceSeeder
+    ```
+
+    Or re-run migrations with seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
 ---
 
 ### Seeders
-
-Populate the database with sample data
-
--   4 permissions (create, read, update, delete)
--   4 resources (users, roles, reports, dashboard)
 
 #### database/seeders/RbacSeeder.php
 
@@ -867,30 +941,7 @@ class RbacSeeder extends Seeder
 
 
 
-        // Create resources
-        $userResource = Resource::create([
-            'name' => 'users',
-            'resource_type' => 'model',
-            'description' => 'User management',
-        ]);
 
-        $roleResource = Resource::create([
-            'name' => 'roles',
-            'resource_type' => 'model',
-            'description' => 'Role management',
-        ]);
-
-        $reportResource = Resource::create([
-            'name' => 'reports',
-            'resource_type' => 'page',
-            'description' => 'System reports',
-        ]);
-
-        $dashboardResource = Resource::create([
-            'name' => 'dashboard',
-            'resource_type' => 'page',
-            'description' => 'Dashboard',
-        ]);
 
         // Assign permissions to resources
         $createPermission->resources()->attach($userResource);
