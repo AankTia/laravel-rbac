@@ -633,7 +633,6 @@ class Resource extends Model
     }
     ```
 
-
 3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
 
     ```php
@@ -662,9 +661,88 @@ class Resource extends Model
 
 #### Role Seeder
 
-```bash
-php artisan make:seeder RoleSeeder
-```
+| Name    | Display Name  | Description                                |
+| ------- | ------------- | ------------------------------------------ |
+| admin   | Administrator | Administrator with full system access      |
+| manager | Manager       | Manager with limited administrative access |
+| user    | User          | Regular user with basic access             |
+
+
+1. Create RoleSeeder:
+
+    ```bash
+    php artisan make:seeder RoleSeeder
+    ```
+
+2. Update RoleSeeder (`database/seeders/RoleSeeder.php`)
+
+    ```php
+    <?php
+
+    namespace Database\Seeders;
+
+    use App\Models\User;
+    use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\Hash;
+
+    class RoleSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         */
+        public function run(): void
+        {
+            $users = [
+                [
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Manager User',
+                    'email' => 'manager@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Regular User',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                ]
+            ];
+
+            foreach ($users as $user) {
+                User::create($user);
+            }
+        }
+    }
+    ```
+
+3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
+
+    ```php
+    public function run()
+    {
+        $this->call([
+            // ...
+            RoleSeeder::class
+        ]);
+    }
+    ```
+
+4. Run Seeder
+
+    An individual seeder:
+
+    ```bash
+    php artisan db:seed --class=RoleSeeder
+    ```
+
+    Or re-run migrations with seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
 #### Permissions Seeder
 
@@ -684,11 +762,6 @@ php artisan make:seeder ResourceSeeder
 
 Populate the database with sample data
 
-#### User Seeder
-
-####
-
--   3 users (admin, manager, regular user)
 -   3 roles (admin, manager, user)
 -   4 permissions (create, read, update, delete)
 -   4 resources (users, roles, reports, dashboard)
@@ -714,25 +787,6 @@ class RbacSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create users
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $manager = User::create([
-            'name' => 'Manager User',
-            'email' => 'manager@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $user = User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
         // Create roles
         $adminRole = Role::create([
             'name' => 'admin',
