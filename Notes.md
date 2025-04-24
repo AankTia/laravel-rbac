@@ -319,96 +319,13 @@ class CreatePermissionResourcesTable extends Migration
 }
 ```
 
-
-
 ### Models
 
-#### Role
+#### User Model
 
-```php
-<?php
+`app/Models/User.php`
 
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Role extends Model
-{
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'display_name',
-        'description',
-    ];
-
-    /**
-     * Get the users that have this role.
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_roles');
-    }
-
-    /**
-     * Get the permissions for this role.
-     */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'role_permissions');
-    }
-
-    /**
-     * Assign a permission to the role.
-     */
-    public function givePermissionTo($permission)
-    {
-        if (is_string($permission)) {
-            $permission = Permission::whereName($permission)->firstOrFail();
-        }
-
-        $this->permissions()->syncWithoutDetaching([$permission->id]);
-    }
-}
-```
-
-### Permissions
-
-...
-
-### Seeders
-
-#### Role
-
-...
-
-### Permissions
-
-...
-
----
-
-### Migrations
-
-
-### Models
-
-The implementation includes four model classes:
-
--   **User** (extended from Laravel's default user model)
--   **Role**
--   **Permission**
--   **Resource**
-
-Each model includes relationship methods and helper functions to check permissions or assign roles.
-
-#### `app/Models/User.php`
+_(extended from Laravel's default user model)_
 
 ```php
 <?php
@@ -505,9 +422,66 @@ class User extends Authenticatable
 }
 ```
 
-#### `app/Models/Role.php`
+#### Role Model
 
-#### app/Models/Permission.php
+`app/Models/Role.php`
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'display_name',
+        'description',
+    ];
+
+    /**
+     * Get the users that have this role.
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_roles');
+    }
+
+    /**
+     * Get the permissions for this role.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
+    }
+
+    /**
+     * Assign a permission to the role.
+     */
+    public function givePermissionTo($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permission::whereName($permission)->firstOrFail();
+        }
+
+        $this->permissions()->syncWithoutDetaching([$permission->id]);
+    }
+}
+```
+
+#### Permission Model
+
+`app/Models/Permission.php`
 
 ```php
 <?php
@@ -562,7 +536,9 @@ class Permission extends Model
 }
 ```
 
-#### app/Models/Resource.php
+#### Resource Model
+
+`app/Models/Resource.php`
 
 ```php
 <?php
@@ -596,6 +572,18 @@ class Resource extends Model
     }
 }
 ```
+
+### Seeders
+
+#### Role
+
+...
+
+### Permissions
+
+...
+
+---
 
 ### Seeders
 
