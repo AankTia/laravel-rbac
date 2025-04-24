@@ -89,15 +89,17 @@ And these junction tables for relationships:
 
 ```bash
 php artisan make:model Role -a
+php artisan make:model Permission -a
+php artisan make:model Resource -a
 ```
 
 ### Migrations
 
-#### Role
+#### Role Table Migration
+
+`database/migrations/xxxx_xx_xx_xxxxxx_create_roles_table.php`
 
 ```php
-// database/migrations/xxx_create_roles_table.php
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -124,122 +126,11 @@ class CreateRolesTable extends Migration
 }
 ```
 
-#### Permissions
+#### Permissions Table Migration
 
-...
-
-### Models
-
-#### Role
+`database/migrations/xxxx_xx_xx_xxxxxx_create_permissions_table.php`
 
 ```php
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Role extends Model
-{
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'display_name',
-        'description',
-    ];
-
-    /**
-     * Get the users that have this role.
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_roles');
-    }
-
-    /**
-     * Get the permissions for this role.
-     */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'role_permissions');
-    }
-
-    /**
-     * Assign a permission to the role.
-     */
-    public function givePermissionTo($permission)
-    {
-        if (is_string($permission)) {
-            $permission = Permission::whereName($permission)->firstOrFail();
-        }
-
-        $this->permissions()->syncWithoutDetaching([$permission->id]);
-    }
-}
-```
-
-### Permissions
-
-...
-
-### Seeders
-
-#### Role
-
-...
-
-### Permissions
-
-...
-
----
-
-### Roles Model Migration
-
-2. **Model**
-
-### Permissions
-
-```bash
-php artisan make:model Permission -a
-```
-
-1. **Migration**
-2. **Model**
-3. **Seeder**
-
-### Resources
-
-```bash
-php artisan make:model Resource -a
-```
-
-1. **Migration**
-2. **Model**
-3. **Seeder**
-
-### Migrations
-
-#### [-] Create Permissions Table Migration
-
-```bash
-php artisan make:model Product
-```
-
-#### Create Permissions Table Migration
-
-Create Permissions Table Migration
-
-```php
-// database/migrations/xxx_create_permissions_table.php
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -267,10 +158,11 @@ class CreatePermissionsTable extends Migration
 
 ```
 
-#### Create Resources Table Migration
+#### Resource Table Migration
+
+`database/migrations/xxxx_xx_xx_xxxxxx_create_resources_table.php`
 
 ```php
-// database/migrations/2023_01_01_000003_create_resources_table.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -419,6 +311,84 @@ class CreatePermissionResourcesTable extends Migration
     }
 }
 ```
+
+
+
+### Models
+
+#### Role
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'display_name',
+        'description',
+    ];
+
+    /**
+     * Get the users that have this role.
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_roles');
+    }
+
+    /**
+     * Get the permissions for this role.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
+    }
+
+    /**
+     * Assign a permission to the role.
+     */
+    public function givePermissionTo($permission)
+    {
+        if (is_string($permission)) {
+            $permission = Permission::whereName($permission)->firstOrFail();
+        }
+
+        $this->permissions()->syncWithoutDetaching([$permission->id]);
+    }
+}
+```
+
+### Permissions
+
+...
+
+### Seeders
+
+#### Role
+
+...
+
+### Permissions
+
+...
+
+---
+
+### Migrations
+
 
 ### Models
 
