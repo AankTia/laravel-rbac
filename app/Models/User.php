@@ -54,6 +54,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles');
     }
 
+    public function getRoleName()
+    {
+        $firstRole = $this->roles->first();
+        if ($firstRole) {
+            return $firstRole->display_name;
+        } else {
+            return '';
+        }
+    }
+
     /**
      * Check if the user has a specific role.
      */
