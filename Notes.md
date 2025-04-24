@@ -93,6 +93,7 @@ php artisan make:model Permission -a
 php artisan make:model Resource -a
 
 php artisan make:migration create_user_roles_table
+php artisan make:migration create_role_permissions_table
 ```
 
 ### Migrations
@@ -233,7 +234,7 @@ class CreateUserRolesTable extends Migration
 }
 ```
 
-#### Create Role Permissions Table Migration
+#### Role Permissions Table Migration
 
 ```php
 // database/migrations/2023_01_01_000005_create_role_permissions_table.php
