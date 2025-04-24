@@ -8,14 +8,14 @@
                     {{-- <img src="assets/img/logo.png" alt="img"> --}}
                 </div>
                 <div class="login-userheading">
-                    <h3>Sign In</h3>
+                    <h3>{{ __('Login') }}</h3>
                     <h4>Please login to your account</h4>
                 </div>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
                     <div class="form-login">
-                        <label>Email</label>
+                        <label>{{ __('Email Address') }}</label>
                         <div class="form-addons">
                             <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter your email address" value="{{ old('email') }}" autofocus>
                             @error('email')
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="form-login">
-                        <label>Password</label>
+                        <label>{{ __('Password') }}</label>
                         <div class="pass-group">
                             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password" autocomplete="current-password">
                             @error('password')
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="form-login">
-                        <button type="submit" class="btn btn-login">Sign In</button>
+                        <button type="submit" class="btn btn-login"> {{ __('Login') }}</button>
                     </div>
 
 
@@ -60,7 +60,7 @@
 
                     @if (Route::has('register'))
                     <div class="signinform text-center">
-                        <h4>Don’t have an account? <a href="{{ route('register') }}" class="hover-a">Sign Up</a></h4>
+                        <h4>Don’t have an account? <a href="{{ route('register') }}" class="hover-a">{{ __('Register') }}</a></h4>
                     </div>
                     @endif
                 </form>
