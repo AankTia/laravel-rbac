@@ -667,7 +667,6 @@ class Resource extends Model
 | manager | Manager       | Manager with limited administrative access |
 | user    | User          | Regular user with basic access             |
 
-
 1. Create RoleSeeder:
 
     ```bash
@@ -746,9 +745,88 @@ class Resource extends Model
 
 #### Permissions Seeder
 
-```bash
-php artisan make:seeder PermissionSeeder
-```
+| Name   | Display Name | Description           |
+| ------ | ------------ | --------------------- |
+| create | Create       | Create new items      |
+| read   | Read         | Read items            |
+| update | Update       | Update existing items |
+| delete | Delete       | Delete items          |
+
+1. Create PermissionSeeder:
+
+    ```bash
+    php artisan make:seeder PermissionSeeder
+    ```
+
+2. Update PermissionSeeder (`database/seeders/PermissionSeeder.php`)
+
+    ```php
+    <?php
+
+    namespace Database\Seeders;
+
+    use App\Models\User;
+    use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+    use Illuminate\Database\Seeder;
+    use Illuminate\Support\Facades\Hash;
+
+    class PermissionSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         */
+        public function run(): void
+        {
+            $users = [
+                [
+                    'name' => 'Admin User',
+                    'email' => 'admin@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Manager User',
+                    'email' => 'manager@example.com',
+                    'password' => Hash::make('password'),
+                ],
+                [
+                    'name' => 'Regular User',
+                    'email' => 'user@example.com',
+                    'password' => Hash::make('password'),
+                ]
+            ];
+
+            foreach ($users as $user) {
+                User::create($user);
+            }
+        }
+    }
+    ```
+
+3. Register seeder inside `database/seeders/DatabaseSeeder.php`:
+
+    ```php
+    public function run()
+    {
+        $this->call([
+            // ...
+            PermissionSeeder::class
+        ]);
+    }
+    ```
+
+4. Run Seeder
+
+    An individual seeder:
+
+    ```bash
+    php artisan db:seed --class=PermissionSeeder
+    ```
+
+    Or re-run migrations with seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
 #### Resource Seeder
 
@@ -762,7 +840,6 @@ php artisan make:seeder ResourceSeeder
 
 Populate the database with sample data
 
--   3 roles (admin, manager, user)
 -   4 permissions (create, read, update, delete)
 -   4 resources (users, roles, reports, dashboard)
 
@@ -787,49 +864,8 @@ class RbacSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles
-        $adminRole = Role::create([
-            'name' => 'admin',
-            'display_name' => 'Administrator',
-            'description' => 'Administrator with full system access',
-        ]);
 
-        $managerRole = Role::create([
-            'name' => 'manager',
-            'display_name' => 'Manager',
-            'description' => 'Manager with limited administrative access',
-        ]);
 
-        $userRole = Role::create([
-            'name' => 'user',
-            'display_name' => 'User',
-            'description' => 'Regular user with basic access',
-        ]);
-
-        // Create permissions
-        $createPermission = Permission::create([
-            'name' => 'create',
-            'display_name' => 'Create',
-            'description' => 'Create new items',
-        ]);
-
-        $readPermission = Permission::create([
-            'name' => 'read',
-            'display_name' => 'Read',
-            'description' => 'Read items',
-        ]);
-
-        $updatePermission = Permission::create([
-            'name' => 'update',
-            'display_name' => 'Update',
-            'description' => 'Update existing items',
-        ]);
-
-        $deletePermission = Permission::create([
-            'name' => 'delete',
-            'display_name' => 'Delete',
-            'description' => 'Delete items',
-        ]);
 
         // Create resources
         $userResource = Resource::create([
