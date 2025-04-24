@@ -1278,8 +1278,9 @@ Route::get('/admin/users', function () {
 
 I've included a custom middleware that checks if a user has access to a specific resource with a specific permission, which can be used to protect routes.
 
-// app/Http/Middleware/CheckResourceAccess.php
+`app/Http/Middleware/CheckResourceAccess.php`
 
+```php
 <?php
 
 namespace App\Http\Middleware;
@@ -1303,7 +1304,7 @@ class CheckResourceAccess
         }
 
         $user = Auth::user();
-        
+
         if (!$user->hasResourceAccess($resourceName, $permissionName)) {
             abort(403, 'Unauthorized action.');
         }
@@ -1311,12 +1312,19 @@ class CheckResourceAccess
         return $next($request);
     }
 }
+```
 
-// Register this middleware in app/Http/Kernel.php by adding this line to the $routeMiddleware array:
-// 'can.access' => \App\Http\Middleware\CheckResourceAccess::class,
+Register this middleware in app/Http/Kernel.php by adding this line to the $routeMiddleware array:
 
-// Usage example:
-// Route::get('/admin/users', [UserController::class, 'index'])->middleware('can.access:users,read');
+```php
+'can.access' => \App\Http\Middleware\CheckResourceAccess::class,
+```
+
+Usage example:
+
+```php
+Route::get('/admin/users', [UserController::class, 'index'])->middleware('can.access:users,read');
+```
 
 ## How to Use
 
@@ -1326,14 +1334,14 @@ class CheckResourceAccess
 4. Use the middleware in your routes: `Route::get('/admin/users', [UserController::class, 'index'])->middleware('can.access:users,read');`
 
 You can check permissions in your controllers or views using methods like:
+
 ```php
 $user->hasRole('admin');
 $user->hasPermission('create');
 $user->hasResourceAccess('users', 'create');
-````
+```
 
 This implementation follows Laravel best practices and provides a flexible and robust RBAC system that can be easily extended for more complex scenarios.
-
 
 =======
 
@@ -1342,21 +1350,23 @@ I'll provide SQL query implementations for common RBAC operations that you might
 I've provided comprehensive SQL implementations for your Role-Based Access Control (RBAC) system across three artifacts:
 
 ### 1. Raw SQL Queries
+
 These queries cover all essential RBAC operations:
-- User role/permission queries
-- Access validation
-- Resource permission mapping
-- User-role management
-- Statistical queries for analysis
+
+-   User role/permission queries
+-   Access validation
+-   Resource permission mapping
+-   User-role management
+-   Statistical queries for analysis
 
 -- Get all roles for a specific user
-SELECT r.*
+SELECT r.\*
 FROM roles r
 JOIN user_roles ur ON r.id = ur.role_id
 WHERE ur.user_id = ?;
 
 -- Get all permissions for a specific user (via their roles)
-SELECT DISTINCT p.*
+SELECT DISTINCT p.\*
 FROM permissions p
 JOIN role_permissions rp ON p.id = rp.permission_id
 JOIN roles r ON rp.role_id = r.id
@@ -1364,13 +1374,13 @@ JOIN user_roles ur ON r.id = ur.role_id
 WHERE ur.user_id = ?;
 
 -- Check if a user has a specific role
-SELECT COUNT(*) AS role_count
+SELECT COUNT(\*) AS role_count
 FROM user_roles ur
 JOIN roles r ON ur.role_id = r.id
 WHERE ur.user_id = ? AND r.name = ?;
 
 -- Check if a user has a specific permission
-SELECT COUNT(*) AS permission_count
+SELECT COUNT(\*) AS permission_count
 FROM permissions p
 JOIN role_permissions rp ON p.id = rp.permission_id
 JOIN roles r ON rp.role_id = r.id
@@ -1378,7 +1388,7 @@ JOIN user_roles ur ON r.id = ur.role_id
 WHERE ur.user_id = ? AND p.name = ?;
 
 -- Check if a user has access to a specific resource with a specific permission
-SELECT COUNT(*) AS access_count
+SELECT COUNT(\*) AS access_count
 FROM permissions p
 JOIN role_permissions rp ON p.id = rp.permission_id
 JOIN roles r ON rp.role_id = r.id
@@ -1388,7 +1398,7 @@ JOIN resources res ON pr.resource_id = res.id
 WHERE ur.user_id = ? AND p.name = ? AND res.name = ?;
 
 -- Get all resources a user can access with a specific permission
-SELECT DISTINCT res.*
+SELECT DISTINCT res.\*
 FROM resources res
 JOIN permission_resources pr ON res.id = pr.resource_id
 JOIN permissions p ON pr.permission_id = p.id
@@ -1398,28 +1408,28 @@ JOIN user_roles ur ON r.id = ur.role_id
 WHERE ur.user_id = ? AND p.name = ?;
 
 -- Get all permissions for a specific resource
-SELECT p.*
+SELECT p.\*
 FROM permissions p
 JOIN permission_resources pr ON p.id = pr.permission_id
 JOIN resources res ON pr.resource_id = res.id
 WHERE res.name = ?;
 
 -- Get users with a specific role
-SELECT u.*
+SELECT u.\*
 FROM users u
 JOIN user_roles ur ON u.id = ur.user_id
 JOIN roles r ON ur.role_id = r.id
 WHERE r.name = ?;
 
 -- Get roles with a specific permission
-SELECT r.*
+SELECT r.\*
 FROM roles r
 JOIN role_permissions rp ON r.id = rp.role_id
 JOIN permissions p ON rp.permission_id = p.id
 WHERE p.name = ?;
 
 -- Find users with access to a specific resource and permission
-SELECT DISTINCT u.*
+SELECT DISTINCT u.\*
 FROM users u
 JOIN user_roles ur ON u.id = ur.user_id
 JOIN roles r ON ur.role_id = r.id
@@ -1440,9 +1450,9 @@ WHERE user_id = ? AND role_id = (SELECT id FROM roles WHERE name = ?);
 -- Assign a permission to a role
 INSERT INTO role_permissions (role_id, permission_id, created_at, updated_at)
 VALUES (
-    (SELECT id FROM roles WHERE name = ?),
-    (SELECT id FROM permissions WHERE name = ?),
-    NOW(), NOW()
+(SELECT id FROM roles WHERE name = ?),
+(SELECT id FROM permissions WHERE name = ?),
+NOW(), NOW()
 );
 
 -- Remove a permission from a role
@@ -1453,13 +1463,13 @@ AND permission_id = (SELECT id FROM permissions WHERE name = ?);
 -- Assign a permission to a resource
 INSERT INTO permission_resources (permission_id, resource_id, created_at, updated_at)
 VALUES (
-    (SELECT id FROM permissions WHERE name = ?),
-    (SELECT id FROM resources WHERE name = ?),
-    NOW(), NOW()
+(SELECT id FROM permissions WHERE name = ?),
+(SELECT id FROM resources WHERE name = ?),
+NOW(), NOW()
 );
 
 -- Find all resources that have a specific permission assigned
-SELECT res.*
+SELECT res.\*
 FROM resources res
 JOIN permission_resources pr ON res.id = pr.resource_id
 JOIN permissions p ON pr.permission_id = p.id
@@ -1473,34 +1483,34 @@ JOIN resources res ON pr.resource_id = res.id
 ORDER BY p.name, res.name;
 
 -- Find resources that no user has access to
-SELECT res.*
+SELECT res.\*
 FROM resources res
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM permission_resources pr
-    JOIN permissions p ON pr.permission_id = p.id
-    JOIN role_permissions rp ON p.id = rp.permission_id
-    JOIN roles r ON rp.role_id = r.id
-    JOIN user_roles ur ON r.id = ur.role_id
-    WHERE pr.resource_id = res.id
+SELECT 1
+FROM permission_resources pr
+JOIN permissions p ON pr.permission_id = p.id
+JOIN role_permissions rp ON p.id = rp.permission_id
+JOIN roles r ON rp.role_id = r.id
+JOIN user_roles ur ON r.id = ur.role_id
+WHERE pr.resource_id = res.id
 );
 
 -- Find users with no roles assigned
-SELECT u.*
+SELECT u.\*
 FROM users u
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM user_roles ur
-    WHERE ur.user_id = u.id
+SELECT 1
+FROM user_roles ur
+WHERE ur.user_id = u.id
 );
 
 -- Find roles with no permissions
-SELECT r.*
+SELECT r.\*
 FROM roles r
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM role_permissions rp
-    WHERE rp.role_id = r.id
+SELECT 1
+FROM role_permissions rp
+WHERE rp.role_id = r.id
 );
 
 -- Count users per role
@@ -1518,11 +1528,13 @@ GROUP BY r.id, r.name
 ORDER BY permission_count DESC;
 
 ### 2. Laravel Eloquent Implementations
+
 I've translated all the raw SQL queries into Laravel's Eloquent ORM syntax, which:
-- Uses relationship methods where appropriate (like `$user->roles()`)
-- Leverages query builder for more complex joins
-- Provides the same functionality but in Laravel's syntax
-- Shows both basic queries and complex relationship queries
+
+-   Uses relationship methods where appropriate (like `$user->roles()`)
+-   Leverages query builder for more complex joins
+-   Provides the same functionality but in Laravel's syntax
+-   Shows both basic queries and complex relationship queries
 
 ```
 <?php
@@ -1676,13 +1688,15 @@ $permissionCountPerRole = Role::leftJoin('role_permissions', 'roles.id', '=', 'r
 ```
 
 ### 3. MySQL Stored Procedures
-For database-level implementations, I've created stored procedures for:
-- Permission checking (`check_user_has_role`, `check_user_has_permission`)
-- Resource access verification (`check_user_resource_access`)
-- User permission retrieval (`get_user_permissions`)
-- Role and permission management (`assign_role_to_user`, `remove_role_from_user`)
 
-```
+For database-level implementations, I've created stored procedures for:
+
+-   Permission checking (`check_user_has_role`, `check_user_has_permission`)
+-   Resource access verification (`check_user_resource_access`)
+-   User permission retrieval (`get_user_permissions`)
+-   Role and permission management (`assign_role_to_user`, `remove_role_from_user`)
+
+````
 -- MySQL Stored Procedures for RBAC System
 
 -- Procedure to check if a user has a specific role
@@ -1694,12 +1708,12 @@ CREATE PROCEDURE check_user_has_role(
 )
 BEGIN
     DECLARE role_count INT;
-    
+
     SELECT COUNT(*) INTO role_count
     FROM user_roles ur
     JOIN roles r ON ur.role_id = r.id
     WHERE ur.user_id = p_user_id AND r.name = p_role_name;
-    
+
     IF role_count > 0 THEN
         SET p_has_role = TRUE;
     ELSE
@@ -1717,14 +1731,14 @@ CREATE PROCEDURE check_user_has_permission(
 )
 BEGIN
     DECLARE permission_count INT;
-    
+
     SELECT COUNT(*) INTO permission_count
     FROM permissions p
     JOIN role_permissions rp ON p.id = rp.permission_id
     JOIN roles r ON rp.role_id = r.id
     JOIN user_roles ur ON r.id = ur.role_id
     WHERE ur.user_id = p_user_id AND p.name = p_permission_name;
-    
+
     IF permission_count > 0 THEN
         SET p_has_permission = TRUE;
     ELSE
@@ -1743,7 +1757,7 @@ CREATE PROCEDURE check_user_resource_access(
 )
 BEGIN
     DECLARE access_count INT;
-    
+
     SELECT COUNT(*) INTO access_count
     FROM permissions p
     JOIN role_permissions rp ON p.id = rp.permission_id
@@ -1751,10 +1765,10 @@ BEGIN
     JOIN user_roles ur ON r.id = ur.role_id
     JOIN permission_resources pr ON p.id = pr.permission_id
     JOIN resources res ON pr.resource_id = res.id
-    WHERE ur.user_id = p_user_id 
-        AND p.name = p_permission_name 
+    WHERE ur.user_id = p_user_id
+        AND p.name = p_permission_name
         AND res.name = p_resource_name;
-    
+
     IF access_count > 0 THEN
         SET p_has_access = TRUE;
     ELSE
@@ -1804,18 +1818,18 @@ CREATE PROCEDURE assign_role_to_user(
 )
 BEGIN
     DECLARE v_role_id BIGINT;
-    
+
     -- Get role ID
     SELECT id INTO v_role_id
     FROM roles
     WHERE name = p_role_name;
-    
+
     -- Check if role exists
     IF v_role_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Role does not exist';
     END IF;
-    
+
     -- Check if assignment already exists
     IF EXISTS (
         SELECT 1 FROM user_roles WHERE user_id = p_user_id AND role_id = v_role_id
@@ -1838,22 +1852,22 @@ CREATE PROCEDURE remove_role_from_user(
 )
 BEGIN
     DECLARE v_role_id BIGINT;
-    
+
     -- Get role ID
     SELECT id INTO v_role_id
     FROM roles
     WHERE name = p_role_name;
-    
+
     -- Check if role exists
     IF v_role_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Role does not exist';
     END IF;
-    
+
     -- Delete the assignment
     DELETE FROM user_roles
     WHERE user_id = p_user_id AND role_id = v_role_id;
-    
+
     -- Check if any rows were affected
     IF ROW_COUNT() = 0 THEN
         SIGNAL SQLSTATE '45000'
@@ -1871,25 +1885,25 @@ CREATE PROCEDURE assign_permission_to_role(
 BEGIN
     DECLARE v_role_id BIGINT;
     DECLARE v_permission_id BIGINT;
-    
+
     -- Get IDs
     SELECT id INTO v_role_id FROM roles WHERE name = p_role_name;
     SELECT id INTO v_permission_id FROM permissions WHERE name = p_permission_name;
-    
+
     -- Check if exists
     IF v_role_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Role does not exist';
     END IF;
-    
+
     IF v_permission_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Permission does not exist';
     END IF;
-    
+
     -- Check if assignment already exists
     IF EXISTS (
-        SELECT 1 FROM role_permissions 
+        SELECT 1 FROM role_permissions
         WHERE role_id = v_role_id AND permission_id = v_permission_id
     ) THEN
         SIGNAL SQLSTATE '45000'
@@ -1911,25 +1925,25 @@ CREATE PROCEDURE assign_permission_to_resource(
 BEGIN
     DECLARE v_permission_id BIGINT;
     DECLARE v_resource_id BIGINT;
-    
+
     -- Get IDs
     SELECT id INTO v_permission_id FROM permissions WHERE name = p_permission_name;
     SELECT id INTO v_resource_id FROM resources WHERE name = p_resource_name;
-    
+
     -- Check if exists
     IF v_permission_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Permission does not exist';
     END IF;
-    
+
     IF v_resource_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Resource does not exist';
     END IF;
-    
+
     -- Check if assignment already exists
     IF EXISTS (
-        SELECT 1 FROM permission_resources 
+        SELECT 1 FROM permission_resources
         WHERE permission_id = v_permission_id AND resource_id = v_resource_id
     ) THEN
         SIGNAL SQLSTATE '45000'
@@ -1952,9 +1966,9 @@ These SQL implementations complement the Laravel components I provided earlier (
 3. For high-performance applications, you might consider using the stored procedures through Laravel's DB facade:
 
 ```php
-$hasAccess = DB::select('CALL check_user_resource_access(?, ?, ?, @access)', 
+$hasAccess = DB::select('CALL check_user_resource_access(?, ?, ?, @access)',
     [$userId, $resourceName, $permissionName]);
 $result = DB::select('SELECT @access as has_access')[0];
-```
+````
 
 Would you like me to provide any specific additional queries or explain any part in more detail?
