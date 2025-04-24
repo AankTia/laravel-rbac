@@ -91,6 +91,8 @@ And these junction tables for relationships:
 php artisan make:model Role -a
 php artisan make:model Permission -a
 php artisan make:model Resource -a
+
+php artisan make:migration create_user_roles_table
 ```
 
 ### Migrations
@@ -189,10 +191,11 @@ class CreateResourcesTable extends Migration
 }
 ```
 
-#### Create User Roles Table Migration
+#### User Roles Table Migration
+
+`database/migrations/xxxx_xx_xx_xxxxxx_create_user_roles_table.php`
 
 ```php
-// database/migrations/2023_01_01_000004_create_user_roles_table.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
