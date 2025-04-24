@@ -1,6 +1,5 @@
 <!doctype html>
-
-<html lang="en" data-bs-theme="auto">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
   <meta charset="utf-8">
@@ -8,20 +7,18 @@
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.145.0">
-  <title>Signin Template · Bootstrap v5.3</title>
+  <title>Laravel RBAC | ...</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+  <script src="{{ asset('js/color-modes.js') }}"></script>
 
-  <script src="../assets/js/color-modes.js"></script>
+  <link rel="stylesheet" href="{{ asset('dist/css/bootstrap.min.css') }}">
 
-  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <link rel="apple-touch-icon" href="../assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" href="../assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="../assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-  <link rel="manifest" href="../assets/img/favicons/manifest.json">
-  <link rel="mask-icon" href="../assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-  <link rel="icon" href="../assets/img/favicons/favicon.ico">
+  {{-- <link rel="apple-touch-icon" href="../assets/img/favicons/apple-touch-icon.png" sizes="180x180"> --}}
+  {{-- <link rel="icon" href="../assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png"> --}}
+  {{-- <link rel="icon" href="../assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png"> --}}
+  {{-- <link rel="manifest" href="../assets/img/favicons/manifest.json"> --}}
+  {{-- <link rel="mask-icon" href="../assets/img/favicons/safari-pinned-tab.svg" color="#712cf9"> --}}
+  {{-- <link rel="icon" href="../assets/img/favicons/favicon.ico"> --}}
   <meta name="theme-color" content="#712cf9">
 
 
@@ -110,7 +107,7 @@
   </style>
 
   <!-- Custom styles for this template -->
-  <link href="sign-in.css" rel="stylesheet">
+  <link href="{{ asset('css/sign-in.css') }}" rel="stylesheet">
 </head>
 
 <body class="d-flex align-items-center py-4 bg-body-tertiary">
@@ -176,32 +173,9 @@
 
   </div>
 
+  @yield('content')
 
-  <main class="form-signin w-100 m-auto">
-    <form>
-      <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-      <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
-      </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Password</label>
-      </div>
-
-      <div class="form-check text-start my-3">
-        <input class="form-check-input" type="checkbox" value="remember-me" id="checkDefault">
-        <label class="form-check-label" for="checkDefault">
-          Remember me
-        </label>
-      </div>
-      <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2025</p>
-    </form>
-  </main>
-  <script defer src="../assets/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"></script>
+  <script defer src="{{ asset('dist/js/bootstrap.bundle.min.js') }}" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"></script>
 
 </body>
 
