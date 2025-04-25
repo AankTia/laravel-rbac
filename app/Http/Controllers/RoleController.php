@@ -13,7 +13,20 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $viewData = [
+            'title' => "Role - Laravel RBAC",
+            'subtitle' => "Role"
+        ];
+
+        $roles = Role::all();
+
+        return view('roles.index')
+            ->with('viewData', $viewData)
+            ->with('roles', $roles);
+
+
+        // $roles = Role::all();
+        // return view('roles.index', compact('roles'));
     }
 
     /**
@@ -21,7 +34,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        // return view('roles.create');
     }
 
     /**
@@ -29,7 +42,15 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        //
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:roles',
+        // ]);
+
+        // Role::create($request->all());
+
+        // return redirect()->route('roles.index')
+        //                  ->with('success', 'Role created successfully.');
     }
 
     /**
@@ -37,7 +58,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        // return view('roles.show', compact('Role'));
     }
 
     /**
@@ -45,7 +66,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        // return view('roles.edit', compact('Role'));
     }
 
     /**
@@ -53,7 +74,15 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        //
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:roles,email,' . $Role->id,
+        // ]);
+
+        // $Role->update($request->all());
+
+        // return redirect()->route('roles.index')
+        //                  ->with('success', 'Role updated successfully.');
     }
 
     /**
@@ -61,6 +90,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        // $Role->delete();
+
+        // return redirect()->route('roles.index')
+        //                  ->with('success', 'Role deleted successfully.');
     }
 }
