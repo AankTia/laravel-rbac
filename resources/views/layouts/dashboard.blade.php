@@ -36,6 +36,9 @@
                         </div>
                     </div>
                 </div>
+
+                @include('partials._alert')
+
                 <div class="row">
                     <div class="col-sm-12">
                         @yield('content')
