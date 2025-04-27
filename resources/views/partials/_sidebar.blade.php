@@ -33,7 +33,7 @@
                             active subdrop
                         @endif
                     ">
-                        <img src="assets/img/icons/settings.svg" alt="img">
+                        <img src="{{ asset('assets/img/icons/settings.svg') }}" alt="img">
                         <span> Settings</span>
                         <span class="menu-arrow"></span>
                     </a>

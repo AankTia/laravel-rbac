@@ -23,10 +23,6 @@ class RoleController extends Controller
         return view('roles.index')
             ->with('viewData', $viewData)
             ->with('roles', $roles);
-
-
-        // $roles = Role::all();
-        // return view('roles.index', compact('roles'));
     }
 
     /**
@@ -58,7 +54,12 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        // return view('roles.show', compact('Role'));
+        $viewData = [
+            'title' => "Role - Laravel RBAC",
+            'subtitle' => "Role"
+        ];
+
+        return view('roles.show', compact('role'))->with('viewData', $viewData);
     }
 
     /**

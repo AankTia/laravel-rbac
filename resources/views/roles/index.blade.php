@@ -24,7 +24,7 @@
                             <td>{{ $role->display_name }}</td>
                             <td>{{ $role->description }}</td>
                             <td>
-                                <a class="me-3" href="#">
+                                <a class="me-3" href="{{ route('roles.show', $role) }}">
                                     <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="img">
                                 </a>
                                 <a class="me-3" href="#">
