@@ -15,23 +15,23 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
             [
-                'name' => 'create',
-                'display_name' => 'Create',
+                'slug' => 'create',
+                'name' => 'Create',
                 'description' => 'Create new items',
             ],
             [
-                'name' => 'read',
-                'display_name' => 'Read',
+                'slug' => 'read',
+                'name' => 'Read',
                 'description' => 'Read items',
             ],
             [
-                'name' => 'update',
-                'display_name' => 'Update',
+                'slug' => 'update',
+                'name' => 'Update',
                 'description' => 'Update existing items',
             ],
             [
-                'name' => 'delete',
-                'display_name' => 'Delete',
+                'slug' => 'delete',
+                'name' => 'Delete',
                 'description' => 'Delete items',
             ]
         ];
