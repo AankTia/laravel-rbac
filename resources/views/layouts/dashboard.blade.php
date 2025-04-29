@@ -2,58 +2,92 @@
 <html lang="en">
 
 <head>
-    @include('partials._meta')
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>@yield('title', 'Laravel RBAC')</title>
+    <title>Laravel RBAC</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+    <meta name="description" content="" />
 
-    @include('partials._stylesheet_assets')
-    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/fonts/boxicons.css') }}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('assets/sneat/css/demo.css') }}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/apex-charts/apex-charts.css') }}" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{{ asset('assets/sneat/vendor/js/helpers.js') }}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{ asset('assets/sneat/js/config.js') }}"></script>
 </head>
 
 <body>
-    <div id="global-loader">
-        <div class="whirly-loader"> </div>
-    </div>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            @include('partials._sidebar')
 
-    <div class="main-wrapper">
+            <!-- Layout container -->
+            <div class="layout-page">
+                @include('partials._top_navbar')
 
-        @include('partials._header')
-        @include('partials._sidebar')
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
 
-        <div class="page-wrapper">
-            <div class="content">
-                <div class="page-header">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h3 class="page-title">@yield('subtitle')</h3>
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0);">Home</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0);">Library</a>
+                                </li>
+                                <li class="breadcrumb-item active">Data</li>
+                            </ol>
+                        </nav>
 
-                            <div class="mt-3 mb-3">
-                                <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#">...</a></li>
-                                    <li class="breadcrumb-item active">...</li>
-                                </ul>
-                            </div>
-
-                            <div class="page-btn">
-                                @yield('pageButton')
-                            </div>
-                        </div>
+                        @yield('content')
                     </div>
+                    <!-- / Content -->
+
+                    @include('partials._footer')
+
+                    <div class="content-backdrop fade"></div>
                 </div>
-
-                @include('partials._alert')
-
-                @yield('content')
+                <!-- Content wrapper -->
             </div>
+            <!-- / Layout page -->
         </div>
-    </div>
 
-    @include('partials._script_assets')
-    <script src="{{ asset('assets/js/jquery.slimscroll.min.js') }}"></script>
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    @include('partials._body_js')
+    @yield('page_js')
+    <!-- Page JS -->
+    {{-- <script src="{{ asset('assets/sneat/js/dashboards-analytics.js') }}"></script> --}}
 </body>
 
 </html>
