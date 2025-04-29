@@ -51,8 +51,21 @@
 
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
+
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0);">Home</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0);">Library</a>
+                                </li>
+                                <li class="breadcrumb-item active">Data</li>
+                            </ol>
+                        </nav>
+
                         @yield('content')
                     </div>
                     <!-- / Content -->
