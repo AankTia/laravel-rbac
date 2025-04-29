@@ -55,7 +55,11 @@
             </a>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item 
+                @if (Str::startsWith(Route::currentRouteName(), 'roles.')) 
+                    active open
+                @endif
+            ">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Layouts">User Management</div>
@@ -65,8 +69,8 @@
                 <li class="menu-item">
                     <a href="#" class="menu-link">Users</a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">Roles</a>
+                <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'roles.')) active @endif">
+                    <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">Permissions</a>

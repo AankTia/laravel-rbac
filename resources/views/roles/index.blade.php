@@ -15,28 +15,30 @@
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Action</th>
+                        <th><div class="text-end">Action</div></th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($roles as $role)
-                        <tr>
-                            <td>{{ $role->display_name }}</td>
-                            <td>{{ $role->description }}</td>
-                            <td>
-                                <a class="me-3" href="{{ route('roles.show', $role) }}">
-                                    <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="img">
+                    <tr>
+                        <td>{{ $role->display_name }}</td>
+                        <td>{{ $role->description }}</td>
+                        <td>
+                            <div class="text-end">
+                                <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary">
+                                    <i class="bx bx-show-alt"></i>
                                 </a>
-                                <a class="me-3" href="#">
-                                    <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="img">
+                                <a href="#" class="btn btn-icon btn-outline-warning">
+                                    <i class="bx bx-edit-alt"></i>
                                 </a>
-                                <a class="confirm-text" href="javascript:void(0);">
-                                    <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="img">
+                                <a href="#" class="btn btn-icon btn-outline-danger">
+                                    <i class="bx bx-trash-alt"></i>
                                 </a>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     @empty
-                        
+
                     @endforelse
                 </tbody>
             </table>
