@@ -91,7 +91,12 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit', compact('role'));
+        $viewData = [
+            'title' => "Edit Role"
+        ];
+
+        return view('roles.edit', compact('role'))
+            ->with('viewData', $viewData);
     }
 
     /**
@@ -108,6 +113,28 @@ class RoleController extends Controller
 
         // return redirect()->route('roles.index')
         //                  ->with('success', 'Role updated successfully.');
+
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'content' => 'required|string',
+        // ]);
+
+        // $post->update($request->only('title', 'content'));
+
+        // return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
+
+        $roleData = $request->validated();
+
+        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+
+        $role->update($roleData);
+
+
+        // $role = Role::create($roleData);
+
+        return redirect()->route('roles.show', ['role' => $role])
+            ->with('success', 'Role updated successfully.');
     }
 
     /**

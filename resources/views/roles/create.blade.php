@@ -46,7 +46,7 @@
                     <div class="mb-3">
                         <label class="form-label">Available for Assignment</label>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="allow_to_be_assigne" id="allow_to_be_assigne" checked>
+                            <input class="form-check-input" type="checkbox" name="allow_to_be_assigne" id="allow_to_be_assigne" {{ old('allow_to_be_assigne') ? 'checked' : '' }}>
                             <label class="form-check-label" for="allow_to_be_assigne">Allow this role to be assigned to users</label>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="text-end">
-                <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
+                <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">Cancel</a>
                 <button type="submit" class="btn btn-primary">Create Role</button>
             </div>
         </form>

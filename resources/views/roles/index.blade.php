@@ -52,7 +52,7 @@
                                 <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary">
                                     <i class="bx bx-show-alt"></i>
                                 </a>
-                                <a href="#" class="btn btn-icon btn-outline-warning">
+                                <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning">
                                     <i class="bx bx-edit-alt"></i>
                                 </a>
                             </div>
