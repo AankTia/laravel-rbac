@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'])
+@section('title', $viewData['title'] . " | Laravel RBAC")
 @section('pageTitle', $viewData['title'])
 @section('pageSubTitle', $viewData['subtitle'])
 
@@ -16,7 +16,7 @@
     </div>
     <div class="col-md-6 text-md-end mt-3 mt-md-0">
         <a href="{{ route('roles.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-2"></i> Add New Role
+            <i class="bx bx-plus-circle me-2"></i> Add New Role
         </a>
     </div>
 </div>
@@ -32,7 +32,9 @@
                         <th>Role Name</th>
                         <th>Description</th>
                         <th>Created On</th>
-                        <th><div class="text-end">Action</div></th>
+                        <th>
+                            <div class="text-end">Action</div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +65,16 @@
             </table>
         </div>
 
-        <nav aria-label="Page navigation" class="mt-4">
+        <!-- Pagination Links with Bootstrap 5 Styling -->
+        {{-- <nav aria-label="Page navigation" class="mt-4">
+            <div class="d-flex justify-content-center">
+                {{ $roles->links() }}
+            </div>
+        </nav> --}}
+
+        {{ $roles->links('vendor.pagination.custom') }}
+
+        {{-- <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
@@ -75,7 +86,7 @@
                     <a class="page-link" href="#">Next</a>
                 </li>
             </ul>
-        </nav>
+        </nav> --}}
     </div>
 </div>
 

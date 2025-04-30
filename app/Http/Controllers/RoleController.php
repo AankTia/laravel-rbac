@@ -5,20 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $viewData = [
             'title' => "Roles",
             'subtitle' => "Manage all roles in the system"
         ];
 
-        $roles = Role::all();
+        // $roles = Role::all();
+        $query = Role::query();
+        // if ($request->has('search_keyword')) {
+        //     $keyword = $request->search_keyword;
+
+        //     $query->where(function ($q) use ($keyword) {
+        //         $q->where('name', 'LIKE', "%{$keyword}%");
+        //     });
+        // }
+        $roles = $query->orderBy('id', 'asc')
+            ->paginate(10);
+
+        $roles->appends($request->all());
 
         return view('roles.index')
             ->with('viewData', $viewData)
