@@ -42,7 +42,9 @@
                 <tbody>
                     @forelse ($roles as $role)
                     <tr>
-                        <td>{{ $role->name }}</td>
+                        <td>
+                            <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
+                        </td>
                         <td>{{ $role->description }}</td>
                         <td>{{ $role->created_at->format('d M Y, h:i A') }}</td>
                         <td>
