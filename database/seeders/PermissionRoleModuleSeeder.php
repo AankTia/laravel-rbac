@@ -57,65 +57,65 @@ class PermissionRoleModuleSeeder extends Seeder
             }
         }
         
-        // 2. ADMIN ROLE PERMISSIONS
-        // Admin has all basic CRUD permissions for all modules
-        $adminModules = $allModules->except([$auditLogsModule->id]);
-        foreach ($adminModules as $module) {
-            $this->assignPermission($adminRole->id, $createPermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $readPermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $updatePermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $deletePermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $approvePermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $exportPermission->id, $module->id);
-            $this->assignPermission($adminRole->id, $importPermission->id, $module->id);
-        }
+        // // 2. ADMIN ROLE PERMISSIONS
+        // // Admin has all basic CRUD permissions for all modules
+        // $adminModules = $allModules->except([$auditLogsModule->id]);
+        // foreach ($adminModules as $module) {
+        //     $this->assignPermission($adminRole->id, $createPermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $readPermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $updatePermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $deletePermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $approvePermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $exportPermission->id, $module->id);
+        //     $this->assignPermission($adminRole->id, $importPermission->id, $module->id);
+        // }
         
-        // Admin can manage users but not roles
-        $this->assignPermission($adminRole->id, $manageUsersPermission->id, $usersModule->id);
+        // // Admin can manage users but not roles
+        // $this->assignPermission($adminRole->id, $manageUsersPermission->id, $usersModule->id);
         
-        // Admin can access but not modify settings
-        $this->assignPermission($adminRole->id, $readPermission->id, $settingsModule->id);
+        // // Admin can access but not modify settings
+        // $this->assignPermission($adminRole->id, $readPermission->id, $settingsModule->id);
         
-        // Admin can access audit logs but cannot modify them
-        $this->assignPermission($adminRole->id, $readPermission->id, $auditLogsModule->id);
+        // // Admin can access audit logs but cannot modify them
+        // $this->assignPermission($adminRole->id, $readPermission->id, $auditLogsModule->id);
         
-        // 3. MANAGER ROLE PERMISSIONS
-        // Manager has access to dashboard
-        $this->assignPermission($managerRole->id, $readPermission->id, $dashboardModule->id);
+        // // 3. MANAGER ROLE PERMISSIONS
+        // // Manager has access to dashboard
+        // $this->assignPermission($managerRole->id, $readPermission->id, $dashboardModule->id);
         
-        // Manager has CRUD for products, orders, and invoices
-        foreach ([$productsModule, $ordersModule, $invoicesModule] as $module) {
-            $this->assignPermission($managerRole->id, $createPermission->id, $module->id);
-            $this->assignPermission($managerRole->id, $readPermission->id, $module->id);
-            $this->assignPermission($managerRole->id, $updatePermission->id, $module->id);
-            $this->assignPermission($managerRole->id, $deletePermission->id, $module->id);
-            $this->assignPermission($managerRole->id, $approvePermission->id, $module->id);
-        }
+        // // Manager has CRUD for products, orders, and invoices
+        // foreach ([$productsModule, $ordersModule, $invoicesModule] as $module) {
+        //     $this->assignPermission($managerRole->id, $createPermission->id, $module->id);
+        //     $this->assignPermission($managerRole->id, $readPermission->id, $module->id);
+        //     $this->assignPermission($managerRole->id, $updatePermission->id, $module->id);
+        //     $this->assignPermission($managerRole->id, $deletePermission->id, $module->id);
+        //     $this->assignPermission($managerRole->id, $approvePermission->id, $module->id);
+        // }
         
-        // Manager can read and export reports
-        $this->assignPermission($managerRole->id, $readPermission->id, $reportsModule->id);
-        $this->assignPermission($managerRole->id, $exportPermission->id, $reportsModule->id);
+        // // Manager can read and export reports
+        // $this->assignPermission($managerRole->id, $readPermission->id, $reportsModule->id);
+        // $this->assignPermission($managerRole->id, $exportPermission->id, $reportsModule->id);
         
-        // Manager can read user information but not modify
-        $this->assignPermission($managerRole->id, $readPermission->id, $usersModule->id);
+        // // Manager can read user information but not modify
+        // $this->assignPermission($managerRole->id, $readPermission->id, $usersModule->id);
         
-        // 4. STAFF ROLE PERMISSIONS
-        // Staff has access to dashboard
-        $this->assignPermission($staffRole->id, $readPermission->id, $dashboardModule->id);
+        // // 4. STAFF ROLE PERMISSIONS
+        // // Staff has access to dashboard
+        // $this->assignPermission($staffRole->id, $readPermission->id, $dashboardModule->id);
         
-        // Staff has read access to products
-        $this->assignPermission($staffRole->id, $readPermission->id, $productsModule->id);
+        // // Staff has read access to products
+        // $this->assignPermission($staffRole->id, $readPermission->id, $productsModule->id);
         
-        // Staff has create and read access to orders
-        $this->assignPermission($staffRole->id, $createPermission->id, $ordersModule->id);
-        $this->assignPermission($staffRole->id, $readPermission->id, $ordersModule->id);
-        $this->assignPermission($staffRole->id, $updatePermission->id, $ordersModule->id);
+        // // Staff has create and read access to orders
+        // $this->assignPermission($staffRole->id, $createPermission->id, $ordersModule->id);
+        // $this->assignPermission($staffRole->id, $readPermission->id, $ordersModule->id);
+        // $this->assignPermission($staffRole->id, $updatePermission->id, $ordersModule->id);
         
-        // Staff has read access to invoices
-        $this->assignPermission($staffRole->id, $readPermission->id, $invoicesModule->id);
+        // // Staff has read access to invoices
+        // $this->assignPermission($staffRole->id, $readPermission->id, $invoicesModule->id);
         
-        // Staff has read access to basic reports
-        $this->assignPermission($staffRole->id, $readPermission->id, $reportsModule->id);
+        // // Staff has read access to basic reports
+        // $this->assignPermission($staffRole->id, $readPermission->id, $reportsModule->id);
 
         $this->command->info('Role and Permission system seeded successfully!');
     }
