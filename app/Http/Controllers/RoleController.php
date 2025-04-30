@@ -126,4 +126,23 @@ class RoleController extends Controller
         $role->delete(); // This is a soft delete
         return redirect()->route('roles.index')->with('success', 'Role: ' . $name . ' deleted successfully.');
     }
+
+    /**
+     * Show the form for editing the specified permissions.
+     */
+    public function editPermissions(Role $role) {
+        $viewData = [
+            'title' => "Edit Role Permission"
+        ];
+        $modules = Module::all();
+
+        return view('roles.edit_permissions', compact('role'))
+            ->with('viewData', $viewData)
+            ->with('modules', $modules);
+    }
+
+    /**
+     * Update the specified permissions in storage.
+     */
+    public function updatePermissions() {}
 }

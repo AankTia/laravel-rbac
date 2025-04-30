@@ -9,5 +9,10 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    // Roles
     Route::resource('/roles', RoleController::class);
+    Route::get('/roles/{role}/permissions/edit', [RoleController::class, 'editPermissions'])->name('roles.edit-permissions');
+    Route::patch('/roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.update-permissions');
+    
 });

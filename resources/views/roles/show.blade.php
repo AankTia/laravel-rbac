@@ -114,7 +114,19 @@
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-header bg-white">
-                <h3 class="h5 mb-0">Permission Details</h3>
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h3 class="h5 mb-0">Permissions</h3>
+                    </div>
+                
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        @if(auth()->user()->hasPermission('update', 'roles'))
+                        <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-warning">
+                            <i class="bx bx-plus-circle me-2"></i> Update Permissions
+                        </a>
+                        @endif
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
