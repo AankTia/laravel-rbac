@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Module;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -130,7 +131,8 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified permissions.
      */
-    public function editPermissions(Role $role) {
+    public function editPermissions(Role $role)
+    {
         $viewData = [
             'title' => "Edit Role Permission"
         ];
@@ -144,5 +146,26 @@ class RoleController extends Controller
     /**
      * Update the specified permissions in storage.
      */
-    public function updatePermissions() {}
+    public function updatePermissions(Request $request, Role $role)
+    {
+        if (isset($request->modules)) {
+            foreach ($request->modules as $moduleSlug => $permissionsSlug) {
+                $module = Module::where('slug', $moduleSlug)->first();
+                if ($module) {
+                    $permissionsId = Permission::whereIn('slug', $permissionsSlug)->pluck('id')->toArray();
+                    foreach ($permissionsId as $permissionId) {
+                        $role->assignPermission($module->id, $permissionId);
+                    }
+                }
+                // dd($permissionsId);
+                # code...
+            }
+
+        } else {
+            // puts log
+        }
+
+        return redirect()->route('roles.edit-permissions', $role)
+            ->with('success', 'Role Permissions updated successfully.');
+    }
 }

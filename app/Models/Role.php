@@ -105,4 +105,13 @@ class Role extends Model
             ->where('module_id', $module->id)
             ->exists();
     }
+
+    public function assignPermission($moduleId, $permissionId)
+    {
+        PermissionRoleModule::create([
+            'role_id' => $this->id,
+            'permission_id' => $permissionId,
+            'module_id' => $moduleId,
+        ]);
+    }
 }
