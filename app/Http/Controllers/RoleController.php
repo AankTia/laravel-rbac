@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Module;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -62,6 +63,7 @@ class RoleController extends Controller
 
         $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
         $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+        $roleData['created_by_id'] = Auth::user()->id;
 
         $role = Role::create($roleData);
 
@@ -104,34 +106,12 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:roles,email,' . $Role->id,
-        // ]);
-
-        // $Role->update($request->all());
-
-        // return redirect()->route('roles.index')
-        //                  ->with('success', 'Role updated successfully.');
-
-        // $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'content' => 'required|string',
-        // ]);
-
-        // $post->update($request->only('title', 'content'));
-
-        // return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
-
         $roleData = $request->validated();
 
-        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['last_updated_by_id'] = Auth::user()->id;
 
         $role->update($roleData);
-
-
-        // $role = Role::create($roleData);
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role updated successfully.');

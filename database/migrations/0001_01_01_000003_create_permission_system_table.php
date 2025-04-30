@@ -18,8 +18,13 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('description')->nullable();
             $table->boolean('allow_to_be_assigne')->default(false);
+            $table->unsignedBigInteger('created_by_id')->nullable();
+            $table->unsignedBigInteger('last_updated_by_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('created_by_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('last_updated_by_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         // Create permissions table

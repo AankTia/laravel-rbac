@@ -12,7 +12,14 @@ class Role extends Model
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'description', 'allow_to_be_assigne'];
+    protected $fillable = [
+        'name', 
+        'slug', 
+        'description', 
+        'allow_to_be_assigne',
+        'created_by_id',
+        'last_updated_by_id'
+    ];
 
     protected static function boot()
     {
@@ -20,13 +27,25 @@ class Role extends Model
 
         // Before create
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            if ($model->slug == null || trim($model->slug) == '') {
+                $model->slug = Str::slug($model->name);
+            } 
         });
 
         // // Before update
         // static::updating(function ($model) {
         //     $model->validate($model->getAttributes(), $model->id);
         // });
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lastUpdatedBy()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -71,7 +71,7 @@
 
                         <div class="mb-3">
                             <div class="small text-muted">Created By</div>
-                            <div>-</div>
+                            <div>{{ $role->createdBy ? $role->createdBy->name : '-' }}</div>
                         </div>
 
                         <div class="mb-3">
@@ -81,7 +81,7 @@
 
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated By</div>
-                            <div>-</div>
+                            <div>{{ $role->lastUpdatedBy ? $role->lastUpdatedBy->name : '-' }}</div>
                         </div>
 
                         {{-- <div class="mb-3">
