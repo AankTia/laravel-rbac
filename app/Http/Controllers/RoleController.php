@@ -6,6 +6,7 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Module;
 use App\Models\Permission;
+use App\Models\PermissionRoleModule;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -149,6 +150,8 @@ class RoleController extends Controller
     public function updatePermissions(Request $request, Role $role)
     {
         if (isset($request->modules)) {
+            PermissionRoleModule::where('role_id', $role->id)->delete();
+
             foreach ($request->modules as $moduleSlug => $permissionsSlug) {
                 $module = Module::where('slug', $moduleSlug)->first();
                 if ($module) {
@@ -156,16 +159,16 @@ class RoleController extends Controller
                     foreach ($permissionsId as $permissionId) {
                         $role->assignPermission($module->id, $permissionId);
                     }
+                } else {
+                    // puts log
                 }
-                // dd($permissionsId);
-                # code...
             }
 
         } else {
             // puts log
         }
 
-        return redirect()->route('roles.edit-permissions', $role)
+        return redirect()->route('roles.show', $role)
             ->with('success', 'Role Permissions updated successfully.');
     }
 }
