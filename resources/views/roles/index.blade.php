@@ -50,11 +50,18 @@
                         <td>
                             <div class="text-end">
                                 <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary">
-                                    <i class="bx bx-show-alt"></i>
+                                    <i class="bx bx-show-alt me-1"></i>
                                 </a>
                                 <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning">
-                                    <i class="bx bx-edit-alt"></i>
+                                    <i class="bx bx-edit-alt me-1"></i>
                                 </a>
+                                <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-icon btn-outline-danger">
+                                        <i class="bx bx-trash me-1"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

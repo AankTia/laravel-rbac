@@ -13,6 +13,13 @@
         <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">
             <i class="bx bx-pencil me-1"></i> Edit Role
         </a>
+        <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
+                <i class="bx bx-trash me-1"></i> Delete
+            </button>
+        </form>
     </div>
 </div>
 @endsection

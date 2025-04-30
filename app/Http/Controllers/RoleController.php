@@ -122,9 +122,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        // $Role->delete();
-
-        // return redirect()->route('roles.index')
-        //                  ->with('success', 'Role deleted successfully.');
+        $name = $role->name;
+        $role->delete(); // This is a soft delete
+        return redirect()->route('roles.index')->with('success', 'Role: ' . $name . ' deleted successfully.');
     }
 }
