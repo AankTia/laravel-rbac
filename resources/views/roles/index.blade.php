@@ -17,13 +17,13 @@
     <div class="col-md-6">
         <div class="input-group">
             <span class="input-group-text bg-white">
-                <i class="bi bi-search"></i>
+                <i class="bx bx-search-alt"></i>
             </span>
             <input type="text" class="form-control" placeholder="Search roles...">
         </div>
     </div>
     <div class="col-md-6 text-md-end mt-3 mt-md-0">
-        <a href="create.html" class="btn btn-primary">
+        <a href="{{ route('roles.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle me-2"></i> Add New Role
         </a>
     </div>
@@ -46,7 +46,7 @@
                     <tr>
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
-                        <td>{{ $role->created_at }}</td>
+                        <td>{{ $role->created_at->format('d M Y, h:i A') }}</td>
                         <td>
                             <div class="text-end">
                                 <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary">
@@ -54,9 +54,6 @@
                                 </a>
                                 <a href="#" class="btn btn-icon btn-outline-warning">
                                     <i class="bx bx-edit-alt"></i>
-                                </a>
-                                <a href="#" class="btn btn-icon btn-outline-danger">
-                                    <i class="bx bx-trash-alt"></i>
                                 </a>
                             </div>
                         </td>

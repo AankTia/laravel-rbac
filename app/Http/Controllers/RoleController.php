@@ -14,8 +14,8 @@ class RoleController extends Controller
     public function index()
     {
         $viewData = [
-            'title' => "Role - Laravel RBAC",
-            'subtitle' => "Role"
+            'title' => "Roles",
+            'subtitle' => "Manage all roles in the system"
         ];
 
         $roles = Role::all();
