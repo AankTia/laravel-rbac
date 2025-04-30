@@ -7,12 +7,14 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-6">
-        <div class="input-group">
-            <span class="input-group-text bg-white">
-                <i class="bx bx-search-alt"></i>
-            </span>
-            <input type="text" class="form-control" placeholder="Search roles...">
-        </div>
+        <form action="{{ route('roles.index') }}" method="GET">
+            <div class="input-group">
+                <span class="input-group-text bg-white">
+                    <i class="bx bx-search-alt"></i>
+                </span>
+                <input type="text" name="search_keyword" value="{{ request('search_keyword') }}" class="form-control" placeholder="Search roles...">
+            </div>
+        </form>
     </div>
     <div class="col-md-6 text-md-end mt-3 mt-md-0">
         <a href="{{ route('roles.create') }}" class="btn btn-primary">
@@ -65,28 +67,8 @@
             </table>
         </div>
 
-        <!-- Pagination Links with Bootstrap 5 Styling -->
-        {{-- <nav aria-label="Page navigation" class="mt-4">
-            <div class="d-flex justify-content-center">
-                {{ $roles->links() }}
-            </div>
-        </nav> --}}
-
+        {{-- Pagination --}}
         {{ $roles->links('vendor.pagination.custom') }}
-
-        {{-- <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav> --}}
     </div>
 </div>
 

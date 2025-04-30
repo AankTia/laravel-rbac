@@ -21,13 +21,13 @@ class RoleController extends Controller
 
         // $roles = Role::all();
         $query = Role::query();
-        // if ($request->has('search_keyword')) {
-        //     $keyword = $request->search_keyword;
+        if ($request->has('search_keyword')) {
+            $keyword = $request->search_keyword;
 
-        //     $query->where(function ($q) use ($keyword) {
-        //         $q->where('name', 'LIKE', "%{$keyword}%");
-        //     });
-        // }
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', "%{$keyword}%");
+            });
+        }
         $roles = $query->orderBy('id', 'asc')
             ->paginate(10);
 
