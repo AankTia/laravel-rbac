@@ -68,8 +68,8 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $viewData = [
-            'title' => "Role - Laravel RBAC",
-            'subtitle' => "Role"
+            'title' => "Role Details",
+            'subtitle' => $role->name
         ];
 
         return view('roles.show', compact('role'))->with('viewData', $viewData);
