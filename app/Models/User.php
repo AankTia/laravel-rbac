@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -47,58 +48,73 @@ class User extends Authenticatable
     }
 
     /**
-     * Get te roles for the user.
+     * Get the role that owns the user.
      */
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
-    }
-
-    public function getRoleName()
-    {
-        $firstRole = $this->roles->first();
-        if ($firstRole) {
-            return $firstRole->display_name;
-        } else {
-            return '';
-        }
+        return $this->belongsTo(Role::class);
     }
 
     /**
-     * Check if the user has a specific role.
+     * Check if user has a specific permission for a module.
+     *
+     * @param string $permissionSlug
+     * @param string $moduleSlug
+     * @return bool
      */
-    public function hasRole($roleName)
+    public function hasPermission($permissionSlug, $moduleSlug)
     {
-        return $this->roles()->where('name', $roleName)->exists();
+        return $this->role && $this->role->hasPermission($permissionSlug, $moduleSlug);
     }
 
     /**
-     * Check if the user has a permission through any of their roles.
+     * Check if user has a specific role.
+     *
+     * @param string $roleSlug
+     * @return bool
      */
-    public function hasPermission($permissionName)
+    public function hasRole($roleSlug)
     {
-        foreach ($this->roles as $role) {
-            if ($role->permissions()->where('name', $permissionName)->exists()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->role && $this->role->slug === $roleSlug;
     }
 
     /**
-     * Check if the user has access to a specific rousource.
+     * Check if user is super admin.
+     *
+     * @return bool
      */
-    public function hasResourceAccess($resourceName, $permissionName)
+    public function isSuperAdmin()
     {
-        foreach ($this->roles as $role) {
-            foreach ($role->permissions as $permission) {
-                if ($permission->name === $permissionName) {
-                    return true;
-                }
-            }
-        }
+        return $this->hasRole('superadmin');
+    }
 
-        return false;
+    /**
+     * Check if user is admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is manager.
+     *
+     * @return bool
+     */
+    public function isManager()
+    {
+        return $this->hasRole('manager');
+    }
+
+    /**
+     * Check if user is staff.
+     *
+     * @return bool
+     */
+    public function isStaff()
+    {
+        return $this->hasRole('staff');
     }
 }

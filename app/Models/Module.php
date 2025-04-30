@@ -10,15 +10,25 @@ class Module extends Model
     /** @use HasFactory<\Database\Factories\ResourceFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'resource_type',
-        'description'
-    ];
+    protected $fillable = ['name', 'slug', 'description'];
 
-    /** Get the permissions for this resource. */
+    /**
+     * Get roles that have access to this module.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'permission_role_module')
+                    ->withPivot('permission_id')
+                    ->using(PermissionRoleModule::class);
+    }
+
+    /**
+     * Get permissions for this module.
+     */
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'permission_resources');
+        return $this->belongsToMany(Permission::class, 'permission_role_module')
+                    ->withPivot('role_id')
+                    ->using(PermissionRoleModule::class);
     }
 }
