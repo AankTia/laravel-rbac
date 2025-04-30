@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Laravel RBAC</title>
+    <title>@yield('title', 'Laravel RBAC')</title>
 
     <meta name="description" content="" />
 
@@ -54,17 +54,12 @@
 
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        {{-- <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="javascript:void(0);">Home</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="javascript:void(0);">Library</a>
-                                </li>
-                                <li class="breadcrumb-item active">Data</li>
-                            </ol>
-                        </nav> --}}
+                        <header class="mb-4">
+                            <h1 class="display-5 fw-bold">@yield('pageTitle')</h1>
+                            <p class="text-muted">@yield('pageSubTitle')</p>
+                        </header>
+
+                        @yield('pageAction')
 
                         @yield('content')
                     </div>

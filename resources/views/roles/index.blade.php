@@ -1,18 +1,10 @@
 @extends('layouts.dashboard')
-{{-- @section('title', $viewData['title']) --}}
-{{-- @section('subtitle', $viewData['subtitle']) --}}
 
-{{-- @section('pageButton')
-<a href="#" class="btn btn-added"><img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add New {{ $viewData['subtitle'] }}</a>
-@endsection --}}
+@section('title', $viewData['title'])
+@section('pageTitle', $viewData['title'])
+@section('pageSubTitle', $viewData['subtitle'])
 
-@section('content')
-
-<header class="mb-4">
-    <h1 class="display-5 fw-bold">Role Management</h1>
-    <p class="text-muted">Manage all roles in the system</p>
-</header>
-
+@section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-6">
         <div class="input-group">
@@ -28,14 +20,16 @@
         </a>
     </div>
 </div>
+@endsection
 
+@section('content')
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Role Name</th>
                         <th>Description</th>
                         <th>Created On</th>
                         <th><div class="text-end">Action</div></th>
@@ -59,7 +53,11 @@
                         </td>
                     </tr>
                     @empty
-
+                    <tr>
+                        <td colspan="4">
+                            <div class="text-center">No data to show</div>
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
