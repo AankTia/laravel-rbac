@@ -149,23 +149,27 @@ class RoleController extends Controller
      */
     public function updatePermissions(Request $request, Role $role)
     {
-        if (isset($request->modules)) {
-            PermissionRoleModule::where('role_id', $role->id)->delete();
+        PermissionRoleModule::where('role_id', $role->id)->delete();
 
+        if (isset($request->modules)) {
+            $newRolePermissionsData = [];
             foreach ($request->modules as $moduleSlug => $permissionsSlug) {
                 $module = Module::where('slug', $moduleSlug)->first();
                 if ($module) {
                     $permissionsId = Permission::whereIn('slug', $permissionsSlug)->pluck('id')->toArray();
                     foreach ($permissionsId as $permissionId) {
-                        $role->assignPermission($module->id, $permissionId);
+                        $newRolePermissionsData[] = [
+                            'role_id' => $role->id,
+                            'module_id' => $module->id,
+                            'permission_id' => $permissionId
+                        ];
                     }
-                } else {
-                    // puts log
                 }
             }
 
-        } else {
-            // puts log
+            if (count($newRolePermissionsData) > 0) {
+                PermissionRoleModule::insert($newRolePermissionsData);
+            }
         }
 
         return redirect()->route('roles.show', $role)
