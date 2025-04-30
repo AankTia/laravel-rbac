@@ -44,7 +44,13 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        $viewData = [
+            'title' => "Create New Role",
+            // 'subtitle' => $role->name
+        ];
+
+        return view('roles.create')
+            ->with('viewData', $viewData);
     }
 
     /**
@@ -52,15 +58,10 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:roles',
-        // ]);
+        $role = Role::create($request->validated());
 
-        // Role::create($request->all());
-
-        // return redirect()->route('roles.index')
-        //                  ->with('success', 'Role created successfully.');
+        return redirect()->route('roles.show', ['role' => $role])
+            ->with('success', 'Role created successfully.');
     }
 
     /**
@@ -85,8 +86,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        // return view('roles.edit', compact('Role'));
-        return view('roles.edit');
+        return view('roles.edit', compact('role'));
     }
 
     /**
