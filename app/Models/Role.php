@@ -11,7 +11,7 @@ class Role extends Model
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = ['name', 'slug', 'description', 'allow_to_be_assigne'];
 
     /**
      * Get the users that belong to this role.

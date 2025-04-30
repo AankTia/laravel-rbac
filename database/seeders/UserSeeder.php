@@ -29,16 +29,10 @@ class UserSeeder extends Seeder
                 'role_id' => Role::where('slug', 'admin')->first()->id
             ],
             [
-                'name' => 'Manager User',
-                'email' => 'manager@example.com',
+                'name' => 'User',
+                'email' => 'user@example.com',
                 'password' => Hash::make('password'),
-                'role_id' => Role::where('slug', 'manager')->first()->id
-            ],
-            [
-                'name' => 'Staff User',
-                'email' => 'staff@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => Role::where('slug', 'staff')->first()->id
+                'role_id' => Role::where('slug', 'user')->first()->id
             ],
         ];
 

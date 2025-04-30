@@ -48,8 +48,14 @@
                 </div> --}}
 
                 <div class="mb-4">
-                    <h3 class="h6 text-muted">User Assignment</h3>
-                    <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
+                    <h3 class="h6 text-muted">Allow to be assigned to users</h3>
+                    <p>
+                        @if ($role->allow_to_be_assigne)
+                            <span class="badge bg-label-primary">Allowed</span>
+                        @else
+                            <span class="badge bg-label-secondary">Not Allowed</span>
+                        @endif
+                    </p>
                 </div>
             </div>
 
@@ -150,6 +156,10 @@
                 <h3 class="h5 mb-0">Assigned Users</h3>
             </div>
             <div class="card-body">
+                <div class="mb-4">
+                    <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead class="table-light">

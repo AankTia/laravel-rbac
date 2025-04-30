@@ -14,10 +14,24 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-            ['name' => 'Super Admin', 'slug' => 'superadmin', 'description' => 'Full system access with all permissions'],
-            ['name' => 'Admin', 'slug' => 'admin', 'description' => 'Administrative access with most permissions'],
-            ['name' => 'Manager', 'slug' => 'manager', 'description' => 'Management access with limited permissions'],
-            ['name' => 'Staff', 'slug' => 'staff', 'description' => 'Basic staff access with minimal permissions'],
+            [
+                'name' => 'Super Admin', 
+                'slug' => 'superadmin', 
+                'allow_to_be_assigne' => false,
+                'description' => 'Full system access with all permissions'
+            ],
+            [
+                'name' => 'Admin', 
+                'slug' => 'admin', 
+                'allow_to_be_assigne' => true,
+                'description' => 'Administrative access with most permissions'
+            ],
+            [
+                'name' => 'User', 
+                'slug' => 'user', 
+                'allow_to_be_assigne' => true,
+                'description' => 'Basic access with minimal permissions'
+            ],
         ];
 
         foreach ($roles as $role) {
