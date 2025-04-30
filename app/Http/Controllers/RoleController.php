@@ -58,7 +58,12 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $role = Role::create($request->validated());
+        $roleData = $request->validated();
+
+        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+
+        $role = Role::create($roleData);
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role created successfully.');

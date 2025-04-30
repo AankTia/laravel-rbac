@@ -27,7 +27,7 @@ class StoreRoleRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:roles,name',
             'description' => 'required|string|max:255',
-            'stock' => 'sometimes|required|integer|min:0',
+            'allow_to_be_assigne' => 'nullable',
         ];
     }
 }
