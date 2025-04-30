@@ -30,7 +30,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        // return view('roles.create');
+        return view('roles.create');
     }
 
     /**
@@ -68,6 +68,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         // return view('roles.edit', compact('Role'));
+        return view('roles.edit');
     }
 
     /**
