@@ -45,9 +45,6 @@
                 <div class="mb-4">
                     <h3 class="h6 text-muted">User Assignment</h3>
                     <p>This role is currently assigned to  <strong>{{ $role->users->count() }} users</strong> in the system.</p>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#usersModal">
-                        View Assigned Users
-                    </button>
                 </div>
             </div>
 
@@ -92,107 +89,118 @@
     </div>
 </div>
 
-<div class="card shadow-sm">
-    <div class="card-header bg-white">
-        <h3 class="h5 mb-0">Permission Details</h3>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="table-light">
-                    <tr>
-                        <th>Module</th>
-                        <th class="text-center">Read</th>
-                        <th class="text-center">Create</th>
-                        <th class="text-center">Update</th>
-                        <th class="text-center">Delete</th>
-                        <th class="text-center">Special Privileges</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($modules as $module)
-                    <tr>
-                        <td class="fw-medium">{{ $module->name }}</td>
-                        <th class="text-center">
-                            @if ($role->hasPermission('read', $module->slug))
-                                <i class="bx bxs-check-circle text-success"></i>
-                            @endif
-                        </th>
-                        <th class="text-center">
-                            @if ($role->hasPermission('create', $module->slug))
-                                <i class="bx bxs-check-circle text-success"></i>
-                            @endif
-                        </th>
-                        <th class="text-center">
-                            @if ($role->hasPermission('update', $module->slug))
-                                <i class="bx bxs-check-circle text-success"></i>
-                            @endif
-                        </th>
-                        <th class="text-center">
-                            @if ($role->hasPermission('delete', $module->slug))
-                                <i class="bx bxs-check-circle text-success"></i>
-                            @endif
-                        </th>
-                        <th class="text-center">
-                            {{-- Special Privileges --}}
-                        </th>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Users Modal -->
-<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="usersModalLabel">Users with Administrator Role</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="h5 mb-0">Permission Details</h3>
             </div>
-            <div class="modal-body">
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Department</th>
-                                <th>Assigned Date</th>
+                                <th>Module</th>
+                                <th class="text-center">Read</th>
+                                <th class="text-center">Create</th>
+                                <th class="text-center">Update</th>
+                                <th class="text-center">Delete</th>
+                                <th class="text-center">Special Privileges</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($modules as $module)
                             <tr>
-                                <td>John Smith</td>
-                                <td>john.smith@example.com</td>
-                                <td>IT</td>
-                                <td>Jan 15, 2025</td>
+                                <td class="fw-medium">{{ $module->name }}</td>
+                                <th class="text-center">
+                                    @if ($role->hasPermission('read', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th>
+                                <th class="text-center">
+                                    @if ($role->hasPermission('create', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th>
+                                <th class="text-center">
+                                    @if ($role->hasPermission('update', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th>
+                                <th class="text-center">
+                                    @if ($role->hasPermission('delete', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th>
+                                <th class="text-center">
+                                    {{-- Special Privileges --}}
+                                </th>
                             </tr>
-                            <tr>
-                                <td>Sarah Johnson</td>
-                                <td>sarah.j@example.com</td>
-                                <td>Operations</td>
-                                <td>Feb 3, 2025</td>
-                            </tr>
-                            <tr>
-                                <td>Michael Wong</td>
-                                <td>m.wong@example.com</td>
-                                <td>Security</td>
-                                <td>Mar 12, 2025</td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="h5 mb-0">Assigned Users</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Assigned Date</th>
+                                <th class="text-center">Assigned By</th>
+                                {{-- <th class="text-center">Email</th> --}}
+                                {{-- <th class="text-center">Update</th> --}}
+                                {{-- <th class="text-center">Delete</th> --}}
+                                {{-- <th class="text-center">Special Privileges</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($role->users as $user)
+                            <tr>
+                                <td class="fw-medium">{{ $user->name }}</td>
+                                <td class="fw-medium">{{ $user->email }}</td>
+                                <td class="fw-medium"></td>
+                                <td class="fw-medium"></td>
+                                {{-- <th class="text-center">
+                                    @if ($role->hasPermission('read', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th> --}}
+                                {{-- <th class="text-center">
+                                    @if ($role->hasPermission('create', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th> --}}
+                                {{-- <th class="text-center">
+                                    @if ($role->hasPermission('update', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th> --}}
+                                {{-- <th class="text-center">
+                                    @if ($role->hasPermission('delete', $module->slug))
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </th> --}}
+                                {{-- <th class="text-center">
+                                    Special Privileges
+                                </th> --}}
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 @endsection
