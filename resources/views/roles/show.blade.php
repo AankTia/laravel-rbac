@@ -25,6 +25,11 @@
                 <h2 class="card-title h4 mb-4">{{ $role->name }}</h2>
 
                 <div class="mb-4">
+                    <h3 class="h6 text-muted">Identifier</h3>
+                    <p>{{ $role->slug }}</p>
+                </div>
+
+                <div class="mb-4">
                     <h3 class="h6 text-muted">Description</h3>
                     <p>{{ $role->description }}</p>
                 </div>
@@ -51,12 +56,7 @@
             <div class="col-md-4">
                 <div class="card bg-light">
                     <div class="card-body">
-                        <h3 class="h6 text-muted mb-3">Role Information</h3>
-
-                        <div class="mb-3">
-                            <div class="small text-muted">Role Identifier</div>
-                            <div>{{ $role->slug }}</div>
-                        </div>
+                        <h3 class="h6 text-muted mb-3">Information</h3>
 
                         <div class="mb-3">
                             <div class="small text-muted">Created On</div>
@@ -167,10 +167,10 @@
                         <tbody>
                             @foreach ($role->users as $user)
                             <tr>
-                                <td class="fw-medium">{{ $user->name }}</td>
-                                <td class="fw-medium">{{ $user->email }}</td>
-                                <td class="fw-medium"></td>
-                                <td class="fw-medium"></td>
+                                <td class="fw-medium" nowrap>{{ $user->name }}</td>
+                                <td class="fw-medium" nowrap>{{ $user->email }}</td>
+                                <td class="fw-medium" nowrap></td>
+                                <td class="fw-medium" nowrap></td>
                                 {{-- <th class="text-center">
                                     @if ($role->hasPermission('read', $module->slug))
                                         <i class="bx bxs-check-circle text-success"></i>
