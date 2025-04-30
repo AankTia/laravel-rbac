@@ -69,9 +69,11 @@
                 <li class="menu-item">
                     <a href="#" class="menu-link">Users</a>
                 </li>
-                <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'roles.')) active @endif">
-                    <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
-                </li>
+                @if(auth()->user()->hasPermission('read', 'roles'))
+                    <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'roles.')) active @endif">
+                        <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
+                    </li>
+                @endif
                 <li class="menu-item">
                     <a href="#" class="menu-link">Permissions</a>
                 </li>
