@@ -21,7 +21,7 @@
                 <tbody>
                     @forelse ($roles as $role)
                     <tr>
-                        <td>{{ $role->display_name }}</td>
+                        <td>{{ $role->name }}</td>
                         <td>{{ $role->description }}</td>
                         <td>
                             <div class="text-end">
