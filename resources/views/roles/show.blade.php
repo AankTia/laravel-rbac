@@ -8,10 +8,10 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bi bi-arrow-left me-1"></i> Back to List
+            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
         </a>
-        <a href="edit.html" class="btn btn-primary">
-            <i class="bi bi-pencil me-1"></i> Edit Role
+        <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">
+            <i class="bx bx-pencil me-1"></i> Edit Role
         </a>
     </div>
 </div>
@@ -44,7 +44,7 @@
 
                 <div class="mb-4">
                     <h3 class="h6 text-muted">User Assignment</h3>
-                    <p>This role is currently assigned to  <strong>{{ $role->users->count() }} users</strong> in the system.</p>
+                    <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
                 </div>
             </div>
 
@@ -114,22 +114,22 @@
                                 <td class="fw-medium">{{ $module->name }}</td>
                                 <th class="text-center">
                                     @if ($role->hasPermission('read', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
+                                    <i class="bx bxs-check-circle text-success"></i>
                                     @endif
                                 </th>
                                 <th class="text-center">
                                     @if ($role->hasPermission('create', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
+                                    <i class="bx bxs-check-circle text-success"></i>
                                     @endif
                                 </th>
                                 <th class="text-center">
                                     @if ($role->hasPermission('update', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
+                                    <i class="bx bxs-check-circle text-success"></i>
                                     @endif
                                 </th>
                                 <th class="text-center">
                                     @if ($role->hasPermission('delete', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
+                                    <i class="bx bxs-check-circle text-success"></i>
                                     @endif
                                 </th>
                                 <th class="text-center">
