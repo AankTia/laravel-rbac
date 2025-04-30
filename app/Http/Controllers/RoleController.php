@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use App\Models\Module;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -72,7 +73,11 @@ class RoleController extends Controller
             'subtitle' => $role->name
         ];
 
-        return view('roles.show', compact('role'))->with('viewData', $viewData);
+        $modules = Module::all();
+
+        return view('roles.show', compact('role'))
+            ->with('viewData', $viewData)
+            ->with('modules', $modules);
     }
 
     /**

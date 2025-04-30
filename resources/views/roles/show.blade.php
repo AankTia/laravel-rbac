@@ -102,46 +102,42 @@
                 <thead class="table-light">
                     <tr>
                         <th>Module</th>
-                        <th class="text-center">Create</th>
                         <th class="text-center">Read</th>
+                        <th class="text-center">Create</th>
                         <th class="text-center">Update</th>
                         <th class="text-center">Delete</th>
                         <th class="text-center">Special Privileges</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($modules as $module)
                     <tr>
-                        <td class="fw-medium">Users</td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td>Reset passwords, Impersonate</td>
+                        <td class="fw-medium">{{ $module->name }}</td>
+                        <th class="text-center">
+                            @if ($role->hasPermission('read', $module->slug))
+                                <i class="bx bxs-check-circle text-success"></i>
+                            @endif
+                        </th>
+                        <th class="text-center">
+                            @if ($role->hasPermission('create', $module->slug))
+                                <i class="bx bxs-check-circle text-success"></i>
+                            @endif
+                        </th>
+                        <th class="text-center">
+                            @if ($role->hasPermission('update', $module->slug))
+                                <i class="bx bxs-check-circle text-success"></i>
+                            @endif
+                        </th>
+                        <th class="text-center">
+                            @if ($role->hasPermission('delete', $module->slug))
+                                <i class="bx bxs-check-circle text-success"></i>
+                            @endif
+                        </th>
+                        <th class="text-center">
+                            {{-- Special Privileges --}}
+                        </th>
                     </tr>
-                    <tr>
-                        <td class="fw-medium">Roles</td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td>Assign, Audit</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-medium">Reports</td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td>Export, Schedule</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-medium">Settings</td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td class="text-center"><i class="bx bxs-check-circle text-success"></i></td>
-                        <td>System configuration, Backups</td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
