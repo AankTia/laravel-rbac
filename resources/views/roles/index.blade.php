@@ -7,6 +7,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-6">
+        @if(auth()->user()->hasPermission('read', 'roles'))
         <form action="{{ route('roles.index') }}" method="GET">
             <div class="input-group">
                 <span class="input-group-text bg-white">
@@ -15,11 +16,15 @@
                 <input type="text" name="search_keyword" value="{{ request('search_keyword') }}" class="form-control" placeholder="Search roles...">
             </div>
         </form>
+        @endif
     </div>
+
     <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        @if(auth()->user()->hasPermission('create', 'roles'))
         <a href="{{ route('roles.create') }}" class="btn btn-primary">
             <i class="bx bx-plus-circle me-2"></i> Add New Role
         </a>
+        @endif
     </div>
 </div>
 @endsection
@@ -49,12 +54,19 @@
                         <td>{{ $role->created_at->format('d M Y, h:i A') }}</td>
                         <td>
                             <div class="text-end">
+                                @if(auth()->user()->hasPermission('read', 'roles'))
                                 <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary">
                                     <i class="bx bx-show-alt me-1"></i>
                                 </a>
+                                @endif
+
+                                @if(auth()->user()->hasPermission('update', 'roles'))
                                 <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning">
                                     <i class="bx bx-edit-alt me-1"></i>
                                 </a>
+                                @endif
+
+                                @if(auth()->user()->hasPermission('delete', 'roles'))
                                 <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -62,6 +74,7 @@
                                         <i class="bx bx-trash me-1"></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

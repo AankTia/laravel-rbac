@@ -7,12 +7,19 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
+        @if(auth()->user()->hasPermission('read', 'roles'))
         <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">
             <i class="bx bx-left-arrow-alt me-1"></i> Back to List
         </a>
+        @endif
+
+        @if(auth()->user()->hasPermission('update', 'roles'))
         <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">
             <i class="bx bx-pencil me-1"></i> Edit Role
         </a>
+        @endif
+
+        @if(auth()->user()->hasPermission('delete', 'roles'))
         <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
@@ -20,6 +27,7 @@
                 <i class="bx bx-trash me-1"></i> Delete
             </button>
         </form>
+        @endif
     </div>
 </div>
 @endsection
@@ -58,9 +66,9 @@
                     <h3 class="h6 text-muted">Allow to be assigned to users</h3>
                     <p>
                         @if ($role->allow_to_be_assigne)
-                            <span class="badge bg-label-primary">Allowed</span>
+                        <span class="badge bg-label-primary">Allowed</span>
                         @else
-                            <span class="badge bg-label-secondary">Not Allowed</span>
+                        <span class="badge bg-label-secondary">Not Allowed</span>
                         @endif
                     </p>
                 </div>
