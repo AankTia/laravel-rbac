@@ -27,8 +27,8 @@ class RoleSeeder extends Seeder
                 'description' => 'Administrative access with most permissions'
             ],
             [
-                'name' => 'User', 
-                'slug' => 'user', 
+                'name' => 'Viewer', 
+                'slug' => 'viewer', 
                 'allow_to_be_assigne' => true,
                 'description' => 'Basic access with minimal permissions'
             ],

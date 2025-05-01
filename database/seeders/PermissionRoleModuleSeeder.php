@@ -18,33 +18,33 @@ class PermissionRoleModuleSeeder extends Seeder
     {
         // Get roles
         $superadminRole = Role::where('slug', 'superadmin')->first();
-        $adminRole = Role::where('slug', 'admin')->first();
-        $managerRole = Role::where('slug', 'manager')->first();
-        $staffRole = Role::where('slug', 'staff')->first();
+        // $adminRole = Role::where('slug', 'admin')->first();
+        // $managerRole = Role::where('slug', 'manager')->first();
+        $viewerRole = Role::where('slug', 'viewer')->first();
 
         // Get all permissions and modules for easy reference
-        $createPermission = Permission::where('slug', 'create')->first();
+        // $createPermission = Permission::where('slug', 'create')->first();
         $readPermission = Permission::where('slug', 'read')->first();
-        $updatePermission = Permission::where('slug', 'update')->first();
-        $deletePermission = Permission::where('slug', 'delete')->first();
-        $approvePermission = Permission::where('slug', 'approve')->first();
-        $exportPermission = Permission::where('slug', 'export')->first();
-        $importPermission = Permission::where('slug', 'import')->first();
-        $manageUsersPermission = Permission::where('slug', 'manage-users')->first();
-        $manageRolesPermission = Permission::where('slug', 'manage-roles')->first();
-        $manageSettingsPermission = Permission::where('slug', 'manage-settings')->first();
+        // $updatePermission = Permission::where('slug', 'update')->first();
+        // $deletePermission = Permission::where('slug', 'delete')->first();
+        // $approvePermission = Permission::where('slug', 'approve')->first();
+        // $exportPermission = Permission::where('slug', 'export')->first();
+        // $importPermission = Permission::where('slug', 'import')->first();
+        // $manageUsersPermission = Permission::where('slug', 'manage-users')->first();
+        // $manageRolesPermission = Permission::where('slug', 'manage-roles')->first();
+        // $manageSettingsPermission = Permission::where('slug', 'manage-settings')->first();
 
         // Get all modules
         $allModules = Module::all();
-        $dashboardModule = Module::where('slug', 'dashboard')->first();
-        $usersModule = Module::where('slug', 'users')->first();
-        $rolesModule = Module::where('slug', 'roles')->first();
-        $productsModule = Module::where('slug', 'products')->first();
-        $ordersModule = Module::where('slug', 'orders')->first();
-        $invoicesModule = Module::where('slug', 'invoices')->first();
-        $reportsModule = Module::where('slug', 'reports')->first();
-        $settingsModule = Module::where('slug', 'settings')->first();
-        $auditLogsModule = Module::where('slug', 'audit-logs')->first();
+        // $dashboardModule = Module::where('slug', 'dashboard')->first();
+        // $usersModule = Module::where('slug', 'users')->first();
+        // $rolesModule = Module::where('slug', 'roles')->first();
+        // $productsModule = Module::where('slug', 'products')->first();
+        // $ordersModule = Module::where('slug', 'orders')->first();
+        // $invoicesModule = Module::where('slug', 'invoices')->first();
+        // $reportsModule = Module::where('slug', 'reports')->first();
+        // $settingsModule = Module::where('slug', 'settings')->first();
+        // $auditLogsModule = Module::where('slug', 'audit-logs')->first();
 
         // Get all permissions
         $allPermissions = Permission::all();
@@ -52,9 +52,12 @@ class PermissionRoleModuleSeeder extends Seeder
         // 1. SUPERADMIN ROLE PERMISSIONS
         // Superadmin has all permissions for all modules
         foreach ($allModules as $module) {
+            // Superadmin has all permissions for all modules
             foreach ($allPermissions as $permission) {
-                $this->assignPermission($superadminRole->id, $permission->id, $module->id);
+                $superadminRole->assignPermission($module->id, $permission->id);
             }
+            
+            $viewerRole->assignPermission($module->id, $readPermission->id);
         }
         
         // // 2. ADMIN ROLE PERMISSIONS

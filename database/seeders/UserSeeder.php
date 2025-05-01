@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 'name' => 'User',
                 'email' => 'user@example.com',
                 'password' => Hash::make('password'),
-                'role_id' => Role::where('slug', 'user')->first()->id
+                'role_id' => Role::where('slug', 'viewer')->first()->id
             ],
         ];
 
