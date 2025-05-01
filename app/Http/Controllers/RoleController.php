@@ -82,12 +82,50 @@ class RoleController extends Controller
             'title' => "Role Details",
             'subtitle' => $role->name
         ];
+        
+        $roleModulePermissions = [];
+        foreach ($role->modulePermissions as $roleModulePermission) {
+            $moduleSlug = $roleModulePermission->module->slug;
+            $permissionSlug = $roleModulePermission->permission->slug;
+            if (isset($roleModulePermissions[$moduleSlug])) {
+                $roleModulePermissions[$moduleSlug][] = $permissionSlug;
+            } else {
+                $roleModulePermissions[$moduleSlug] = [$permissionSlug];
+            }
+        }
 
+        $modulePermissions = [];
         $modules = Module::all();
+        foreach ($modules as $module) {
+            $roleModulePermission = $roleModulePermissions[$module->slug];
+
+            $modulePermissionSlugs = [];
+            $otherPermissions = [];
+            foreach ($module->permissions as $modPermission) {
+                $modulePermissionSlugs[] = $modPermission->slug;
+                if (!in_array($modPermission->slug, ['read', 'create', 'update', 'delete'])) {
+                    if (in_array($modPermission->slug, $roleModulePermission)) {
+                        $otherPermissions[] = $modPermission->name;
+                    }
+                }
+            }
+
+            $modulePermissions[$module->name] = [
+                'read' => (in_array('read', $modulePermissionSlugs) && in_array('read', $roleModulePermission)),
+                'create' => (in_array('create', $modulePermissionSlugs) && in_array('create', $roleModulePermission)),
+                'update' => (in_array('update', $modulePermissionSlugs) && in_array('update', $roleModulePermission)),
+                'delete' => (in_array('delete', $modulePermissionSlugs) && in_array('delete', $roleModulePermission)),
+                'others' => $otherPermissions
+            ];
+        }
+
+        $crudPermissionData = Permission::whereIn('slug', ['create', 'read', 'update', 'delete'])
+            ->pluck('id', 'slug')
+            ->toArray();
 
         return view('roles.show', compact('role'))
             ->with('viewData', $viewData)
-            ->with('modules', $modules);
+            ->with('modulePermissions', $modulePermissions);
     }
 
     /**

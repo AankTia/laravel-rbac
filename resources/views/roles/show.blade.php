@@ -142,32 +142,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($modules as $module)
+                            @foreach ($modulePermissions as $moduleName => $permissions)
                             <tr>
-                                <td class="fw-medium">{{ $module->name }}</td>
-                                <th class="text-center">
-                                    @if ($role->hasPermission('read', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
+                                <td class="fw-medium">{{ $moduleName }}</td>
+                                <td class="text-center">
+                                    @if ($permissions['read'])
+                                        <i class="bx bxs-check-circle text-success"></i>
                                     @endif
-                                </th>
-                                <th class="text-center">
-                                    @if ($role->hasPermission('create', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
+                                </td>
+                                <td class="text-center">
+                                    @if ($permissions['create'])
+                                        <i class="bx bxs-check-circle text-success"></i>
                                     @endif
-                                </th>
-                                <th class="text-center">
-                                    @if ($role->hasPermission('update', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
+                                </td>
+                                <td class="text-center">
+                                    @if ($permissions['update'])
+                                        <i class="bx bxs-check-circle text-success"></i>
                                     @endif
-                                </th>
-                                <th class="text-center">
-                                    @if ($role->hasPermission('delete', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
+                                </td>
+
+                                <td class="text-center">
+                                    @if ($permissions['delete'])
+                                        <i class="bx bxs-check-circle text-success"></i>
                                     @endif
-                                </th>
-                                <th class="text-center">
-                                    {{-- Special Privileges --}}
-                                </th>
+                                </td>
+                                <td nowrap>
+                                    @foreach ($permissions['others'] as $otherPermission)
+                                        <div>
+                                            <i class="bx bxs-check-circle text-success"></i> {{ $otherPermission }}
+                                        </div>
+                                    @endforeach
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
