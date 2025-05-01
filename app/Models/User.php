@@ -105,23 +105,23 @@ class User extends Authenticatable
         return $this->hasRole('admin');
     }
 
-    /**
-     * Check if user is manager.
-     *
-     * @return bool
-     */
-    public function isManager()
-    {
-        return $this->hasRole('manager');
-    }
+    // /**
+    //  * Check if user is manager.
+    //  *
+    //  * @return bool
+    //  */
+    // public function isManager()
+    // {
+    //     return $this->hasRole('manager');
+    // }
 
-    /**
-     * Check if user is staff.
-     *
-     * @return bool
-     */
-    public function isStaff()
-    {
-        return $this->hasRole('staff');
-    }
+    // /**
+    //  * Check if user is staff.
+    //  *
+    //  * @return bool
+    //  */
+    // public function isStaff()
+    // {
+    //     return $this->hasRole('staff');
+    // }
 }

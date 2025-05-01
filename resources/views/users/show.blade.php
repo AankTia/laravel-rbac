@@ -13,16 +13,29 @@
 
         @if(auth()->user()->hasPermission('update', 'users'))
         <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-primary">
-            <i class="bx bx-pencil me-1"></i> Edit User
+            <i class="bx bx-pencil me-1"></i> Edit
         </a>
         @endif
+
+        @if ($user->is_active)
+            <a href="#" class="btn btn-secondary">
+                <i class="bx bx-user-x me-1"></i> Deactivate
+            </a>
+        @endif
+
+        @if (!$user->is_active)
+            <a href="#" class="btn btn-success">
+                <i class="bx bx-user-check me-1"></i> Activate
+            </a>
+        @endif
+
 
         @if(auth()->user()->hasPermission('delete', 'users'))
         <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
             <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
-                <i class="bx bx-trash me-1"></i> Delete User
+                <i class="bx bx-trash me-1"></i> Delete
             </button>
         </form>
         @endif
@@ -62,7 +75,11 @@
                     </div>
                     <div class="col">
                         <span class="d-block fw-bold">Status</span>
-                        <span class="badge bg-success">...</span>
+                        @if ($user->is_active)
+                            <span class="badge rounded-pill bg-success">Active</span>    
+                        @else
+                            <span class="badge rounded-pill bg-danger">Inactive</span>
+                        @endif
                     </div>
                 </div>
             </div>

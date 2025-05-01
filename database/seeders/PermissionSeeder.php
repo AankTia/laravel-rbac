@@ -18,6 +18,8 @@ class PermissionSeeder extends Seeder
             ['name' => 'Read', 'slug' => 'read', 'description' => 'Permission to view resources'],
             ['name' => 'Update', 'slug' => 'update', 'description' => 'Permission to update resources'],
             ['name' => 'Delete', 'slug' => 'delete', 'description' => 'Permission to delete resources'],
+            ['name' => 'Activate User', 'slug' => 'activate_user', 'description' => 'Permission to activate user'],
+            ['name' => 'Deactivate User', 'slug' => 'deactivate_user', 'description' => 'Permission to deactivate user'],
             // ['name' => 'Approve', 'slug' => 'approve', 'description' => 'Permission to approve resources'],
             // ['name' => 'Export', 'slug' => 'export', 'description' => 'Permission to export resources'],
             // ['name' => 'Import', 'slug' => 'import', 'description' => 'Permission to import resources'],
