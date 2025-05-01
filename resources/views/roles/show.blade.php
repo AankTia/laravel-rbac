@@ -24,7 +24,7 @@
             @csrf
             @method('DELETE')
             <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
-                <i class="bx bx-trash me-1"></i> Delete
+                <i class="bx bx-trash me-1"></i> Delete Role
             </button>
         </form>
         @endif

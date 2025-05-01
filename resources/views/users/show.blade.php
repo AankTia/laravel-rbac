@@ -3,6 +3,31 @@
 @section('pageTitle', $viewData['title'])
 
 @section('pageAction')
+<div class="row mb-4 align-items-center">
+    <div class="col-md-12 mt-3 mt-md-0">
+        @if(auth()->user()->hasPermission('read', 'users'))
+        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2">
+            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
+        </a>
+        @endif
+
+        @if(auth()->user()->hasPermission('update', 'users'))
+        <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-primary">
+            <i class="bx bx-pencil me-1"></i> Edit User
+        </a>
+        @endif
+
+        @if(auth()->user()->hasPermission('delete', 'users'))
+        <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
+                <i class="bx bx-trash me-1"></i> Delete User
+            </button>
+        </form>
+        @endif
+    </div>
+</div>
 @endsection
 
 @section('content')
@@ -23,21 +48,21 @@
         <div class="card">
             <div class="card-body text-center">
                 <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="User Avatar" class="user-avatar mb-4">
-                <h4 id="userName">John Doe</h4>
-                <p class="text-muted" id="userEmail">john.doe@example.com</p>
+                <h4>{{ $user->name }}</h4>
+                <p class="text-muted">{{ $user->email }}</p>
                 <div class="d-flex justify-content-center mb-3">
-                    <span class="badge bg-primary p-2" id="userRole">Administrator</span>
+                    <span class="badge bg-primary p-2" id="userRole">{{ $user->role->name }}</span>
                 </div>
             </div>
             <div class="card-footer bg-white">
                 <div class="row text-center">
                     <div class="col">
                         <span class="d-block fw-bold">Last Login</span>
-                        <small class="text-muted" id="lastLogin">April 28, 2025</small>
+                        <small class="text-muted" id="lastLogin">...</small>
                     </div>
                     <div class="col">
                         <span class="d-block fw-bold">Status</span>
-                        <small class="text-success" id="userStatus">Active</small>
+                        <span class="badge bg-success">...</span>
                     </div>
                 </div>
             </div>
@@ -47,23 +72,22 @@
     <!-- User Details -->
     <div class="col-md-8">
         <!-- Personal Information -->
-        <div class="card mb-4">
+        {{-- <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
-                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-pencil-alt"></i></button>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Full Name</label>
-                            <p class="fw-medium" id="fullName">John Robert Doe</p>
+                            <p class="fw-medium" id="fullName">{{ $user->name }}</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Employee ID</label>
-                            <p class="fw-medium" id="employeeId">EMP-2025-0042</p>
+                            <p class="fw-medium" id="employeeId">...</p>
                         </div>
                     </div>
                 </div>
@@ -71,13 +95,13 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Department</label>
-                            <p class="fw-medium" id="department">Information Technology</p>
+                            <p class="fw-medium" id="department">...</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Position</label>
-                            <p class="fw-medium" id="position">System Administrator</p>
+                            <p class="fw-medium" id="position">...</p>
                         </div>
                     </div>
                 </div>
@@ -85,104 +109,18 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Phone</label>
-                            <p class="fw-medium" id="phone">+1 (555) 123-4567</p>
+                            <p class="fw-medium" id="phone">...</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label text-muted">Join Date</label>
-                            <p class="fw-medium" id="joinDate">January 15, 2023</p>
+                            <p class="fw-medium" id="joinDate">...</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- User Role & Permissions -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-user-shield me-2"></i>Role & Permissions</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <h6 class="section-title mb-3">Role</h6>
-                    <div class="d-flex align-items-center">
-                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
-                            <i class="fas fa-user-tie text-primary"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1" id="roleName">Administrator</h6>
-                            <p class="text-muted small mb-0" id="roleDescription">Full system access with user management capabilities</p>
-                        </div>
-                    </div>
-                </div>
-
-                <h6 class="section-title mb-3">Assigned Permissions</h6>
-                <div class="row">
-                    <!-- User Management -->
-                    <div class="col-md-6 mb-3">
-                        <div class="card h-100 border-0 bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-3"><i class="fas fa-users me-2 text-primary"></i>User Management</h6>
-                                <div id="userManagementPermissions">
-                                    <span class="badge bg-success permission-badge">Create Users</span>
-                                    <span class="badge bg-success permission-badge">Edit Users</span>
-                                    <span class="badge bg-success permission-badge">Delete Users</span>
-                                    <span class="badge bg-success permission-badge">View Users</span>
-                                    <span class="badge bg-success permission-badge">Assign Roles</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Management -->
-                    <div class="col-md-6 mb-3">
-                        <div class="card h-100 border-0 bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-3"><i class="fas fa-file-alt me-2 text-primary"></i>Content Management</h6>
-                                <div id="contentManagementPermissions">
-                                    <span class="badge bg-success permission-badge">Create Content</span>
-                                    <span class="badge bg-success permission-badge">Edit Content</span>
-                                    <span class="badge bg-success permission-badge">Delete Content</span>
-                                    <span class="badge bg-success permission-badge">Publish Content</span>
-                                    <span class="badge bg-warning permission-badge">Archive Content</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- System Settings -->
-                    <div class="col-md-6 mb-3">
-                        <div class="card h-100 border-0 bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-3"><i class="fas fa-cogs me-2 text-primary"></i>System Settings</h6>
-                                <div id="systemSettingsPermissions">
-                                    <span class="badge bg-success permission-badge">View Settings</span>
-                                    <span class="badge bg-success permission-badge">Modify Settings</span>
-                                    <span class="badge bg-success permission-badge">Backup System</span>
-                                    <span class="badge bg-danger permission-badge">Delete Backups</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Reports & Analytics -->
-                    <div class="col-md-6 mb-3">
-                        <div class="card h-100 border-0 bg-light">
-                            <div class="card-body">
-                                <h6 class="mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Reports & Analytics</h6>
-                                <div id="reportsPermissions">
-                                    <span class="badge bg-success permission-badge">View Reports</span>
-                                    <span class="badge bg-success permission-badge">Create Reports</span>
-                                    <span class="badge bg-success permission-badge">Export Data</span>
-                                    <span class="badge bg-secondary permission-badge">Delete Reports</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div> --}}
 
         <!-- Activity Log -->
         <div class="card">
