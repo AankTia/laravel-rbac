@@ -56,7 +56,7 @@
         </li>
 
         <li class="menu-item 
-                @if (Str::startsWith(Route::currentRouteName(), 'roles.')) 
+                @if (Str::startsWith(Route::currentRouteName(), 'roles.') || Str::startsWith(Route::currentRouteName(), 'users.')) 
                     active open
                 @endif
             ">
@@ -66,9 +66,11 @@
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">Users</a>
+                @if(auth()->user()->hasPermission('read', 'users'))
+                <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'users.')) active @endif">
+                    <a href="{{ route('users.index') }}" class="menu-link">Users</a>
                 </li>
+                @endif
                 @if(auth()->user()->hasPermission('read', 'roles'))
                     <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'roles.')) active @endif">
                         <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
