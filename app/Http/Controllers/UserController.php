@@ -35,4 +35,18 @@ class UserController extends Controller
             ->with('viewData', $viewData)
             ->with('users', $users);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
+    {
+        $viewData = [
+            'title' => "User Details",
+            'subtitle' => $user->name
+        ];
+
+        return view('users.show', compact('user'))
+            ->with('viewData', $viewData);
+    }
 }

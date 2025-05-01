@@ -2,7 +2,7 @@
 
 @section('title', $viewData['title'] . " | Laravel RBAC")
 @section('pageTitle', $viewData['title'])
-@section('pageSubTitle', $viewData['subtitle'] . " Role Details")
+{{-- @section('pageSubTitle', $viewData['subtitle'] . " Role Details") --}}
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">

@@ -72,36 +72,57 @@
                     @forelse ($users as $user)
                     <tr>
                         <td>
-                            {{-- <div class="user-info">
-                                {{ $user->name }}
-        </div> --}}
-        <div class="user-info">
-            <div class="user-avatar" style="background-color: #e3f2fd; color: #2196f3;">
-                {{ $user->initialName() }}
-            </div>
-            <div class="user-details">
-                <p class="user-name">{{ $user->name }}</p>
-                <p class="user-email">{{ $user->email }}</p>
-            </div>
-        </div>
-        </td>
-        <td>{{ $user->role->name }}</td>
-        <td></td>
-        <td></td>
-        </tr>
-        @empty
-        <tr>
-            <td>
-                <div class="text-center">No data to show</div>
-            </td>
-        </tr>
-        @endforelse
-        </tbody>
-        </table>
-    </div>
+                            <div class="user-info">
+                                <div class="user-avatar" style="background-color: #e3f2fd; color: #2196f3;">
+                                    {{ $user->initialName() }}
+                                </div>
+                                <div class="user-details">
+                                    <p class="user-name"><a href="{{ route('users.show', $user) }}">{{ $user->name }}</a></p>
+                                    <p class="user-email">{{ $user->email }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ $user->role->name }}</td>
+                        <td></td>
+                        <td>
+                            <div class="text-end">
+                                @if(auth()->user()->hasPermission('read', 'users'))
+                                <a href="{{ route('users.show', $user) }}" class="btn btn-icon btn-outline-primary">
+                                    <i class="bx bx-show-alt me-1"></i>
+                                </a>
+                                @endif
 
-    {{-- Pagination --}}
-    {{ $users->links('vendor.pagination.custom') }}
-</div>
+                                @if(auth()->user()->hasPermission('update', 'users'))
+                                <a href="{{ route('users.edit', $user) }}" class="btn btn-icon btn-outline-warning">
+                                    <i class="bx bx-edit-alt me-1"></i>
+                                </a>
+                                @endif
+
+                                @if(auth()->user()->hasPermission('delete', 'users'))
+                                <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-icon btn-outline-danger">
+                                        <i class="bx bx-trash me-1"></i>
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td>
+                            <div class="text-center">No data to show</div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Pagination --}}
+        {{ $users->links('vendor.pagination.custom') }}
+    </div>
 </div>
 @endsection
