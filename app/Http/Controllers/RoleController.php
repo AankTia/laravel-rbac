@@ -82,7 +82,7 @@ class RoleController extends Controller
             'title' => "Role Details",
             'subtitle' => $role->name
         ];
-        
+
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -97,26 +97,36 @@ class RoleController extends Controller
         $modulePermissions = [];
         $modules = Module::all();
         foreach ($modules as $module) {
-            $roleModulePermission = $roleModulePermissions[$module->slug];
+            $permissionsData = [
+                'read' => false,
+                'create' => false,
+                'update' => false,
+                'delete' => false,
+                'others' => []
+            ];
 
-            $modulePermissionSlugs = [];
-            $otherPermissions = [];
-            foreach ($module->permissions as $modPermission) {
-                $modulePermissionSlugs[] = $modPermission->slug;
-                if (!in_array($modPermission->slug, ['read', 'create', 'update', 'delete'])) {
-                    if (in_array($modPermission->slug, $roleModulePermission)) {
-                        $otherPermissions[] = $modPermission->name;
+            if (isset($roleModulePermissions[$module->slug])) {
+                $roleModulePermission = $roleModulePermissions[$module->slug];
+
+                $modulePermissionSlugs = [];
+                $otherPermissions = [];
+                foreach ($module->permissions as $permission) {
+                    $modulePermissionSlugs[] = $permission->slug;
+                    if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
+                        if (in_array($permission->slug, $roleModulePermission)) {
+                            $otherPermissions[] = $permission->name;
+                        }
                     }
                 }
+
+                $permissionsData['read'] = (in_array('read', $modulePermissionSlugs) && in_array('read', $roleModulePermission));
+                $permissionsData['create'] = (in_array('create', $modulePermissionSlugs) && in_array('create', $roleModulePermission));
+                $permissionsData['update'] = (in_array('update', $modulePermissionSlugs) && in_array('update', $roleModulePermission));
+                $permissionsData['delete'] = (in_array('delete', $modulePermissionSlugs) && in_array('delete', $roleModulePermission));
+                $permissionsData['others'] = $otherPermissions;
             }
 
-            $modulePermissions[$module->name] = [
-                'read' => (in_array('read', $modulePermissionSlugs) && in_array('read', $roleModulePermission)),
-                'create' => (in_array('create', $modulePermissionSlugs) && in_array('create', $roleModulePermission)),
-                'update' => (in_array('update', $modulePermissionSlugs) && in_array('update', $roleModulePermission)),
-                'delete' => (in_array('delete', $modulePermissionSlugs) && in_array('delete', $roleModulePermission)),
-                'others' => $otherPermissions
-            ];
+            $modulePermissions[$module->name] = $permissionsData;
         }
 
         $crudPermissionData = Permission::whereIn('slug', ['create', 'read', 'update', 'delete'])
