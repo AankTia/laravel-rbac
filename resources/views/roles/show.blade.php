@@ -15,7 +15,11 @@
 
         @if(auth()->user()->hasPermission('update', 'roles'))
         <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">
-            <i class="bx bx-pencil me-1"></i> Edit Role
+            <i class="bx bx-pencil me-1"></i> Edit
+        </a>
+
+        <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-warning">
+            <i class="bx bx-plus-circle me-2"></i> Update Permissions
         </a>
         @endif
 
@@ -24,7 +28,7 @@
             @csrf
             @method('DELETE')
             <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
-                <i class="bx bx-trash me-1"></i> Delete Role
+                <i class="bx bx-trash me-1"></i> Delete
             </button>
         </form>
         @endif
@@ -110,138 +114,122 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h3 class="h5 mb-0">Permissions</h3>
-                    </div>
-                
-                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                        @if(auth()->user()->hasPermission('update', 'roles'))
-                        <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-warning">
-                            <i class="bx bx-plus-circle me-2"></i> Update Permissions
-                        </a>
-                        @endif
-                    </div>
-                </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <h2 class="card-title h4 mb-4">Assigned Users</h2>
+            <div class="mb-4">
+                <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Module</th>
-                                <th class="text-center">Read</th>
-                                <th class="text-center">Create</th>
-                                <th class="text-center">Update</th>
-                                <th class="text-center">Delete</th>
-                                <th class="text-center">Special Privileges</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($modulePermissions as $moduleName => $permissions)
-                            <tr>
-                                <td class="fw-medium">{{ $moduleName }}</td>
-                                <td class="text-center">
-                                    @if ($permissions['read'])
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($permissions['create'])
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($permissions['update'])
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </td>
 
-                                <td class="text-center">
-                                    @if ($permissions['delete'])
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </td>
-                                <td nowrap>
-                                    @foreach ($permissions['others'] as $otherPermission)
-                                        <div>
-                                            <i class="bx bxs-check-circle text-success"></i> {{ $otherPermission }}
-                                        </div>
-                                    @endforeach
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Assigned Date</th>
+                            <th class="text-center">Assigned By</th>
+                            {{-- <th class="text-center">Email</th> --}}
+                            {{-- <th class="text-center">Update</th> --}}
+                            {{-- <th class="text-center">Delete</th> --}}
+                            {{-- <th class="text-center">Special Privileges</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($role->users as $user)
+                        <tr>
+                            <td class="fw-medium" nowrap>{{ $user->name }}</td>
+                            <td class="fw-medium" nowrap>{{ $user->email }}</td>
+                            <td class="fw-medium" nowrap></td>
+                            <td class="fw-medium" nowrap></td>
+                            {{-- <th class="text-center">
+                                @if ($role->hasPermission('read', $module->slug))
+                                    <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </th> --}}
+                            {{-- <th class="text-center">
+                                @if ($role->hasPermission('create', $module->slug))
+                                    <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </th> --}}
+                            {{-- <th class="text-center">
+                                @if ($role->hasPermission('update', $module->slug))
+                                    <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </th> --}}
+                            {{-- <th class="text-center">
+                                @if ($role->hasPermission('delete', $module->slug))
+                                    <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </th> --}}
+                            {{-- <th class="text-center">
+                                Special Privileges
+                            </th> --}}
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <h3 class="h5 mb-0">Assigned Users</h3>
-            </div>
-            <div class="card-body">
-                <div class="mb-4">
-                    <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
-                </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <h2 class="card-title h4 mb-4">Allowed Permissions</h2>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Name</th>
-                                <th class="text-center">Email</th>
-                                <th class="text-center">Assigned Date</th>
-                                <th class="text-center">Assigned By</th>
-                                {{-- <th class="text-center">Email</th> --}}
-                                {{-- <th class="text-center">Update</th> --}}
-                                {{-- <th class="text-center">Delete</th> --}}
-                                {{-- <th class="text-center">Special Privileges</th> --}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($role->users as $user)
-                            <tr>
-                                <td class="fw-medium" nowrap>{{ $user->name }}</td>
-                                <td class="fw-medium" nowrap>{{ $user->email }}</td>
-                                <td class="fw-medium" nowrap></td>
-                                <td class="fw-medium" nowrap></td>
-                                {{-- <th class="text-center">
-                                    @if ($role->hasPermission('read', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </th> --}}
-                                {{-- <th class="text-center">
-                                    @if ($role->hasPermission('create', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </th> --}}
-                                {{-- <th class="text-center">
-                                    @if ($role->hasPermission('update', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </th> --}}
-                                {{-- <th class="text-center">
-                                    @if ($role->hasPermission('delete', $module->slug))
-                                        <i class="bx bxs-check-circle text-success"></i>
-                                    @endif
-                                </th> --}}
-                                {{-- <th class="text-center">
-                                    Special Privileges
-                                </th> --}}
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Module</th>
+                            <th class="text-center">Read</th>
+                            <th class="text-center">Create</th>
+                            <th class="text-center">Update</th>
+                            <th class="text-center">Delete</th>
+                            <th class="text-center">Special Privileges</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($modulePermissions as $moduleName => $permissions)
+                        <tr>
+                            <td class="fw-medium">{{ $moduleName }}</td>
+                            <td class="text-center">
+                                @if ($permissions['read'])
+                                <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if ($permissions['create'])
+                                <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if ($permissions['update'])
+                                <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </td>
+
+                            <td class="text-center">
+                                @if ($permissions['delete'])
+                                <i class="bx bxs-check-circle text-success"></i>
+                                @endif
+                            </td>
+                            <td nowrap>
+                                @foreach ($permissions['others'] as $otherPermission)
+                                <div>
+                                    <i class="bx bxs-check-circle text-success"></i> {{ $otherPermission }}
+                                </div>
+                                @endforeach
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
         </div>
     </div>
 </div>
