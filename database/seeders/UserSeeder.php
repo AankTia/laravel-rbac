@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,20 +17,23 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
+                'name' => 'Super Admin User',
+                'email' => 'superadmin@example.com',
+                'password' => Hash::make('password'),
+                'role_id' => Role::where('slug', 'superadmin')->first()->id
+            ],
+            [
                 'name' => 'Admin User',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
+                'role_id' => Role::where('slug', 'admin')->first()->id
             ],
             [
-                'name' => 'Manager User',
-                'email' => 'manager@example.com',
-                'password' => Hash::make('password'),
-            ],
-            [
-                'name' => 'Regular User',
+                'name' => 'User',
                 'email' => 'user@example.com',
                 'password' => Hash::make('password'),
-            ]
+                'role_id' => Role::where('slug', 'user')->first()->id
+            ],
         ];
 
         foreach ($users as $user) {

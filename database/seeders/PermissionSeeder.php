@@ -14,26 +14,16 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            [
-                'name' => 'create',
-                'display_name' => 'Create',
-                'description' => 'Create new items',
-            ],
-            [
-                'name' => 'read',
-                'display_name' => 'Read',
-                'description' => 'Read items',
-            ],
-            [
-                'name' => 'update',
-                'display_name' => 'Update',
-                'description' => 'Update existing items',
-            ],
-            [
-                'name' => 'delete',
-                'display_name' => 'Delete',
-                'description' => 'Delete items',
-            ]
+            ['name' => 'Create', 'slug' => 'create', 'description' => 'Permission to create resources'],
+            ['name' => 'Read', 'slug' => 'read', 'description' => 'Permission to view resources'],
+            ['name' => 'Update', 'slug' => 'update', 'description' => 'Permission to update resources'],
+            ['name' => 'Delete', 'slug' => 'delete', 'description' => 'Permission to delete resources'],
+            // ['name' => 'Approve', 'slug' => 'approve', 'description' => 'Permission to approve resources'],
+            // ['name' => 'Export', 'slug' => 'export', 'description' => 'Permission to export resources'],
+            // ['name' => 'Import', 'slug' => 'import', 'description' => 'Permission to import resources'],
+            // ['name' => 'Manage Users', 'slug' => 'manage-users', 'description' => 'Permission to manage users'],
+            // ['name' => 'Manage Roles', 'slug' => 'manage-roles', 'description' => 'Permission to manage roles'],
+            // ['name' => 'Manage Settings', 'slug' => 'manage-settings', 'description' => 'Permission to manage system settings'],
         ];
 
         foreach ($permissions as $permission) {

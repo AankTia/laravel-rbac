@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateRoleRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->hasPermission('update', 'roles');
     }
 
     /**
@@ -22,7 +23,9 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255|unique:roles,name,' . $this->route('role')->id,
+            'description' => 'required|string|max:255',
+            'allow_to_be_assigne' => 'nullable',
         ];
     }
 }

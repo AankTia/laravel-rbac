@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreResourceRequest;
-use App\Http\Requests\UpdateResourceRequest;
-use App\Models\Resource;
+use App\Http\Requests\StoreModuleRequest;
+use App\Http\Requests\UpdateModuleRequest;
+use App\Models\Module;
 
 class ResourceController extends Controller
 {
@@ -27,7 +27,7 @@ class ResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreResourceRequest $request)
+    public function store(StoreModuleRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class ResourceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Resource $resource)
+    public function show(Module $module)
     {
         //
     }
@@ -43,7 +43,7 @@ class ResourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Resource $resource)
+    public function edit(Module $module)
     {
         //
     }
@@ -51,7 +51,7 @@ class ResourceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateResourceRequest $request, Resource $resource)
+    public function update(UpdateModuleRequest $request, Module $module)
     {
         //
     }
@@ -59,7 +59,7 @@ class ResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Resource $resource)
+    public function destroy(Module $module)
     {
         //
     }

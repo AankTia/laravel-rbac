@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRoleRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class StoreRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::user()->hasPermission('create', 'roles');
     }
 
     /**
@@ -22,7 +24,20 @@ class StoreRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255|unique:roles,name,{{$this->role}}',
+            'description' => 'required|string|max:255',
+            'allow_to_be_assigne' => 'nullable',
         ];
+
+        // return [
+        //     'name' => ['required', 'string', 'max:255', Rule::unique('roles')->ignore($this->role)],
+        //     'description' => ['required', 'string', 'max:255'],
+        //     'allow_to_be_assigne' => ['nullable']
+        //     // 'email' => [
+        //     //     'required',
+        //     //     'email',
+        //     //     Rule::unique('users')->ignore($this->user)
+        //     // ],
+        // ];
     }
 }

@@ -5,29 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class Module extends Model
 {
-    /** @use HasFactory<\Database\Factories\PermissionFactory> */
+    /** @use HasFactory<\Database\Factories\ResourceFactory> */
     use HasFactory;
 
     protected $fillable = ['name', 'slug', 'description'];
 
     /**
-     * Get roles that have this permission.
+     * Get roles that have access to this module.
      */
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'permission_role_module')
-                    ->withPivot('module_id')
+                    ->withPivot('permission_id')
                     ->using(PermissionRoleModule::class);
     }
 
     /**
-     * Get modules that have this permission.
+     * Get permissions for this module.
      */
-    public function modules()
+    public function permissions()
     {
-        return $this->belongsToMany(Module::class, 'permission_role_module')
+        return $this->belongsToMany(Permission::class, 'permission_role_module')
                     ->withPivot('role_id')
                     ->using(PermissionRoleModule::class);
     }
