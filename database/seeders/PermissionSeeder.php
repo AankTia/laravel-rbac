@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Module;
+use App\Models\ModulePermission;
 use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,23 +16,92 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->createPermissions();
+        $permissionsIdBySlug = Permission::pluck('id', 'slug');
+
+        $this->assignModulePermissions($permissionsIdBySlug);
+        $this->assignPermissionRoleModule($permissionsIdBySlug);
+    }
+
+    private function createPermissions()
+    {
+        $this->command->info('   Creating Permissions!');
+
         $permissions = [
-            ['name' => 'Create', 'slug' => 'create', 'description' => 'Permission to create resources'],
             ['name' => 'Read', 'slug' => 'read', 'description' => 'Permission to view resources'],
+            ['name' => 'Create', 'slug' => 'create', 'description' => 'Permission to create resources'],
             ['name' => 'Update', 'slug' => 'update', 'description' => 'Permission to update resources'],
             ['name' => 'Delete', 'slug' => 'delete', 'description' => 'Permission to delete resources'],
-            ['name' => 'Activate User', 'slug' => 'activate_user', 'description' => 'Permission to activate user'],
-            ['name' => 'Deactivate User', 'slug' => 'deactivate_user', 'description' => 'Permission to deactivate user'],
-            // ['name' => 'Approve', 'slug' => 'approve', 'description' => 'Permission to approve resources'],
-            // ['name' => 'Export', 'slug' => 'export', 'description' => 'Permission to export resources'],
-            // ['name' => 'Import', 'slug' => 'import', 'description' => 'Permission to import resources'],
-            // ['name' => 'Manage Users', 'slug' => 'manage-users', 'description' => 'Permission to manage users'],
-            // ['name' => 'Manage Roles', 'slug' => 'manage-roles', 'description' => 'Permission to manage roles'],
-            // ['name' => 'Manage Settings', 'slug' => 'manage-settings', 'description' => 'Permission to manage system settings'],
+            ['name' => 'Activate User', 'slug' => 'activate-user', 'description' => 'Permission to activate user'],
+            ['name' => 'Deactivate User', 'slug' => 'deactivate-user', 'description' => 'Permission to deactivate user'],
         ];
 
         foreach ($permissions as $permission) {
             Permission::create($permission);
         }
+
+        $this->command->info('   Permissions seeded successfully!');
+        $this->command->info('   ---');
+    }
+
+    private function assignModulePermissions($permissionsIdBySlug)
+    {
+        $this->command->info('   Mapping Module Permissions!');
+
+        $modulePermissions = [
+            'dashboard' => ['read'],
+            'users' => ['read', 'create', 'update', 'delete', 'activate-user', 'deactivate-user'],
+            'roles' => ['read', 'create', 'update', 'delete']
+        ];
+
+        foreach ($modulePermissions as $modulSlug => $permissionSlugs) {
+            $module = Module::where('slug', $modulSlug)->first();
+            foreach ($permissionSlugs as $permissionSlug) {
+                $module->assignPermission($permissionsIdBySlug[$permissionSlug]);
+            }
+        }
+
+        $this->command->info('   Module Permissions mapped successfully!');
+        $this->command->info('   ---');
+    }
+
+    private function assignPermissionRoleModule($permissionsIdBySlug)
+    {
+        $this->command->info('   Mapping Role Module Permissions!');
+
+        // Superadmin has all permissions for all modules
+        $superadminRole = Role::where('slug', 'superadmin')->first();
+        $allModulePermission = ModulePermission::all();
+        foreach ($allModulePermission as $modulePermission) {
+            $superadminRole->assignPermission($modulePermission->module_id, $modulePermission->permission_id);
+        }
+
+        $rolePermissionData = [
+            'admin' => [
+                'dashboard' => ['read'],
+                'users' => ['read', 'create', 'update', 'activate-user', 'deactivate-user'],
+                'roles' => ['read']
+            ],
+            'viewer' => [
+                'dashboard' => ['read'],
+                'users' => ['read']
+            ]
+        ];
+
+        $modulesIdBySlug = Module::pluck('id', 'slug');
+        foreach ($rolePermissionData as $roleSlug => $modulePermissions) {
+            $role = Role::where('slug', $roleSlug)->first();
+
+            foreach ($modulePermissions as $moduleSlug => $permissionSlugs) {
+                $moduleId = $modulesIdBySlug[$moduleSlug];
+                
+                foreach ($permissionSlugs as $permissionSlug) {
+                    $role->assignPermission($moduleId, $permissionsIdBySlug[$permissionSlug]);
+                }
+            }
+        }
+
+        $this->command->info('   Role Module Permissions mapped successfully!');
+        $this->command->info('   ---');
     }
 }
