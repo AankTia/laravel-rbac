@@ -58,7 +58,6 @@
                     </div>
                 </div>
 
-
                 <div class="row text-center">
                     <div class="col">
                         <span class="d-block fw-bold">Last Login</span>
@@ -103,76 +102,6 @@
 
     <!-- User Details -->
     <div class="col-md-8">
-        <!-- Personal Information -->
-        {{-- <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Full Name</label>
-                            <p class="fw-medium" id="fullName">{{ $user->name }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Employee ID</label>
-                            <p class="fw-medium" id="employeeId">...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Department</label>
-                            <p class="fw-medium" id="department">...</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Position</label>
-                            <p class="fw-medium" id="position">...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Phone</label>
-                            <p class="fw-medium" id="phone">...</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Join Date</label>
-                            <p class="fw-medium" id="joinDate">...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
-        <div class="card mb-4">
-            <h5 class="card-header">Delete Account</h5>
-            <div class="card-body">
-                <div class="mb-3 col-12 mb-0">
-                    <div class="alert alert-warning">
-                        <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
-                        <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
-                    </div>
-                </div>
-                <form id="formAccountDeactivation" onsubmit="return false">
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation">
-                        <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
-                    </div>
-                    <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-                </form>
-            </div>
-        </div>
-
         <!-- Activity Log -->
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -243,6 +172,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- Personal Information -->
+        {{-- <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Full Name</label>
+                            <p class="fw-medium" id="fullName">{{ $user->name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Employee ID</label>
+                            <p class="fw-medium" id="employeeId">...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Department</label>
+                            <p class="fw-medium" id="department">...</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Position</label>
+                            <p class="fw-medium" id="position">...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Phone</label>
+                            <p class="fw-medium" id="phone">...</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Join Date</label>
+                            <p class="fw-medium" id="joinDate">...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
     </div>
 </div>
 @endsection
