@@ -126,8 +126,7 @@
                 <table class="table table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th>Name</th>
-                            <th class="text-center">Email</th>
+                            <th>User</th>
                             <th class="text-center">Assigned Date</th>
                             <th class="text-center">Assigned By</th>
                             {{-- <th class="text-center">Email</th> --}}
@@ -139,8 +138,17 @@
                     <tbody>
                         @foreach ($role->users as $user)
                         <tr>
-                            <td class="fw-medium" nowrap>{{ $user->name }}</td>
-                            <td class="fw-medium" nowrap>{{ $user->email }}</td>
+                            <td class="fw-medium">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ $user->initialName() }}
+                                    </div>
+                                    <div class="user-details">
+                                        <p class="user-name"><a href="{{ route('users.show', $user) }}">{{ $user->name }}</a></p>
+                                        <p class="user-email">{{ $user->email }}</p>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="fw-medium" nowrap></td>
                             <td class="fw-medium" nowrap></td>
                             {{-- <th class="text-center">

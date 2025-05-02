@@ -16,44 +16,6 @@
 @endsection
 
 @section('content')
-<style>
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        background-color: #f0f0f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666;
-        font-weight: 500;
-        font-size: 14px;
-    }
-
-    .user-details {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .user-name {
-        font-weight: 500;
-        margin-bottom: 0;
-    }
-
-    .user-email {
-        font-size: 12px;
-        color: #666;
-        margin-bottom: 0;
-    }
-</style>
-
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -73,7 +35,7 @@
                     <tr>
                         <td>
                             <div class="user-info">
-                                <div class="user-avatar" style="background-color: #e3f2fd; color: #2196f3;">
+                                <div class="user-avatar">
                                     {{ $user->initialName() }}
                                 </div>
                                 <div class="user-details">
