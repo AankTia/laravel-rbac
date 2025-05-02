@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\TimestampAndUserTrackingTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -107,23 +109,23 @@ class User extends Authenticatable
         return $this->hasRole('admin');
     }
 
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // public function createdBy()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function lastUpdatedBy()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // public function lastUpdatedBy()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function lastUpdate() {
-        if ($this->created_at == $this->updated_at) {
-            return null;
-        } else {
-            return $this->updated_at->format('d M Y, h:i A');
-        }
-    }
+    // public function lastUpdate() {
+    //     if ($this->created_at == $this->updated_at) {
+    //         return null;
+    //     } else {
+    //         return $this->updated_at->format('d M Y, h:i A');
+    //     }
+    // }
 
     // /**
     //  * Check if user is manager.
