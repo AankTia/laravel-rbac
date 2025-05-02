@@ -83,10 +83,12 @@
                             <div class="mb-3 col-md-11">
                                 <label for="role_id" class="form-label">Role</label>
                                 <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
-                                    <option selected=""></option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value="" {{ old('role_id') === null || old('role_id') === '' ? 'selected' : '' }}>-- Select Role --</option>
+                                    @foreach ($roleOptions as $id => $name)
+                                        <option value="{{ $id }}" {{ old('role_id') == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('role_id')
                                 <span class="invalid-feedback" role="alert">
@@ -98,10 +100,12 @@
                             <div class="mb-3 col-md-11">
                                 <label for="language" class="form-label">Status</label>
                                 <select name="is_active" class="form-control @error('is_active') is-invalid @enderror" aria-label="Role select">
-                                    <option selected=""></option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value="" {{ old('is_active') === null || old('is_active') === '' ? 'selected' : '' }}>-- Select Status --</option>
+                                    @foreach (['active' => 'Active', 'inactive' => 'Inactive'] as $id => $name)
+                                        <option value="{{ $id }}" {{ old('is_active') == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('is_active')
                                 <span class="invalid-feedback" role="alert">

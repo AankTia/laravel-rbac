@@ -45,7 +45,13 @@
                             </div>
                         </td>
                         <td>{{ $user->role->name }}</td>
-                        <td></td>
+                        <td>
+                            @if ($user->is_active)
+                            <span class="badge rounded-pill bg-success">Active</span>
+                            @else
+                            <span class="badge rounded-pill bg-danger">Inactive</span>
+                            @endif
+                        </td>
                         <td>
                             <div class="text-end">
                                 @if(auth()->user()->hasPermission('read', 'users'))

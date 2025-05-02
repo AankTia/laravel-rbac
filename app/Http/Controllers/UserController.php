@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,11 +60,13 @@ class UserController extends Controller
     {
         $viewData = [
             'title' => "Create New User",
-            // 'subtitle' => $role->name
         ];
 
+        $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'id');
+
         return view('users.create')
-            ->with('viewData', $viewData);
+            ->with('viewData', $viewData)
+            ->with('roleOptions', $roleOptions);
     }
 
     /**
@@ -71,12 +74,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        dd($request->validated());
         $userData = $request->validated();
-
-        // $isAllowToBeAssigne = (isset($userData['allow_to_be_assigne']) && $userData['allow_to_be_assigne'] == 'on');
-        // $userData['allow_to_be_assigne'] = $isAllowToBeAssigne;
-        // $userData['created_by_id'] = Auth::user()->id;
+        $userData['is_active'] = ($userData['is_active'] == 'active');
+        $userData['created_by_id'] = Auth::user()->id;
 
         $user = User::create($userData);
 
