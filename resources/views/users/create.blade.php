@@ -56,7 +56,12 @@
                             <div class="mb-3 col-md-11">
                                 <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
                                 <div class="input-group input-group-merge">
-                                    <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" autocomplete="new-password">
+                                    <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" autocomplete="new-password">
+                                    @error('password_confirmation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
 
