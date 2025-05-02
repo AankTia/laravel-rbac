@@ -95,7 +95,7 @@
 
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated</div>
-                            <div>{{ $role->updated_at->format('d M Y, h:i A') }}</div>
+                            <div>{{ $role->lastUpdate() ?? '-' }}</div>
                         </div>
 
                         <div class="mb-3">

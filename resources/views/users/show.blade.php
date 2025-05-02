@@ -47,7 +47,7 @@
 <div class="row">
     <!-- User Profile Card -->
     <div class="col-md-4 mb-4">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body text-center">
                 <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="User Avatar" class="user-image-profile mb-4">
                 <h4>{{ $user->name }}</h4>
@@ -56,6 +56,7 @@
                     <span class="badge bg-primary p-2" id="userRole">{{ $user->role->name }}</span>
                 </div>
             </div>
+            
             <div class="card-footer bg-white">
                 <div class="row text-center">
                     <div class="col">
@@ -70,6 +71,38 @@
                             <span class="badge rounded-pill bg-danger">Inactive</span>
                         @endif
                     </div>
+                </div>
+            </div>
+
+
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h3 class="h6 text-muted mb-3">Information</h3>
+
+                    <div class="mb-3">
+                        <div class="small text-muted">Created On</div>
+                        <div>{{ $user->created_at->format('d M Y, h:i A') }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="small text-muted">Created By</div>
+                        <div>{{ $user->createdBy ? $user->createdBy->name : '-' }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="small text-muted">Last Updated</div>
+                        <div>{{ $user->lastUpdate() ?? '-' }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="small text-muted">Last Updated By</div>
+                        <div>{{ $user->lastUpdatedBy ? $user->lastUpdatedBy->name : '-' }}</div>
+                    </div>
+
+                    {{-- <div class="mb-3">
+                        <div class="small text-muted">Status</div>
+                        <div><span class="badge bg-success">Active</span></div>
+                    </div> --}}
                 </div>
             </div>
         </div>

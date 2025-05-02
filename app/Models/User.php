@@ -107,6 +107,24 @@ class User extends Authenticatable
         return $this->hasRole('admin');
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lastUpdatedBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lastUpdate() {
+        if ($this->created_at == $this->updated_at) {
+            return null;
+        } else {
+            return $this->updated_at->format('d M Y, h:i A');
+        }
+    }
+
     // /**
     //  * Check if user is manager.
     //  *

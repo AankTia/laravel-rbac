@@ -48,6 +48,14 @@ class Role extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function lastUpdate() {
+        if ($this->created_at == $this->updated_at) {
+            return null;
+        } else {
+            return $this->updated_at->format('d M Y, h:i A');
+        }
+    }
+
     /**
      * Get the users that belong to this role.
      */
