@@ -49,4 +49,18 @@ class UserController extends Controller
         return view('users.show', compact('user'))
             ->with('viewData', $viewData);
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $viewData = [
+            'title' => "Create New User",
+            // 'subtitle' => $role->name
+        ];
+
+        return view('users.create')
+            ->with('viewData', $viewData);
+    }
 }
