@@ -81,32 +81,25 @@
             <div class="col-md-4">
                 <div class="card bg-light">
                     <div class="card-body">
-                        <h3 class="h6 text-muted mb-3">Information</h3>
-
                         <div class="mb-3">
-                            <div class="small text-muted">Created On</div>
-                            <div>{{ $role->created_at->format('d M Y, h:i A') }}</div>
+                            <div class="small text-muted">Created By</div>
+                            <div>{{ $role->creatorName() }}</div>
                         </div>
 
                         <div class="mb-3">
-                            <div class="small text-muted">Created By</div>
-                            <div>{{ $role->createdBy ? $role->createdBy->name : '-' }}</div>
+                            <div class="small text-muted">Created On</div>
+                            <div>{{ $role->createdAt() }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="small text-muted">Last Updated By</div>
+                            <div>{{ $role->lastUpdaterName() ?? '-' }}</div>
                         </div>
 
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated</div>
                             <div>{{ $role->lastUpdate() ?? '-' }}</div>
                         </div>
-
-                        <div class="mb-3">
-                            <div class="small text-muted">Last Updated By</div>
-                            <div>{{ $role->lastUpdatedBy ? $role->lastUpdatedBy->name : '-' }}</div>
-                        </div>
-
-                        {{-- <div class="mb-3">
-                            <div class="small text-muted">Status</div>
-                            <div><span class="badge bg-success">Active</span></div>
-                        </div> --}}
                     </div>
                 </div>
             </div>

@@ -62,10 +62,8 @@ class RoleController extends Controller
     public function store(StoreRoleRequest $request)
     {
         $roleData = $request->validated();
-
         $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
         $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
-        $roleData['created_by_id'] = Auth::user()->id;
 
         $role = Role::create($roleData);
 
@@ -157,9 +155,7 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, Role $role)
     {
         $roleData = $request->validated();
-
         $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['last_updated_by_id'] = Auth::user()->id;
 
         $role->update($roleData);
 

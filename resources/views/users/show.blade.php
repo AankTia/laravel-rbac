@@ -76,23 +76,23 @@
                 <div class="card bg-light mt-4">
                     <div class="card-body">
                         <div class="mb-3">
+                            <div class="small text-muted">Created By</div>
+                            <div>{{ $user->creatorName() }}</div>
+                        </div>
+
+                        <div class="mb-3">
                             <div class="small text-muted">Created On</div>
-                            <div>{{ $user->created_at->format('d M Y, h:i A') }}</div>
+                            <div>{{ $user->createdAt() }}</div>
                         </div>
     
                         <div class="mb-3">
-                            <div class="small text-muted">Created By</div>
-                            <div>{{ $user->createdBy ? $user->createdBy->name : '-' }}</div>
+                            <div class="small text-muted">Last Updated By</div>
+                            <div>{{ $user->lastUpdaterName() ?? '-' }}</div>
                         </div>
     
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated</div>
                             <div>{{ $user->lastUpdate() ?? '-' }}</div>
-                        </div>
-    
-                        <div class="mb-3">
-                            <div class="small text-muted">Last Updated By</div>
-                            <div>{{ $user->lastUpdatedBy ? $user->lastUpdatedBy->name : '-' }}</div>
                         </div>
                     </div>
                 </div>

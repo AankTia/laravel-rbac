@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\TimestampAndUserTrackingTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait;
 
     protected $fillable = [
         'name', 
@@ -36,24 +37,6 @@ class Role extends Model
         // static::updating(function ($model) {
         //     $model->validate($model->getAttributes(), $model->id);
         // });
-    }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function lastUpdatedBy()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function lastUpdate() {
-        if ($this->created_at == $this->updated_at) {
-            return null;
-        } else {
-            return $this->updated_at->format('d M Y, h:i A');
-        }
     }
 
     /**
