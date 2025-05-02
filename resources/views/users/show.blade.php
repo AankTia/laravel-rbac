@@ -44,23 +44,12 @@
 @endsection
 
 @section('content')
-<style>
-    .user-avatar {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 5px solid #f8f9fa;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-</style>
-
 <div class="row">
     <!-- User Profile Card -->
     <div class="col-md-4 mb-4">
         <div class="card">
             <div class="card-body text-center">
-                <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="User Avatar" class="user-avatar mb-4">
+                <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="User Avatar" class="user-image-profile mb-4">
                 <h4>{{ $user->name }}</h4>
                 <p class="text-muted">{{ $user->email }}</p>
                 <div class="d-flex justify-content-center mb-3">
