@@ -18,35 +18,77 @@
     <div class="col-md-12">
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form>
+                <form method="post" action="{{ route('users.store') }}">
+                    @csrf
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3 col-md-11">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input class="form-control" type="text" id="firstName" name="firstName" value="John" autofocus="">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" autofocus="">
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
-    
+
                             <div class="mb-3 col-md-11">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input class="form-control" type="text" id="email" name="email" value="john.doe@example.com" placeholder="john.doe@example.com">
+                                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror">
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
-    
+
                             <div class="mb-3 col-md-11">
-                                <label for="language" class="form-label">Role</label>
-                                <select id="language" class="select2 form-select">
-                                    <option value=""></option>
-                                    <option value="en">Admin</option>
-                                    <option value="fr">User</option>
-                                </select>
+                                <label class="form-label" for="password">{{ __('Password') }}</label>
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
-    
+
+                            <div class="mb-3 col-md-11">
+
+                                <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-md-11">
+                                <label for="role_id" class="form-label">Role</label>
+                                <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
+                                    <option selected=""></option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                @error('role_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
                             <div class="mb-3 col-md-11">
                                 <label for="language" class="form-label">Status</label>
-                                <select id="language" class="select2 form-select">
-                                    <option value=""></option>
-                                    <option value="en">Active</option>
-                                    <option value="fr">Inactive</option>
+                                <select name="is_active" class="form-control @error('is_active') is-invalid @enderror" aria-label="Role select">
+                                    <option selected=""></option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
                                 </select>
+                                @error('is_active')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -59,7 +101,7 @@
                                         <i class="bx bx-upload d-block d-sm-none"></i>
                                         <input type="file" id="upload" class="account-file-input" hidden="" accept="image/png, image/jpeg">
                                     </label>
-    
+
                                     <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
                                 </div>
                             </div>

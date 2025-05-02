@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -62,5 +64,23 @@ class UserController extends Controller
 
         return view('users.create')
             ->with('viewData', $viewData);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreUserRequest $request)
+    {
+        dd($request->validated());
+        $userData = $request->validated();
+
+        // $isAllowToBeAssigne = (isset($userData['allow_to_be_assigne']) && $userData['allow_to_be_assigne'] == 'on');
+        // $userData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+        // $userData['created_by_id'] = Auth::user()->id;
+
+        $user = User::create($userData);
+
+        return redirect()->route('users.show', ['user' => $user])
+            ->with('success', 'User created successfully.');
     }
 }
