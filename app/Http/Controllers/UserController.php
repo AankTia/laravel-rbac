@@ -132,4 +132,14 @@ class UserController extends Controller
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User updated successfully.');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
+    {
+        $name = $user->name;
+        $user->delete(); // This is a soft delete
+        return redirect()->route('users.index')->with('success', 'User: ' . $name . ' deleted successfully.');
+    }
 }
