@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -72,13 +73,18 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $userData = $request->validated();
+        $userData = $request->all();
         $userData['is_active'] = ($userData['is_active'] == 'active');
-        $userData['created_by_id'] = Auth::user()->id;
 
-        $user = User::create($userData);
+        $user = new User();
+        $validated = $user->validate('create', $userData);
+
+        // Hash password before saving
+        $validated['password'] = bcrypt($validated['password']);
+
+        $user->fill($validated)->save();
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User created successfully.');
@@ -93,7 +99,7 @@ class UserController extends Controller
             'title' => "Edit User"
         ];
 
-        if(Auth::user()->isSuperAdmin()) {
+        if (Auth::user()->isSuperAdmin()) {
             $roleOptions = Role::all()->pluck('name', 'id');
         } else {
             $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'id');
@@ -102,5 +108,28 @@ class UserController extends Controller
         return view('users.edit', compact('user'))
             ->with('viewData', $viewData)
             ->with('roleOptions', $roleOptions);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, User $user)
+    {
+        $userData = $request->all();
+        $userData['is_active'] = ($userData['is_active'] == 'active');
+
+        $validated = $user->validate('update', $userData);
+
+        // Hash password if it was sent
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']); // Don't overwrite if null
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('users.show', ['user' => $user])
+            ->with('success', 'User updated successfully.');
     }
 }

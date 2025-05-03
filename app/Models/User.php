@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class User extends Authenticatable
 {
@@ -28,6 +30,14 @@ class User extends Authenticatable
         'is_active',
         'created_by_id',
         'last_updated_by_id'
+    ];
+
+    protected static $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8',
+        'role_id' => 'required|exists:roles,id',
+        'is_active' => 'required|boolean'
     ];
 
     /**
@@ -51,6 +61,26 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function validate($action, $data)
+    {
+        $rules = static::$rules;
+        $isUpdate = $action == 'update';
+
+        // If updating, ignore unique constraint for current user
+        if ($isUpdate && isset($this->id)) {
+            $rules['email'] = 'required|email|unique:users,email,' . $this->id;
+            $rules['password'] = 'nullable|min:8'; // Optional on update
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 
     /**

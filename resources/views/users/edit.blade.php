@@ -8,8 +8,9 @@
     <div class="col-md-12">
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form method="post" action="{{ route('users.store') }}">
+                <form method="post" action="{{ route('users.update', $user) }}">
                     @csrf
+                    @method('PUT')
 
                     <div class="row">
                         <div class="col-md-6">
@@ -56,7 +57,6 @@
 
                             <div class="mb-3 col-md-11">
                                 @php
-                                // $selectedIsActive = 
                                 $status = $user->is_active ? 'active' : 'inactive';
                                 $selectedIsActive = old('is_active', $status ?? '');
                                 @endphp
