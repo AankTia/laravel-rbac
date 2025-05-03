@@ -83,4 +83,24 @@ class UserController extends Controller
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User created successfully.');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(User $user)
+    {
+        $viewData = [
+            'title' => "Edit User"
+        ];
+
+        if(Auth::user()->isSuperAdmin()) {
+            $roleOptions = Role::all()->pluck('name', 'id');
+        } else {
+            $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'id');
+        }
+
+        return view('users.edit', compact('user'))
+            ->with('viewData', $viewData)
+            ->with('roleOptions', $roleOptions);
+    }
 }

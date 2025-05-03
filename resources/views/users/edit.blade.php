@@ -3,16 +3,6 @@
 @section('title', $viewData['title'] . " | Laravel RBAC")
 @section('pageTitle', $viewData['title'])
 
-@section('pageAction')
-<div class="row mb-4 align-items-center">
-    <div class="col-md-12 mt-3 mt-md-0">
-        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
-    </div>
-</div>
-@endsection
-
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -25,7 +15,7 @@
                         <div class="col-md-6">
                             <div class="mb-3 col-md-11">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" autofocus="">
+                                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control @error('name') is-invalid @enderror" autofocus="">
                                 @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -35,7 +25,7 @@
 
                             <div class="mb-3 col-md-11">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror">
+                                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control @error('email') is-invalid @enderror">
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -44,11 +34,15 @@
                             </div>
 
                             <div class="mb-3 col-md-11">
+                                @php
+                                    $selectedRole = old('role_id', $user->role_id ?? '');
+                                @endphp
+
                                 <label for="role_id" class="form-label">Role</label>
                                 <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
-                                    <option value="" {{ old('role_id') === null || old('role_id') === '' ? 'selected' : '' }}>-- Select Role --</option>
+                                    <option value="" {{ $selectedRole === '' ? 'selected' : '' }}>-- Select Role --</option>
                                     @foreach ($roleOptions as $id => $name)
-                                        <option value="{{ $id }}" {{ old('role_id') == $id ? 'selected' : '' }}>
+                                        <option value="{{ $id }}" {{ $selectedRole == $id ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
                                     @endforeach
@@ -61,11 +55,17 @@
                             </div>
 
                             <div class="mb-3 col-md-11">
+                                @php
+                                // $selectedIsActive = 
+                                $status = $user->is_active ? 'active' : 'inactive';
+                                $selectedIsActive = old('is_active', $status ?? '');
+                                @endphp
+
                                 <label for="language" class="form-label">Status</label>
                                 <select name="is_active" class="form-control @error('is_active') is-invalid @enderror" aria-label="Role select">
-                                    <option value="" {{ old('is_active') === null || old('is_active') === '' ? 'selected' : '' }}>-- Select Status --</option>
+                                    <option value="" {{ $selectedIsActive === '' ? 'selected' : '' }}>-- Select Status --</option>
                                     @foreach (['active' => 'Active', 'inactive' => 'Inactive'] as $id => $name)
-                                        <option value="{{ $id }}" {{ old('is_active') == $id ? 'selected' : '' }}>
+                                        <option value="{{ $id }}" {{ $selectedIsActive == $id ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
                                     @endforeach
