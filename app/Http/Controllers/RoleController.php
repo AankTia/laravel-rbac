@@ -59,13 +59,15 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        $roleData = $request->validated();
-        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
+        $roleData = $request->all();
+        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
 
-        $role = Role::create($roleData);
+        $role = new Role();
+        $validated = $role->validate('create', $roleData);
+
+        $role->fill($validated)->save();
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role created successfully.');
@@ -152,12 +154,14 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(Request $request, Role $role)
     {
-        $roleData = $request->validated();
+        $roleData = $request->all();
         $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
 
-        $role->update($roleData);
+        $validated = $role->validate('update', $roleData);
+
+        $role->update($validated);
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role updated successfully.');
