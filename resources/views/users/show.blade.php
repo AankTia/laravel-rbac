@@ -18,15 +18,21 @@
         @endif
 
         @if ($user->is_active)
-            <a href="#" class="btn btn-secondary">
-                <i class="bx bx-user-x me-1"></i> Deactivate
-            </a>
+            <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
+                    <i class="bx bx-user-x me-1"></i> Deactivate
+                </button>
+            </form>
         @endif
 
         @if (!$user->is_active)
-            <a href="#" class="btn btn-success">
-                <i class="bx bx-user-check me-1"></i> Activate
-            </a>
+            <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">
+                    <i class="bx bx-user-check me-1"></i> Activate
+                </button>
+            </form>
         @endif
 
 

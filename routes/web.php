@@ -13,6 +13,8 @@ Route::middleware('auth')->group(function () {
 
     // users
     Route::resource('/users', UserController::class);
+    Route::post('/users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
+    Route::post('/users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
 
     // Roles
     Route::resource('/roles', RoleController::class);

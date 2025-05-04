@@ -76,9 +76,6 @@
                         <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
                     </li>
                 @endif
-                <li class="menu-item">
-                    <a href="#" class="menu-link">Permissions</a>
-                </li>
             </ul>
         </li>
 

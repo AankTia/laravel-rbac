@@ -32,8 +32,8 @@ class PermissionSeeder extends Seeder
             ['name' => 'Create', 'slug' => 'create', 'description' => 'Permission to create resources'],
             ['name' => 'Update', 'slug' => 'update', 'description' => 'Permission to update resources'],
             ['name' => 'Delete', 'slug' => 'delete', 'description' => 'Permission to delete resources'],
-            ['name' => 'Activate User', 'slug' => 'activate-user', 'description' => 'Permission to activate user'],
-            ['name' => 'Deactivate User', 'slug' => 'deactivate-user', 'description' => 'Permission to deactivate user'],
+            ['name' => 'Activate', 'slug' => 'activate', 'description' => 'Permission to activate resources'],
+            ['name' => 'Deactivate', 'slug' => 'deactivate', 'description' => 'Permission to deactivate resources'],
         ];
 
         foreach ($permissions as $permission) {
@@ -50,7 +50,7 @@ class PermissionSeeder extends Seeder
 
         $modulePermissions = [
             'dashboard' => ['read'],
-            'users' => ['read', 'create', 'update', 'delete', 'activate-user', 'deactivate-user'],
+            'users' => ['read', 'create', 'update', 'delete', 'activate', 'deactivate'],
             'roles' => ['read', 'create', 'update', 'delete']
         ];
 
@@ -79,7 +79,7 @@ class PermissionSeeder extends Seeder
         $rolePermissionData = [
             'admin' => [
                 'dashboard' => ['read'],
-                'users' => ['read', 'create', 'update', 'activate-user', 'deactivate-user'],
+                'users' => ['read', 'create', 'update', 'activate', 'deactivate'],
                 'roles' => ['read']
             ],
             'viewer' => [

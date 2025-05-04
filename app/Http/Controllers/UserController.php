@@ -142,4 +142,54 @@ class UserController extends Controller
         $user->delete(); // This is a soft delete
         return redirect()->route('users.index')->with('success', 'User: ' . $name . ' deleted successfully.');
     }
+
+    /**
+     * Activate the specified resource in storage.
+     */
+    public function activate(Request $request, User $user)
+    {
+        // $userData = $request->all();
+        // $userData['is_active'] = ($userData['is_active'] == 'active');
+
+        // $validated = $user->validate('update', $userData);
+
+        // // Hash password if it was sent
+        // if (!empty($validated['password'])) {
+        //     $validated['password'] = bcrypt($validated['password']);
+        // } else {
+        //     unset($validated['password']); // Don't overwrite if null
+        // }
+
+        // $user->update($validated);
+
+        // return redirect()->route('users.show', ['user' => $user])
+        //     ->with('success', 'User activated successfully.');
+
+
+        if (!$user->is_active) {
+            $user->update(['is_active' => true]);
+
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('success', 'User activated successfully.');
+        } else {
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('info', 'User in inactive status.');
+        }
+    }
+
+    /**
+     * Deactivate the specified resource in storage.
+     */
+    public function deactivate(Request $request, User $user)
+    {
+        if ($user->is_active) {
+            $user->update(['is_active' => false]);
+
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('success', 'User deactivated successfully.');
+        } else {
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('info', 'User in active status.');
+        }
+    }
 }
