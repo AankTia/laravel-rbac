@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\TimestampAndUserTrackingTrait;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait;
+    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -131,7 +132,7 @@ class User extends Authenticatable
             return $this->userRole->role && $this->userRole->role->slug === $roleSlug;
         } else {
             return false;
-        }  
+        }
     }
 
     /**
@@ -144,15 +145,25 @@ class User extends Authenticatable
         return $this->hasRole('superadmin');
     }
 
-    /**
-     * Check if user is admin.
-     *
-     * @return bool
-     */
-    public function isAdmin()
+    public function activityLogs()
     {
-        return $this->hasRole('admin');
+        return $this->morphMany(ActivityLog::class, 'subject');
     }
+
+    public function actorActivities()
+    {
+        return $this->morphMany(ActivityLog::class, 'actor');
+    }
+
+    // /**
+    //  * Check if user is admin.
+    //  *
+    //  * @return bool
+    //  */
+    // public function isAdmin()
+    // {
+    //     return $this->hasRole('admin');
+    // }
 
     // public function createdBy()
     // {

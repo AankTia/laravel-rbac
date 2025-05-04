@@ -7,17 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLog extends Model
 {
     protected $fillable = [
-        'user_id',
+        // 'user_id',
         'action',
-        'ip_address',
-        'user_agent',
+        'description',
+        // 'ip_address',
+        // 'user_agent',
         // module ==> polymorphic
         // old_value
         // new_value
     ];
-    
-    public function user()
+
+    public function subject()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
+    }
+
+    public function actor()
+    {
+        return $this->morphTo();
     }
 }

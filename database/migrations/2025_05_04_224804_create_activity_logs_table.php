@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->nullableMorphs('actor'); // Polymorphic relation to the actor (like a user/admin)
+            $table->morphs('subject'); // Polymorphic relation to the affected model
             $table->string('action')->index();
-            // module ==> polymorphic
+            $table->text('description')->nullable();
             // old_value
             // new_value
-            $table->string('ip_address');
-            $table->string('user_agent');
+            // $table->string('ip_address');
+            // $table->string('user_agent');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

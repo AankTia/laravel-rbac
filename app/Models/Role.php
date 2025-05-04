@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\TimestampAndUserTrackingTrait;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -139,5 +140,10 @@ class Role extends Model
         } else {
             return 0;
         }
+    }
+
+    public function activityLogs()
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
     }
 }

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -68,6 +65,7 @@ class RoleController extends Controller
         $validated = $role->validate('create', $roleData);
 
         $role->fill($validated)->save();
+        $this->logActivity($request, 'create');
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role created successfully.');
