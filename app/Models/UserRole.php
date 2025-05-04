@@ -11,7 +11,12 @@ class UserRole extends Model
     // If you want timestamps on your pivot table
     public $timestamps = true;
 
-    protected $fillable = ['user_id', 'role_id'];
+    protected $fillable = [
+        'user_id', 
+        'role_id',
+        'assigned_by_id',
+        'assigned_at'
+    ];
     
     /**
      * Get the user for this entry.
