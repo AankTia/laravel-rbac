@@ -17,7 +17,7 @@
         </a>
         @endif
 
-        @if ($user->is_active)
+        @if ($user->is_active && auth()->user()->hasPermission('deactivate', 'users'))
             <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
@@ -26,7 +26,7 @@
             </form>
         @endif
 
-        @if (!$user->is_active)
+        @if (!$user->is_active && auth()->user()->hasPermission('activate', 'users'))
             <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">
