@@ -69,9 +69,9 @@ class Role extends Model
     /**
      * Get the users that belong to this role.
      */
-    public function users()
+    public function roleUsers()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(UserRole::class);
     }
 
     /**

@@ -26,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
+        // 'role_id',
         'is_active',
         'created_by_id',
         'last_updated_by_id'
@@ -36,7 +36,7 @@ class User extends Authenticatable
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:8',
-        'role_id' => 'required|exists:roles,id',
+        // 'role_id' => 'required|exists:roles,id',
         'is_active' => 'required|boolean'
     ];
 
@@ -83,12 +83,13 @@ class User extends Authenticatable
         return $validator->validated();
     }
 
-    /**
-     * Get the role that owns the user.
-     */
-    public function role()
+    public function userRole()
     {
-        return $this->belongsTo(Role::class);
+        return $this->hasOne(UserRole::class);
+    }
+
+    public function getRoleName() {
+        return $this->userRole->role->name;
     }
 
     public function initialName()
@@ -105,7 +106,7 @@ class User extends Authenticatable
      */
     public function hasPermission($permissionSlug, $moduleSlug)
     {
-        return $this->role && $this->role->hasPermission($permissionSlug, $moduleSlug);
+        return $this->userRole->role && $this->userRole->role->hasPermission($permissionSlug, $moduleSlug);
     }
 
     /**
@@ -116,7 +117,7 @@ class User extends Authenticatable
      */
     public function hasRole($roleSlug)
     {
-        return $this->role && $this->role->slug === $roleSlug;
+        return $this->userRole->role && $this->userRole->role->slug === $roleSlug;
     }
 
     /**

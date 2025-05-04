@@ -112,7 +112,7 @@
         <div class="row">
             <h2 class="card-title h4 mb-4">Assigned Users</h2>
             <div class="mb-4">
-                <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
+                <p>This role is currently assigned to <strong>{{ $role->roleUsers->count() }} users</strong> in the system.</p>
             </div>
 
             <div class="table-responsive">
@@ -129,16 +129,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($role->users as $user)
+                        @foreach ($role->roleUsers as $roleUser)
                         <tr>
                             <td class="fw-medium">
                                 <div class="user-info">
                                     <div class="user-avatar">
-                                        {{ $user->initialName() }}
+                                        {{ $roleUser->user->initialName() }}
                                     </div>
                                     <div class="user-details">
-                                        <p class="user-name"><a href="{{ route('users.show', $user) }}">{{ $user->name }}</a></p>
-                                        <p class="user-email">{{ $user->email }}</p>
+                                        <p class="user-name"><a href="{{ route('users.show', $roleUser->user) }}">{{ $roleUser->user->name }}</a></p>
+                                        <p class="user-email">{{ $roleUser->user->email }}</p>
                                     </div>
                                 </div>
                             </td>
