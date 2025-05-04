@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use App\TimestampAndUserTrackingTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait;
 
     protected $fillable = [
         'name', 
@@ -19,6 +22,12 @@ class Role extends Model
         'allow_to_be_assigne',
         'created_by_id',
         'last_updated_by_id'
+    ];
+
+    protected static $rules = [
+        'name' => 'required|string|max:255|unique:roles,name',
+        'description' => 'required|string|max:255',
+        'allow_to_be_assigne' => 'nullable',
     ];
 
     protected static function boot()
@@ -38,14 +47,23 @@ class Role extends Model
         // });
     }
 
-    public function createdBy()
+    public function validate($action, $data)
     {
-        return $this->belongsTo(User::class);
-    }
+        $rules = static::$rules;
+        $isUpdate = $action == 'update';
 
-    public function lastUpdatedBy()
-    {
-        return $this->belongsTo(User::class);
+        // If updating, ignore unique constraint for current user
+        if ($isUpdate && isset($this->id)) {
+            $rules['name'] = 'required|string|max:255|unique:roles,name,' . $this->id;
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 
     /**

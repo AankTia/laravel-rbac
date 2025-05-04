@@ -27,10 +27,11 @@
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/apex-charts/apex-charts.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/apex-charts/apex-charts.css') }}" /> --}}
 
     <!-- Page CSS -->
-
+    <link rel="stylesheet" href="{{ asset('assets/sneat/vendor/libs/apex-charts/apex-charts.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
     <!-- Helpers -->
     <script src="{{ asset('assets/sneat/vendor/js/helpers.js') }}"></script>
 

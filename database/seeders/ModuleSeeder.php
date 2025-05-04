@@ -17,12 +17,12 @@ class ModuleSeeder extends Seeder
             ['name' => 'Dashboard', 'slug' => 'dashboard', 'description' => 'Main dashboard module'],
             ['name' => 'Users', 'slug' => 'users', 'description' => 'User management module'],
             ['name' => 'Roles', 'slug' => 'roles', 'description' => 'Role management module'],
-            ['name' => 'Products', 'slug' => 'products', 'description' => 'Product management module'],
-            ['name' => 'Orders', 'slug' => 'orders', 'description' => 'Order management module'],
-            ['name' => 'Invoices', 'slug' => 'invoices', 'description' => 'Invoice management module'],
-            ['name' => 'Reports', 'slug' => 'reports', 'description' => 'Reporting module'],
-            ['name' => 'Settings', 'slug' => 'settings', 'description' => 'System settings module'],
-            ['name' => 'Audit Logs', 'slug' => 'audit-logs', 'description' => 'System audit logs module'],
+            // ['name' => 'Products', 'slug' => 'products', 'description' => 'Product management module'],
+            // ['name' => 'Orders', 'slug' => 'orders', 'description' => 'Order management module'],
+            // ['name' => 'Invoices', 'slug' => 'invoices', 'description' => 'Invoice management module'],
+            // ['name' => 'Reports', 'slug' => 'reports', 'description' => 'Reporting module'],
+            // ['name' => 'Settings', 'slug' => 'settings', 'description' => 'System settings module'],
+            // ['name' => 'Audit Logs', 'slug' => 'audit-logs', 'description' => 'System audit logs module'],
         ];
 
         foreach ($modules as $module) {

@@ -3,15 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\TimestampAndUserTrackingTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +27,17 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'is_active'
+        'is_active',
+        'created_by_id',
+        'last_updated_by_id'
+    ];
+
+    protected static $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8',
+        'role_id' => 'required|exists:roles,id',
+        'is_active' => 'required|boolean'
     ];
 
     /**
@@ -49,12 +63,37 @@ class User extends Authenticatable
         ];
     }
 
+    public function validate($action, $data)
+    {
+        $rules = static::$rules;
+        $isUpdate = $action == 'update';
+
+        // If updating, ignore unique constraint for current user
+        if ($isUpdate && isset($this->id)) {
+            $rules['email'] = 'required|email|unique:users,email,' . $this->id;
+            $rules['password'] = 'nullable|min:8'; // Optional on update
+        }
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
+    }
+
     /**
      * Get the role that owns the user.
      */
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function initialName()
+    {
+        return implode('', array_map(fn($word) => $word[0], explode(' ', $this->name)));
     }
 
     /**
@@ -100,23 +139,41 @@ class User extends Authenticatable
         return $this->hasRole('admin');
     }
 
-    /**
-     * Check if user is manager.
-     *
-     * @return bool
-     */
-    public function isManager()
-    {
-        return $this->hasRole('manager');
-    }
+    // public function createdBy()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    /**
-     * Check if user is staff.
-     *
-     * @return bool
-     */
-    public function isStaff()
-    {
-        return $this->hasRole('staff');
-    }
+    // public function lastUpdatedBy()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    // public function lastUpdate() {
+    //     if ($this->created_at == $this->updated_at) {
+    //         return null;
+    //     } else {
+    //         return $this->updated_at->format('d M Y, h:i A');
+    //     }
+    // }
+
+    // /**
+    //  * Check if user is manager.
+    //  *
+    //  * @return bool
+    //  */
+    // public function isManager()
+    // {
+    //     return $this->hasRole('manager');
+    // }
+
+    // /**
+    //  * Check if user is staff.
+    //  *
+    //  * @return bool
+    //  */
+    // public function isStaff()
+    // {
+    //     return $this->hasRole('staff');
+    // }
 }

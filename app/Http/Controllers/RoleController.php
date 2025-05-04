@@ -59,15 +59,15 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        $roleData = $request->validated();
+        $roleData = $request->all();
+        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
 
-        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne;
-        $roleData['created_by_id'] = Auth::user()->id;
+        $role = new Role();
+        $validated = $role->validate('create', $roleData);
 
-        $role = Role::create($roleData);
+        $role->fill($validated)->save();
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role created successfully.');
@@ -83,11 +83,59 @@ class RoleController extends Controller
             'subtitle' => $role->name
         ];
 
+        $roleModulePermissions = [];
+        foreach ($role->modulePermissions as $roleModulePermission) {
+            $moduleSlug = $roleModulePermission->module->slug;
+            $permissionSlug = $roleModulePermission->permission->slug;
+            if (isset($roleModulePermissions[$moduleSlug])) {
+                $roleModulePermissions[$moduleSlug][] = $permissionSlug;
+            } else {
+                $roleModulePermissions[$moduleSlug] = [$permissionSlug];
+            }
+        }
+
+        $modulePermissions = [];
         $modules = Module::all();
+        foreach ($modules as $module) {
+            $permissionsData = [
+                'read' => false,
+                'create' => false,
+                'update' => false,
+                'delete' => false,
+                'others' => []
+            ];
+
+            if (isset($roleModulePermissions[$module->slug])) {
+                $roleModulePermission = $roleModulePermissions[$module->slug];
+
+                $modulePermissionSlugs = [];
+                $otherPermissions = [];
+                foreach ($module->permissions as $permission) {
+                    $modulePermissionSlugs[] = $permission->slug;
+                    if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
+                        if (in_array($permission->slug, $roleModulePermission)) {
+                            $otherPermissions[] = $permission->name;
+                        }
+                    }
+                }
+
+                $permissionsData['read'] = (in_array('read', $modulePermissionSlugs) && in_array('read', $roleModulePermission));
+                $permissionsData['create'] = (in_array('create', $modulePermissionSlugs) && in_array('create', $roleModulePermission));
+                $permissionsData['update'] = (in_array('update', $modulePermissionSlugs) && in_array('update', $roleModulePermission));
+                $permissionsData['delete'] = (in_array('delete', $modulePermissionSlugs) && in_array('delete', $roleModulePermission));
+                $permissionsData['others'] = $otherPermissions;
+            }
+
+            $modulePermissions[$module->name] = $permissionsData;
+        }
+
+        $crudPermissionData = Permission::whereIn('slug', ['create', 'read', 'update', 'delete'])
+            ->pluck('id', 'slug')
+            ->toArray();
 
         return view('roles.show', compact('role'))
             ->with('viewData', $viewData)
-            ->with('modules', $modules);
+            ->with('modulePermissions', $modulePermissions);
     }
 
     /**
@@ -106,14 +154,14 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(Request $request, Role $role)
     {
-        $roleData = $request->validated();
-
+        $roleData = $request->all();
         $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['last_updated_by_id'] = Auth::user()->id;
 
-        $role->update($roleData);
+        $validated = $role->validate('update', $roleData);
+
+        $role->update($validated);
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role updated successfully.');

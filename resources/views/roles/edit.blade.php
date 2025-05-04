@@ -14,8 +14,6 @@
 @endsection
 
 @section('content')
-
-
 <div class="card shadow-sm">
     <div class="card-body">
         <form method="post" action="{{ route('roles.update', $role) }}">

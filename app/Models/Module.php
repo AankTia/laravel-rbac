@@ -25,10 +25,24 @@ class Module extends Model
     /**
      * Get permissions for this module.
      */
-    public function permissions()
+    public function permissions() {
+        return $this->belongsToMany(Permission::class, 'module_permission');
+    }
+
+    /**
+     * Get Role permissions for this module.
+     */
+    public function rolePermissions()
     {
         return $this->belongsToMany(Permission::class, 'permission_role_module')
                     ->withPivot('role_id')
                     ->using(PermissionRoleModule::class);
+    }
+
+    public function assignPermission($permissionId) {
+        ModulePermission::create([
+            'module_id' => $this->id,
+            'permission_id' => $permissionId
+        ]);
     }
 }

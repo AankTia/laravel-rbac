@@ -45,6 +45,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Create modules table
+        Schema::create('module_permission', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('module_id');
+            $table->unsignedBigInteger('permission_id');
+            $table->timestamps();
+
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+
+            // Ensure unique combination
+            $table->unique(['module_id', 'permission_id']);
+        });
+
         // Create pivot table for role-permission-module
         Schema::create('permission_role_module', function (Blueprint $table) {
             $table->id();
