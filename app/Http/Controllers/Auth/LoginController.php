@@ -49,7 +49,7 @@ class LoginController extends Controller
     */
    protected function authenticated(Request $request, $user)
    {
-       if ($user->status !== 'active') {
+       if (!$user->is_active) {
            Auth::logout();
    
            return redirect('/login')->withErrors([
