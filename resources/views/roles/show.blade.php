@@ -112,7 +112,7 @@
         <div class="row">
             <h2 class="card-title h4 mb-4">Assigned Users</h2>
             <div class="mb-4">
-                <p>This role is currently assigned to <strong>{{ $role->roleUsers->count() }} users</strong> in the system.</p>
+                <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.</p>
             </div>
 
             <div class="table-responsive">

@@ -56,10 +56,12 @@ class UserRole extends Model
 
     public function getFormatedAssignedAt($format = 'd M Y, H:i')
     {
-        if ($this->assigned_at instanceof Carbon) {
-            return $this->assigned_at->format($format);
-        } else {
-            return Carbon::parse($this->assigned_at)->format($format);
+        if ($this->assigned_at) {
+            if ($this->assigned_at instanceof Carbon) {
+                return $this->assigned_at->format($format);
+            } else {
+                return Carbon::parse($this->assigned_at)->format($format);
+            }
         }
     }
 }
