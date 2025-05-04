@@ -88,6 +88,11 @@ class User extends Authenticatable
         return $this->hasOne(UserRole::class);
     }
 
+    public function getRoleId()
+    {
+        return $this->userRole ? $this->userRole->role->id : null;
+    }
+
     public function getRoleName()
     {
         return $this->userRole ? $this->userRole->role->name : null;

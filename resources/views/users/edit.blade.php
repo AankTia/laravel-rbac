@@ -36,7 +36,7 @@
 
                             <div class="mb-3 col-md-11">
                                 @php
-                                    $selectedRole = old('role_id', $user->role_id ?? '');
+                                    $selectedRole = old('role_id', $user->getRoleId() ?? '');
                                 @endphp
 
                                 <label for="role_id" class="form-label">Role</label>

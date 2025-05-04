@@ -120,12 +120,8 @@
                     <thead class="table-light">
                         <tr>
                             <th>User</th>
-                            <th class="text-center">Assigned Date</th>
+                            <th class="text-center">Assigned At</th>
                             <th class="text-center">Assigned By</th>
-                            {{-- <th class="text-center">Email</th> --}}
-                            {{-- <th class="text-center">Update</th> --}}
-                            {{-- <th class="text-center">Delete</th> --}}
-                            {{-- <th class="text-center">Special Privileges</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -142,31 +138,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="fw-medium" nowrap></td>
-                            <td class="fw-medium" nowrap></td>
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('read', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('create', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('update', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('delete', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                Special Privileges
-                            </th> --}}
+                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
+                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -6,6 +6,8 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserRole;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,6 +88,15 @@ class UserController extends Controller
 
         $user->fill($validated)->save();
 
+        if ($request->role_id) {
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => $request->role_id,
+                'assigned_by_id' => Auth::id(),
+                'assigned_at' => Carbon::now()
+            ]);
+        }
+
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User created successfully.');
     }
@@ -128,6 +139,23 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+
+        if ($request->role_id) {
+            if ($user->userRole) {
+                $user->userRole->update([
+                    'role_id' => $request->role_id,
+                    'assigned_by_id' => Auth::id(),
+                    'assigned_at' => Carbon::now()
+                ]);
+            } else {
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => $request->role_id,
+                    'assigned_by_id' => Auth::id(),
+                    'assigned_at' => Carbon::now()
+                ]);
+            }
+        }
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User updated successfully.');
