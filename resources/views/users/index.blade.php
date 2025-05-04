@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $user->role->name }}</td>
+                        <td>{{ $user->getRoleName() }}</td>
                         <td>
                             @if ($user->is_active)
                             <span class="badge rounded-pill bg-success">Active</span>

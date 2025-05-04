@@ -16,9 +16,9 @@ class Role extends Model
     use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait;
 
     protected $fillable = [
-        'name', 
-        'slug', 
-        'description', 
+        'name',
+        'slug',
+        'description',
         'allow_to_be_assigne',
         'created_by_id',
         'last_updated_by_id'
@@ -38,7 +38,7 @@ class Role extends Model
         static::creating(function ($model) {
             if ($model->slug == null || trim($model->slug) == '') {
                 $model->slug = Str::slug($model->name);
-            } 
+            }
         });
 
         // // Before update
@@ -69,9 +69,9 @@ class Role extends Model
     /**
      * Get the users that belong to this role.
      */
-    public function users()
+    public function roleUsers()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(UserRole::class);
     }
 
     /**
@@ -131,5 +131,13 @@ class Role extends Model
             'permission_id' => $permissionId,
             'module_id' => $moduleId,
         ]);
+    }
+
+    public function getTotalUsers() {
+        if ($this->roleUsers) {
+            return $this->roleUsers->count();
+        } else {
+            return 0;
+        }
     }
 }

@@ -38,7 +38,7 @@
                     <tr>
                         <th>Role Name</th>
                         <th>Description</th>
-                        <th>Created On</th>
+                        <th class="text-center">Total Users</th>
                         <th>
                             <div class="text-end">Action</div>
                         </th>
@@ -51,7 +51,7 @@
                             <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
                         </td>
                         <td>{{ $role->description }}</td>
-                        <td>{{ $role->created_at->format('d M Y, h:i A') }}</td>
+                        <td class="text-center">{{ $role->getTotalUsers() }}</td>
                         <td>
                             <div class="text-end">
                                 @if(auth()->user()->hasPermission('read', 'roles'))

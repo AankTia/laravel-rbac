@@ -27,6 +27,23 @@ return new class extends Migration
             $table->foreign('last_updated_by_id')->references('id')->on('users')->onDelete('cascade');
         });
 
+        // Create pivot table for user_roles
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('assigned_by_id')->nullable();
+            $table->dateTime('assigned_at')->nullable();
+            $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('assigned_by_id')->references('id')->on('users')->onDelete('cascade');
+
+            // // Ensure unique combination
+            $table->unique(['user_id', 'role_id']);
+        });
+
         // Create permissions table
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
@@ -45,7 +62,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Create modules table
+        // Create module_permission table
         Schema::create('module_permission', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('module_id');
@@ -73,12 +90,6 @@ return new class extends Migration
             
             // Ensure unique combination
             $table->unique(['role_id', 'permission_id', 'module_id']);
-        });
-
-        // Add role_id to users table
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('role_id')->nullable();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 

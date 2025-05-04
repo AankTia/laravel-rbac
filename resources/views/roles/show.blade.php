@@ -112,7 +112,7 @@
         <div class="row">
             <h2 class="card-title h4 mb-4">Assigned Users</h2>
             <div class="mb-4">
-                <p>This role is currently assigned to <strong>{{ $role->users->count() }} users</strong> in the system.</p>
+                <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.</p>
             </div>
 
             <div class="table-responsive">
@@ -120,53 +120,26 @@
                     <thead class="table-light">
                         <tr>
                             <th>User</th>
-                            <th class="text-center">Assigned Date</th>
+                            <th class="text-center">Assigned At</th>
                             <th class="text-center">Assigned By</th>
-                            {{-- <th class="text-center">Email</th> --}}
-                            {{-- <th class="text-center">Update</th> --}}
-                            {{-- <th class="text-center">Delete</th> --}}
-                            {{-- <th class="text-center">Special Privileges</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($role->users as $user)
+                        @foreach ($role->roleUsers as $roleUser)
                         <tr>
                             <td class="fw-medium">
                                 <div class="user-info">
                                     <div class="user-avatar">
-                                        {{ $user->initialName() }}
+                                        {{ $roleUser->user->initialName() }}
                                     </div>
                                     <div class="user-details">
-                                        <p class="user-name"><a href="{{ route('users.show', $user) }}">{{ $user->name }}</a></p>
-                                        <p class="user-email">{{ $user->email }}</p>
+                                        <p class="user-name"><a href="{{ route('users.show', $roleUser->user) }}">{{ $roleUser->user->name }}</a></p>
+                                        <p class="user-email">{{ $roleUser->user->email }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="fw-medium" nowrap></td>
-                            <td class="fw-medium" nowrap></td>
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('read', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('create', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('update', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                @if ($role->hasPermission('delete', $module->slug))
-                                    <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </th> --}}
-                            {{-- <th class="text-center">
-                                Special Privileges
-                            </th> --}}
+                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
+                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
                         </tr>
                         @endforeach
                     </tbody>
