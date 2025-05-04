@@ -60,7 +60,7 @@
                     <h4>{{ $user->name }}</h4>
                     <p class="text-muted">{{ $user->email }}</p>
                     <div class="d-flex justify-content-center mb-3">
-                        <span class="badge bg-primary p-2" id="userRole">{{ $user->role->name }}</span>
+                        <span class="badge bg-primary p-2" id="userRole">{{ $user->getRoleName() }}</span>
                     </div>
                 </div>
 
