@@ -88,8 +88,9 @@ class User extends Authenticatable
         return $this->hasOne(UserRole::class);
     }
 
-    public function getRoleName() {
-        return $this->userRole->role->name;
+    public function getRoleName()
+    {
+        return $this->userRole ? $this->userRole->role->name : null;
     }
 
     public function initialName()
@@ -106,7 +107,11 @@ class User extends Authenticatable
      */
     public function hasPermission($permissionSlug, $moduleSlug)
     {
-        return $this->userRole->role && $this->userRole->role->hasPermission($permissionSlug, $moduleSlug);
+        if ($this->userRole) {
+            return $this->userRole->role && $this->userRole->role->hasPermission($permissionSlug, $moduleSlug);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -117,7 +122,11 @@ class User extends Authenticatable
      */
     public function hasRole($roleSlug)
     {
-        return $this->userRole->role && $this->userRole->role->slug === $roleSlug;
+        if ($this->userRole) {
+            return $this->userRole->role && $this->userRole->role->slug === $roleSlug;
+        } else {
+            return false;
+        }  
     }
 
     /**
