@@ -48,3 +48,10 @@ if (!function_exists('userIcon')) {
         return 'bx bx-user';
     }
 }
+
+if (!function_exists('leftArrowIcon')) {
+    function leftArrowIcon()
+    {
+        return 'bx bx-left-arrow-alt';
+    }
+}

@@ -2,13 +2,12 @@
 
 @section('title', $viewData['title'] . " | Laravel RBAC")
 @section('pageTitle', $viewData['title'])
-{{-- @section('pageSubTitle', $viewData['subtitle'] . " Role Details") --}}
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(auth()->user()->hasPermission('read', 'roles'))
-        {{ backButton(route('roles.index'), 'Back to List') }}
+        {!! backButton(route('roles.index'), 'Back to List') !!}
         @endif
     </div>
 </div>
@@ -20,7 +19,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 @if(auth()->user()->hasPermission('update', 'roles'))
-                {{ editButton(route('roles.edit', ['role' => $role])) }}
+                {!! editButton(route('roles.edit', ['role' => $role])) !!}
                 @endif
 
                 @if(auth()->user()->hasPermission('delete', 'roles'))

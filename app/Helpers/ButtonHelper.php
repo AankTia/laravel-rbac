@@ -1,20 +1,32 @@
 <?php
 
-function backButton($route, $title)
+function backButton($route, $label)
 {
-    echo "<a href='{$route}' class='btn btn-sm btn-outline-secondary me-2'>
-            <i class='bx bx-left-arrow-alt me-1'></i> {$title}
-        </a>";
+    $icon = leftArrowIcon();
+    return <<<HTML
+            <a href="{$route}" class="btn btn-sm btn-outline-secondary me-2">
+                <i class="{$icon}"></i> {$label}
+            </a>
+        HTML;
 }
 
-function createButton($route, $title) {}
+function createButton($route, $label = '') {
+    $icon = createIcon();
+    return <<<HTML
+            <a href='{$route}' class='btn btn-sm btn-primary'>
+                <i class='{$icon}'></i> Add New {$label}
+            </a>
+        HTML;
+}
 
-function editButton($route, $title = 'Edit')
+function editButton($route, $label = 'Edit')
 {
-    $updateIcon = updateIcon();
-    echo "<a href='{$route}' class='btn btn-sm btn-warning'>
-        <i class='{$updateIcon}'></i> {$title}
-    </a>";
+    $icon = updateIcon();
+    return <<<HTML
+            <a href='{$route}' class='btn btn-sm btn-warning'>
+                <i class='{$icon}'></i> {$label}
+            </a>
+        HTML;
 }
 
 function deleteButton($route, $label = 'Delete')

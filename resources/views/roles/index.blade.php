@@ -21,9 +21,7 @@
 
     <div class="col-md-6 text-md-end mt-3 mt-md-0">
         @if(auth()->user()->hasPermission('create', 'roles'))
-        <a href="{{ route('roles.create') }}" class="btn btn-primary">
-            <i class="bx bx-plus-circle me-2"></i> Add New Role
-        </a>
+        {!! createButton(route('roles.create'), 'Role') !!}
         @endif
     </div>
 </div>
