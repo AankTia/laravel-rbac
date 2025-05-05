@@ -125,7 +125,7 @@
                     <strong>{{ $activity->description }}</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> {{ $activity->created_at }}
+                        <i class="{{ clockIcon() }}"></i> {{ $activity->created_at }}
                     </small>
                 </div>
             </div>
@@ -140,65 +140,65 @@
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-primary">
-                    <i class="bx bx-plus"></i>
+                    <i class="{{ createIcon() }}"></i>
                 </div>
                 <div>
                     <strong>Create Resource</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                        <i class="{{ clockIcon() }}"></i> 22 DEC 7:20 PM
                     </small>
                 </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-warning">
-                    <i class="bx bx-pencil"></i>
+                    <i class="{{ updateIcon() }}"></i>
                 </div>
                 <div>
                     <strong>Update Resource</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                        <i class="{{ clockIcon() }}"></i> 22 DEC 7:20 PM
                     </small>
                 </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-danger">
-                    <i class="bx bx-trash"></i>
+                    <i class="{{ deleteIcon() }}"></i>
                 </div>
                 <div>
                     <strong class="text-danger">Delete Resource</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                        <i class="{{ clockIcon() }}"></i> 22 DEC 7:20 PM
                     </small>
                 </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-success">
-                    <i class="bx bx-user-check"></i>
+                    <i class="{{ activateIcon() }}"></i>
                 </div>
                 <div>
                     <strong>Activate Resource</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                        <i class="{{ clockIcon() }}"></i> 22 DEC 7:20 PM
                     </small>
                 </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
-                <div class="timeline-icon text-dark">
-                    <i class="bx bx-user-x"></i>
+                <div class="timeline-icon text-danger">
+                    <i class="{{ deactivateIcon() }}"></i>
                 </div>
                 <div>
                     <strong>Deactivate Resource</strong><br>
 
                     <small class="text-muted">
-                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                        <i class="{{ clockIcon() }}"></i> 22 DEC 7:20 PM
                     </small>
                 </div>
             </div>
