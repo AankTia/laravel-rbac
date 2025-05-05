@@ -1,5 +1,9 @@
 # TODO
 
+## Model
+
+-   [ ] Create base model
+
 ## Helper
 
 -   [ ] Button helper

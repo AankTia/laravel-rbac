@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLog extends Model
 {
     protected $fillable = [
+        'log_name',
         'user_id',
         'action',
         'description',
-        // 'ip_address',
-        // 'user_agent',
-        // module ==> polymorphic
-        // old_value
-        // new_value
+        'properties'
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
     ];
 
     public function subject()

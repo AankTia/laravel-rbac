@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\TimestampAndUserTrackingTrait;
 use App\Traits\LogsActivity;
+use App\Traits\TracksChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, TracksChanges, LogsActivity;
 
     protected $fillable = [
         'name',

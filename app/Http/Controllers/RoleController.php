@@ -59,7 +59,8 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $role = new Role();
         $validated = $role->validate('create', $roleData);
@@ -155,7 +156,8 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $validated = $role->validate('update', $roleData);
 
