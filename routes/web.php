@@ -20,5 +20,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('/roles', RoleController::class);
     Route::get('/roles/{role}/permissions/edit', [RoleController::class, 'editPermissions'])->name('roles.edit-permissions');
     Route::put('/roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.update-permissions');
+    Route::get('/roles/{role}/activity-logs', [RoleController::class, 'activityLogs'])->name('roles.activity-logs');
     
 });

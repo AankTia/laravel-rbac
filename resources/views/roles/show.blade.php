@@ -228,9 +228,9 @@
             </div>
 
             <div class="mt-2">
-                <button type="button" class="btn btn-sm btn-outline-primary">
+                <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary">
                     <i class="{{ historyIcon() }}"></i> Detail Activities
-                </button>
+                </a>
             </div>
             <hr>
         </div>
