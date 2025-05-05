@@ -134,7 +134,8 @@ class Role extends Model
         ]);
     }
 
-    public function getTotalUsers() {
+    public function getTotalUsers()
+    {
         if ($this->roleUsers) {
             return $this->roleUsers->count();
         } else {
@@ -145,5 +146,11 @@ class Role extends Model
     public function activityLogs()
     {
         return $this->morphMany(ActivityLog::class, 'subject');
+    }
+
+    public function getCustomActivityDescription($event)
+    {
+        return ucfirst($event) . " " . class_basename($this) . " : " . $this->name;
+        
     }
 }

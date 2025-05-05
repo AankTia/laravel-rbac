@@ -155,6 +155,11 @@ class User extends Authenticatable
         return $this->hasMany(ActivityLog::class);
     }
 
+    public function getCustomActivityDescription($event)
+    {
+        return ucfirst($event) . " Role: {$this->name}";
+    }
+
     // /**
     //  * Check if user is admin.
     //  *

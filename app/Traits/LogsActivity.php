@@ -31,6 +31,10 @@ trait LogsActivity
 
     protected static function getActivityDescription(string $event, $model): string
     {
-        return $event . " " . class_basename($model);
+        if (method_exists($model, 'getCustomActivityDescription')) {
+            return $model->getCustomActivityDescription($event);
+        }
+
+        return ucfirst($event) . " " . class_basename($model);
     }
 }
