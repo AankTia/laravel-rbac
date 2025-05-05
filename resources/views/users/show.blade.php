@@ -117,9 +117,8 @@
             <div class="timeline-line"></div>
             @foreach ($recentActivities as $activity)
             <div class="mb-4 d-flex align-items-start gap-3">
-                <div class="timeline-icon text-primary">
-                    {{-- <i class="bx bx-plus"></i> --}}
-                    {{ $activity->action }}
+                <div class="timeline-icon {{ $activity->getActionTextColor() }}">
+                    <i class="{{ $activity->getActionIcon() }}"></i>
                 </div>
                 <div>
                     <strong>{{ $activity->description }}</strong><br>
