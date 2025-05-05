@@ -8,29 +8,9 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(auth()->user()->hasPermission('read', 'roles'))
-        <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">
+        <a href="{{ route('roles.index') }}" class="btn btn-sm btn-outline-secondary me-2">
             <i class="bx bx-left-arrow-alt me-1"></i> Back to List
         </a>
-        @endif
-
-        @if(auth()->user()->hasPermission('update', 'roles'))
-        <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-primary">
-            <i class="bx bx-pencil me-1"></i> Edit
-        </a>
-
-        <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-warning">
-            <i class="bx bx-plus-circle me-2"></i> Update Permissions
-        </a>
-        @endif
-
-        @if(auth()->user()->hasPermission('delete', 'roles'))
-        <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
-                <i class="bx bx-trash me-1"></i> Delete
-            </button>
-        </form>
         @endif
     </div>
 </div>
@@ -40,71 +20,50 @@
 <div class="row">
     <div class="col-md-9">
         <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                @if(auth()->user()->hasPermission('update', 'roles'))
+                <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-sm btn-warning">
+                    <i class="{{ updateIcon() }}"></i> Edit
+                </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('delete', 'roles'))
+                <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">
+                        <i class="{{ deleteIcon() }}"></i> Delete
+                    </button>
+                </form>
+                @endif
+            </div>
+
             <div class="card-body">
                 <div class="row">
-
-                    <div class="col-md-8">
-                        <h2 class="card-title h4 mb-4">{{ $role->name }}</h2>
-
-                        <div class="mb-4">
-                            <h3 class="h6 text-muted">Identifier</h3>
-                            <p>{{ $role->slug }}</p>
-                        </div>
-
-                        <div class="mb-4">
-                            <h3 class="h6 text-muted">Description</h3>
-                            <p>{{ $role->description }}</p>
-                        </div>
-
-                        {{-- <div class="mb-4">
-                            <h3 class="h6 text-muted">Assigned Permissions</h3>
-                            <div class="d-flex flex-wrap gap-2 mt-2">
-                                <span class="badge bg-success">Create</span>
-                                <span class="badge bg-primary">Read</span>
-                                <span class="badge bg-warning text-dark">Update</span>
-                                <span class="badge bg-danger">Delete</span>
-                                <span class="badge bg-info text-dark">Export</span>
-                                <span class="badge bg-secondary">Import</span>
-                                <span class="badge bg-dark">Configure</span>
-                            </div>
-                        </div> --}}
-
-                        <div class="mb-4">
-                            <h3 class="h6 text-muted">Allow to be assigned to users</h3>
-                            <p>
-                                @if ($role->allow_to_be_assigne)
-                                <span class="badge bg-label-primary">Allowed</span>
-                                @else
-                                <span class="badge bg-label-secondary">Not Allowed</span>
-                                @endif
-                            </p>
-                        </div>
+                    <div class="col-md-6 mb-4">
+                        <h3 class="h6 text-muted">Role Name</h3>
+                        <div class="mb-2">{{ $role->name }}</div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <div class="small text-muted">Created By</div>
-                                    <div>{{ $role->creatorName() }}</div>
-                                </div>
+                    <div class="col-md-6 mb-4">
+                        <h3 class="h6 text-muted">Role Identifier</h3>
+                        <div class="mb-2">{{ $role->slug }}</div>
+                    </div>
 
-                                <div class="mb-3">
-                                    <div class="small text-muted">Created On</div>
-                                    <div>{{ $role->createdAt() }}</div>
-                                </div>
+                    <div class="col-md-6 mb-4">
+                        <h3 class="h6 text-muted">Description</h3>
+                        <p>{{ $role->description }}</p>
+                    </div>
 
-                                <div class="mb-3">
-                                    <div class="small text-muted">Last Updated By</div>
-                                    <div>{{ $role->lastUpdaterName() ?? '-' }}</div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="small text-muted">Last Updated</div>
-                                    <div>{{ $role->lastUpdate() ?? '-' }}</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <h3 class="h6 text-muted">Allow to be assigned to users</h3>
+                        <p>
+                            @if ($role->allow_to_be_assigne)
+                            <span class="badge bg-label-primary">Allowed</span>
+                            @else
+                            <span class="badge bg-label-secondary">Not Allowed</span>
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>
@@ -114,7 +73,7 @@
             <div class="card-body">
                 <div class="row">
                     <h2 class="card-title h4 mb-4">Assigned Users</h2>
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.</p>
                     </div>
 
@@ -128,10 +87,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($role->roleUsers as $roleUser)
+                                @forelse ($role->roleUsers as $roleUser)
                                 <tr>
                                     <td class="fw-medium">
                                         <div class="user-info">
+                                            <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
+                                                <span class="tf-icons {{ deleteIcon() }}"></span>
+                                            </button>
+
                                             <div class="user-avatar">
                                                 {{ $roleUser->user->initialName() }}
                                             </div>
@@ -144,7 +107,11 @@
                                     <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
                                     <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center"> No data to show</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -153,6 +120,14 @@
         </div>
 
         <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                @if(auth()->user()->hasPermission('update', 'roles'))
+                <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-sm btn-warning">
+                    <i class="{{ updateIcon() }}"></i> Update Permissions
+                </a>
+                @endif
+            </div>
+
             <div class="card-body">
                 <div class="row">
                     <h2 class="card-title h4 mb-4">Allowed Permissions</h2>
@@ -211,44 +186,61 @@
             </div>
         </div>
     </div>
+
     <div class="col-md-3">
+        @if ($role->creatorName() || $role->createdAt())
         <div>
-            <div class="fw-bold mb-3">Created By</div>
+            <div class="fw-bold mb-3">Created</div>
+            @if ($role->creatorName())
             <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
+            @endif
+            @if ($role->createdAt())
             <div><i class="{{ clockIcon() }}"></i> {{ $role->createdAt() }}</div>
+            @endif
         </div>
-
         <hr>
+        @endif
 
+
+        @if ($role->lastUpdaterName() || $role->lastUpdate())
         <div class="mt-4">
-            <div class="fw-bold mb-3">Last Updated By</div>
-            <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() ?? '-' }}</div>
-            <div><i class="{{ clockIcon() }}"></i> {{ $role->lastUpdate() ?? '-' }}</div>
+            <div class="fw-bold mb-3">Last Updated</div>
+            <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
+            <div><i class="{{ clockIcon() }}"></i> {{ $role->lastUpdate() }}</div>
         </div>
-
         <hr>
+        @endif
 
         <div class="mt-4">
             <div class="fw-bold">Activity Logs</div>
             <div class="position-relative ps-4 mt-4">
                 <div class="timeline-line"></div>
-                @foreach ($role->activityLogs as $activity)
+                @forelse ($role->activityLogs as $activity)
                 <div class="mb-4 d-flex align-items-start gap-3">
                     <div class="timeline-icon {{ $activity->getActionTextColor() }}">
                         <i class="{{ $activity->getActionIcon() }}"></i>
                     </div>
+
                     <div>
                         <strong>{{ $activity->description }}</strong><br>
-
-                        <small class="text-muted">
-                            <i class="{{ clockIcon() }}"></i> {{ $activity->created_at }}
-                        </small> <br>
-                        <small class="text-muted">
-                            <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
-                        </small> <br>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="{{ clockIcon() }}"></i> {{ $activity->created_at }}
+                            </small>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
+                            </small>
+                        </div>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-xs btn-outline-primary">Details</button>
+                        </div>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                No activity history
+                @endforelse
             </div>
         </div>
     </div>

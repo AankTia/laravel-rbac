@@ -150,7 +150,7 @@ class Role extends Model
 
     public function getCustomActivityDescription($event)
     {
-        return ucfirst($event) . " " . class_basename($this) . " : " . $this->name;
+        return ucfirst($event) . " " . $this->name . " " . class_basename($this);
         
     }
 }
