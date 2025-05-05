@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLog extends Model
 {
     protected $fillable = [
-        // 'user_id',
+        'user_id',
         'action',
         'description',
         // 'ip_address',
@@ -22,8 +22,8 @@ class ActivityLog extends Model
         return $this->morphTo();
     }
 
-    public function actor()
+    public function user()
     {
-        return $this->morphTo();
+        return $this->belongsTo(User::class);
     }
 }

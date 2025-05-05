@@ -15,11 +15,11 @@ class Controller extends BaseController
 
     function logActivity($request, $action)
     {
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'ip_address' => $request->ip(),
-            'user_agent'=> $request->userAgent(),
-            'action' => $action,
-        ]);
+        // ActivityLog::create([
+        //     'user_id' => Auth::id(),
+        //     'ip_address' => $request->ip(),
+        //     'user_agent'=> $request->userAgent(),
+        //     'action' => $action,
+        // ]);
     }
 }

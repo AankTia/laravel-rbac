@@ -52,7 +52,7 @@ class UserController extends Controller
             'subtitle' => $user->name
         ];
 
-        $recentActivities = $user->actorActivities;
+        $recentActivities = $user->actitityLogs;
 
         return view('users.show', compact('user'))
             ->with('viewData', $viewData)
