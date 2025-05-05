@@ -41,3 +41,10 @@ if (!function_exists('clockIcon')) {
         return 'bx bx-time';
     }
 }
+
+if (!function_exists('userIcon')) {
+    function userIcon()
+    {
+        return 'bx bx-user';
+    }
+}
