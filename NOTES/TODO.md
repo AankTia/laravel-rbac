@@ -24,3 +24,7 @@
 ## User
 
 -   [ ] Enhance button to use button helper
+
+## Seeder
+
+-   [ ] Insert logs activity
