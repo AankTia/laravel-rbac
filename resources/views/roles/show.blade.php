@@ -209,13 +209,13 @@
                     </div>
 
                     <div>
-                        <strong>{{ $activity->description }}</strong><br>
-                        <div class="mt-2">
+                        <strong>{{ ucwords($activity->action) }}</strong><br>
+                        <div class="mb-2">
                             <small class="text-muted">
                                 <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
                             </small>
                         </div>
-                        <div class="mt-2">
+                        <div class="mb-3">
                             <small class="text-muted">
                                 <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
                             </small>

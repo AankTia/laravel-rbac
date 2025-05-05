@@ -81,4 +81,12 @@ class ActivityLog extends Model
 
         return $result;
     }
+
+    public function isCreated() {
+        return $this->action == 'created';
+    }
+
+    public function isUpdated() {
+        return $this->action == 'updated';
+    }
 }

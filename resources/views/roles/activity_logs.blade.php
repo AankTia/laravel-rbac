@@ -86,16 +86,61 @@
                         </div>
 
                         <div>
-                            <strong>{{ $activity->description }}</strong><br>
-                            <div class="mt-2">
+                            <strong>{{ ucwords($activity->action) }}</strong><br>
+                            <div class="mb-2">
                                 <small class="text-muted">
                                     <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
                                 </small>
                             </div>
-                            <div class="mt-2">
+                            <div class="mb-3">
                                 <small class="text-muted">
                                     <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
                                 </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="table-responsive">
+                                    @if ($activity->isCreated())
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="text-center">Field Name</th>
+                                                <th class="text-center">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($activity->properties as $propertyName => $value)
+                                            <tr>
+                                                <td>{{ $propertyName }}</td>
+                                                <td>{{ $value }}
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @endif
+
+                                    @if ($activity->isUpdated())
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="text-center">Field Name</th>
+                                                <th class="text-center">Before</th>
+                                                <th class="text-center">After</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach ($activity->properties as $propertyName => $data)
+                                            <tr>
+                                                <td>{{ $propertyName }}</td>
+                                                <td>{{ $data['before'] }}</td>
+                                                <td>{{ $data['after'] }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

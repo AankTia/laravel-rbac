@@ -14,7 +14,7 @@ trait LogsActivity
                 static::$event(function ($model) use ($event) {
                     $description = static::getActivityDescription($event, $model);
 
-                    $skipTimestampAttributes = ['created_at', 'updated_at', 'deleted_at'];
+                    $skipTimestampAttributes = ['created_at', 'updated_at', 'deleted_at', 'created_by_id', 'last_updated_by_id'];
 
                     $properties = null;
                     if ($event === 'created') {
@@ -46,7 +46,7 @@ trait LogsActivity
                         'user_id' => Auth::id(), // Set the actor (e.g. currently logged in user)
                         'action' => $event,
                         'description' => $description,
-                        'properties' => ($properties ? json_encode($properties) : null)
+                        'properties' => ($properties ? $properties : null)
                     ]);
     
                     // Set the subject (the model that was changed)

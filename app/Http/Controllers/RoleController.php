@@ -230,15 +230,16 @@ class RoleController extends Controller
             ->with('success', 'Role Permissions updated successfully.');
     }
 
-    public function activityLogs(Role $role) {
+    public function activityLogs(Role $role)
+    {
         $viewData = [
             'title' => "Role Activity Logs"
         ];
 
         $activityLogs = $role->activityLogs()
             ->latest()
-            // ->limit(10)
             ->get();
+        // ->limit(10)
 
         return view('roles.activity_logs', compact('role'))
             ->with('viewData', $viewData)
