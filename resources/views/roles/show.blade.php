@@ -8,9 +8,7 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(auth()->user()->hasPermission('read', 'roles'))
-        <a href="{{ route('roles.index') }}" class="btn btn-sm btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
+        {{ backButton(route('roles.index'), 'Back to List') }}
         @endif
     </div>
 </div>
@@ -22,19 +20,11 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 @if(auth()->user()->hasPermission('update', 'roles'))
-                <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-sm btn-warning">
-                    <i class="{{ updateIcon() }}"></i> Edit
-                </a>
+                {{ editButton(route('roles.edit', ['role' => $role])) }}
                 @endif
 
                 @if(auth()->user()->hasPermission('delete', 'roles'))
-                <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">
-                        <i class="{{ deleteIcon() }}"></i> Delete
-                    </button>
-                </form>
+                {!! deleteButton(route('roles.destroy', $role)) !!}
                 @endif
             </div>
 
@@ -122,9 +112,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 @if(auth()->user()->hasPermission('update', 'roles'))
-                <a href="{{ route('roles.edit-permissions', $role) }}" class="btn btn-sm btn-warning">
-                    <i class="{{ updateIcon() }}"></i> Update Permissions
-                </a>
+                {{ editButton(route('roles.edit-permissions', $role), 'Update Permissions') }}
                 @endif
             </div>
 
