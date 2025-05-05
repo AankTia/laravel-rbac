@@ -14,16 +14,21 @@ trait LogsActivity
                 static::$event(function ($model) use ($event) {
                     $description = static::getActivityDescription($event, $model);
 
-                    $skipTimestampAttributes = ['created_at', 'updated_at'];
+                    $skipTimestampAttributes = ['created_at', 'updated_at', 'deleted_at'];
 
-                    $properties = [];
+                    $properties = null;
                     if ($event === 'created') {
-                        dd($event);
+                        foreach ($model->originalAttributes as $attributeName => $value) {
+                            if (in_array($attributeName, $skipTimestampAttributes)) {
+                                continue;
+                            }
+                            
+                            $properties[$attributeName] = $value;
+                        }
                     } elseif ($event === 'updated') {
                         $oldAttributes = $model->getOriginalAttributes();
                         $changedAttributes = $model->getChangedAttributes();
-
-                        // $changesData = [];
+                        
                         foreach ($changedAttributes as $attributeName => $newValue) {
                             if (in_array($attributeName, $skipTimestampAttributes)) {
                                 continue;
@@ -34,12 +39,6 @@ trait LogsActivity
                                 'after' => $newValue
                             ];
                         }
-                        // dd($changesData);
-                        // $properties = 
-
-                        // dd([$old, $new]);
-                    } elseif ($event === 'deleted') {
-                        dd($event);
                     }
     
                     $activity = new ActivityLog([
@@ -47,7 +46,7 @@ trait LogsActivity
                         'user_id' => Auth::id(), // Set the actor (e.g. currently logged in user)
                         'action' => $event,
                         'description' => $description,
-                        'properties' => json_encode($properties)
+                        'properties' => ($properties ? json_encode($properties) : null)
                     ]);
     
                     // Set the subject (the model that was changed)

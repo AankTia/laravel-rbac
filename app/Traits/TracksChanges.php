@@ -13,7 +13,7 @@ trait TracksChanges
         // Before create
         static::creating(function ($model) {
             $model->isNewRecord = true;
-            $model->changedAttributes = $model->getAttributes();
+            $model->originalAttributes = $model->getAttributes();
         });
 
         // Before update
