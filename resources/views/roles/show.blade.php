@@ -195,7 +195,7 @@
             <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
             @endif
             @if ($role->createdAt())
-            <div><i class="{{ clockIcon() }}"></i> {{ $role->createdAt() }}</div>
+            <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</div>
             @endif
         </div>
         <hr>
@@ -206,7 +206,7 @@
         <div class="mt-4">
             <div class="fw-bold mb-3">Last Updated</div>
             <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
-            <div><i class="{{ clockIcon() }}"></i> {{ $role->lastUpdate() }}</div>
+            <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
         </div>
         <hr>
         @endif
@@ -225,7 +225,7 @@
                         <strong>{{ $activity->description }}</strong><br>
                         <div class="mt-2">
                             <small class="text-muted">
-                                <i class="{{ clockIcon() }}"></i> {{ $activity->created_at }}
+                                <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
                             </small>
                         </div>
                         <div class="mt-2">
@@ -245,12 +245,5 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
 
 @endsection
