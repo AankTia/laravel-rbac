@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f2f3f7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .timeline-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .timeline-cards {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .timeline-card {
+            margin-bottom: 30px;
+            display: flex;
+        }
+        
+        .date-column {
+            width: 120px;
+            text-align: right;
+            padding-right: 15px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        .icon-column {
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-top: 25px;
+        }
+        
+        .icon-blue {
+            background-color: #6495ED;
+        }
+        
+        .icon-green {
+            background-color: #7FFF00;
+        }
+        
+        .icon-red {
+            background-color: #FF6347;
+        }
+        
+        .icon-yellow {
+            background-color: #FFD700;
+        }
+        
+        .content-column {
+            flex: 1;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .badge-design {
+            background-color: #e7eeff;
+            color: #6495ED;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        
+        .badge-meeting {
+            background-color: #e8f5e9;
+            color: #4CAF50;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        
+        .avatar-group {
+            display: flex;
+        }
+        
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: -10px;
+            background-color: #f0f0f0;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .avatar-1 { background-color: #8BC34A; }
+        .avatar-2 { background-color: #FF9800; }
+        .avatar-3 { background-color: #9C27B0; }
+        .avatar-4 { background-color: #03A9F4; }
+        
+        .edit-button {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .question-button {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .progress-container {
+            margin-top: 25px;
+        }
+        
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .progress-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .progress-label {
+            width: 80px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .progress {
+            flex: 1;
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .progress-jquery { background-color: #FF5722; }
+        .progress-react { background-color: #2196F3; }
+        .progress-angular { background-color: #FFC107; }
+        .progress-vue { background-color: #4CAF50; }
+        .progress-laravel { background-color: #9C27B0; }
+        
+        .show-report-btn {
+            background-color: white;
+            color: #6c63ff;
+            border: 1px solid #6c63ff;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .snack-card {
+            display: flex;
+        }
+        
+        .snack-img {
+            width: 100px;
+            height: 80px;
+            background-color: #ffcdd2;
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .snack-content {
+            flex: 1;
+        }
+        
+        .donut-emoji {
+            font-size: 24px;
+        }
+        
+        .snack-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .snack-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .rating {
+            color: #ffc107;
+            margin-bottom: 5px;
+        }
+        
+        .snack-price {
+            color: #333;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .read-more {
+            color: #6c63ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="timeline-container">
+        <div class="timeline-cards">
+            <!-- First Card - Designing UI -->
+            <div class="timeline-card">
+                <div class="date-column">1st January</div>
+                <div class="icon-column">
+                    <div class="icon-circle icon-blue">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                </div>
+                <div class="content-column">
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title">Designing UI</h5>
+                                <p class="card-text mb-3">Our main goal is to design a new mobile application for our client. The customer wants a clean & flat design.</p>
+                                <div>
+                                    <p class="text-muted mb-2" style="font-size: 14px;">Participants</p>
+                                    <div class="avatar-group">
+                                        <div class="avatar avatar-1">JS</div>
+                                        <div class="avatar avatar-2">MP</div>
+                                        <div class="avatar avatar-3">KL</div>
+                                        <div class="avatar avatar-4">AB</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                                <div class="edit-button mb-3">
+                                    <i class="fas fa-pen"></i>
+                                </div>
+                                <span class="badge badge-design me-2">Design</span>
+                                <span class="badge badge-meeting">Meeting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Card - Survey Report -->
+            <div class="timeline-card">
+                <div class="date-column">2nd January</div>
+                <div class="icon-column">
+                    <div class="icon-circle icon-green">
+                        <i class="fas fa-question"></i>
+                    </div>
+                </div>
+                <div class="content-column">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Survey Report</h5>
+                            <div class="mb-3 d-flex align-items-center">
+                                <div class="avatar avatar-1 me-2">TJ</div>
+                                <span>assigned this task to Sarah</span>
+                            </div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-item">
+                                    <div class="avatar avatar-2 progress-avatar"></div>
+                                    <div class="progress-label">jQuery</div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-jquery" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-item">
+                                    <div class="avatar avatar-1 progress-avatar"></div>
+                                    <div class="progress-label">React</div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-react" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-item">
+                                    <div class="avatar avatar-3 progress-avatar"></div>
+                                    <div class="progress-label">Angular</div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-angular" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-item">
+                                    <div class="avatar avatar-4 progress-avatar"></div>
+                                    <div class="progress-label">VUE</div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-vue" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-item">
+                                    <div class="avatar avatar-2 progress-avatar"></div>
+                                    <div class="progress-label">Laravel</div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-laravel" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third Card - Financial Reports -->
+            <div class="timeline-card">
+                <div class="date-column">5th January</div>
+                <div class="icon-column">
+                    <div class="icon-circle icon-red">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="content-column">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Financial Reports</h5>
+                            <p class="card-text mb-3">Click the button below to read financial reports</p>
+                            <button class="show-report-btn">Show Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fourth Card - Snacks -->
+            <div class="timeline-card">
+                <div class="date-column">10th January</div>
+                <div class="icon-column">
+                    <div class="icon-circle icon-yellow">
+                        <i class="fas fa-cookie-bite"></i>
+                    </div>
+                </div>
+                <div class="content-column">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Snacks</h5>
+                            <div class="snack-card mt-3">
+                                <div class="snack-img">
+                                    <span class="donut-emoji">🍩</span>
+                                </div>
+                                <div class="snack-content">
+                                    <h6 class="snack-title">A Donut which straight gone to Your Tummy</h6>
+                                    <p class="snack-text">I gaze longingly at the beautiful, perfect, plump donut. This is a delicately crafted piece of art. The mouthwatering mound of miraculous mush isn't able to escape my sight...<a href="#" class="read-more">read more</a></p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                        <span class="snack-price">$5.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

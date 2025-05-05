@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .dashboard-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 35px;
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .blue-dot {
+            background-color: #1e88e5;
+        }
+        .green-dot {
+            background-color: #4caf50;
+        }
+        .light-blue-dot {
+            background-color: #29b6f6;
+        }
+        .timeline-line {
+            position: absolute;
+            left: -18px;
+            top: 24px;
+            bottom: 0;
+            width: 2px;
+            background-color: #e0e0e0;
+        }
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .timeline-subtitle {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .time-ago {
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .file-attachment {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .file-icon {
+            color: #e53935;
+            margin-right: 8px;
+        }
+        .client-info {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .client-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .client-details {
+            line-height: 1.3;
+        }
+        .client-name {
+            font-weight: 500;
+        }
+        .client-title {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .team-avatars {
+            display: flex;
+            margin: 10px 0;
+        }
+        .team-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            margin-right: -8px;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+        }
+        .avatar-more {
+            background-color: #9e9e9e;
+        }
+        .avatar-1 {
+            background-color: #7cb342;
+        }
+        .avatar-2 {
+            background-color: #ffa000;
+        }
+        .avatar-3 {
+            background-color: #d81b60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-card">
+            <h1 class="card-title">Basic</h1>
+            
+            <div class="timeline">
+                <!-- Invoice Item -->
+                <div class="timeline-item">
+                    <div class="timeline-dot blue-dot">
+                        <i class="bi bi-check"></i>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="time-ago">12 min ago</div>
+                    <h2 class="timeline-title">12 Invoices have been paid</h2>
+                    <p class="timeline-subtitle">Invoices have been paid to the company</p>
+                    <div class="file-attachment">
+                        <span class="file-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                            </svg>
+                        </span>
+                        invoices.pdf
+                    </div>
+                </div>
+                
+                <!-- Client Meeting Item -->
+                <div class="timeline-item">
+                    <div class="timeline-dot green-dot">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="time-ago">45 min ago</div>
+                    <h2 class="timeline-title">Client Meeting</h2>
+                    <p class="timeline-subtitle">Project meeting with john @10:15am</p>
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#555" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c0-.001-.001-.207-.266-.477C12.42 11.178 11.276 10 8 10c-3.276 0-4.42 1.18-4.734 1.523-.265.27-.266.476-.266.477v.001c0 .002.001.05.01.121.027.209.09.487.242.835l.002.005.01.019c.159.3.478.751 1.03 1.15.56.401 1.363.777 2.539.98l.019.003.268.038a8.32 8.32 0 0 0 2.28 0l.268-.037.019-.004c1.176-.202 1.979-.578 2.539-.978.554-.4.873-.85 1.032-1.15l.009-.02.002-.004a3 3 0 0 0 .242-.835c.009-.071.01-.12.01-.122z"/>
+                            </svg>
+                        </div>
+                        <div class="client-details">
+                            <div class="client-name">Lester McCarthy (Client)</div>
+                            <div class="client-title">CEO of ThemeSelection</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Project Item -->
+                <div class="timeline-item">
+                    <div class="timeline-dot light-blue-dot">
+                        <i class="bi bi-plus"></i>
+                    </div>
+                    <div class="time-ago">2 Day Ago</div>
+                    <h2 class="timeline-title">Create a new project for client</h2>
+                    <p class="timeline-subtitle">6 team members in a project</p>
+                    <div class="team-avatars">
+                        <div class="team-avatar avatar-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c0-.001-.001-.207-.266-.477C12.42 11.178 11.276 10 8 10c-3.276 0-4.42 1.18-4.734 1.523-.265.27-.266.476-.266.477v.001c0 .002.001.05.01.121.027.209.09.487.242.835.16.304.479.755 1.033 1.154.554.399 1.357.775 2.534.978.325.055.658.095.99.106a8.3 8.3 0 0 0 1.237-.106c1.177-.203 1.98-.578 2.534-.978.554-.399.873-.85 1.033-1.154a3 3 0 0 0 .242-.835c.009-.071.01-.12.01-.122z"/>
+                            </svg>
+                        </div>
+                        <div class="team-avatar avatar-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c0-.001-.001-.207-.266-.477C12.42 11.178 11.276 10 8 10c-3.276 0-4.42 1.18-4.734 1.523-.265.27-.266.476-.266.477v.001c0 .002.001.05.01.121.027.209.09.487.242.835.16.304.479.755 1.033 1.154.554.399 1.357.775 2.534.978.325.055.658.095.99.106a8.3 8.3 0 0 0 1.237-.106c1.177-.203 1.98-.578 2.534-.978.554-.399.873-.85 1.033-1.154a3 3 0 0 0 .242-.835c.009-.071.01-.12.01-.122z"/>
+                            </svg>
+                        </div>
+                        <div class="team-avatar avatar-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c0-.001-.001-.207-.266-.477C12.42 11.178 11.276 10 8 10c-3.276 0-4.42 1.18-4.734 1.523-.265.27-.266.476-.266.477v.001c0 .002.001.05.01.121.027.209.09.487.242.835.16.304.479.755 1.033 1.154.554.399 1.357.775 2.534.978.325.055.658.095.99.106a8.3 8.3 0 0 0 1.237-.106c1.177-.203 1.98-.578 2.534-.978.554-.399.873-.85 1.033-1.154a3 3 0 0 0 .242-.835c.009-.071.01-.12.01-.122z"/>
+                            </svg>
+                        </div>
+                        <div class="team-avatar avatar-more">+3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
