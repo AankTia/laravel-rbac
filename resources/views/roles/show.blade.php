@@ -111,7 +111,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 @if(auth()->user()->hasPermission('update', 'roles'))
-                {{ editButton(route('roles.edit-permissions', $role), 'Update Permissions') }}
+                {!! editButton(route('roles.edit-permissions', $role), 'Update Permissions') !!}
                 @endif
             </div>
 
