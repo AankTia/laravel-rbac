@@ -17,6 +17,7 @@
         </a>
         @endif
 
+        @if (!$user->isSuperAdmin())
         @if ($user->is_active && auth()->user()->hasPermission('deactivate', 'users'))
         <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
             @csrf
@@ -34,7 +35,7 @@
             </button>
         </form>
         @endif
-
+        @endif
 
         @if(auth()->user()->hasPermission('delete', 'users'))
         <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
@@ -130,6 +131,6 @@
             </div>
             @endforeach
         </div>
-</div>
+    </div>
 </div>
 @endsection
