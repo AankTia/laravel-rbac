@@ -109,112 +109,23 @@
     <!-- User Details -->
     <div class="col-md-8">
         <!-- Activity Log -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Activity</h5>
-                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Activity</th>
-                                <th>Time</th>
-                                <th>IP Address</th>
-                            </tr>
-                        </thead>
-                        <tbody id="activityLog">
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-success bg-opacity-10 p-2 rounded-circle me-3">
-                                            <i class="fas fa-sign-in-alt text-success small"></i>
-                                        </div>
-                                        <span>System Login</span>
-                                    </div>
-                                </td>
-                                <td>Today, 09:32 AM</td>
-                                <td>192.168.1.105</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3">
-                                            <i class="fas fa-edit text-primary small"></i>
-                                        </div>
-                                        <span>Updated User Profile</span>
-                                    </div>
-                                </td>
-                                <td>Yesterday, 03:45 PM</td>
-                                <td>192.168.1.105</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-info bg-opacity-10 p-2 rounded-circle me-3">
-                                            <i class="fas fa-file-export text-info small"></i>
-                                        </div>
-                                        <span>Generated Monthly Report</span>
-                                    </div>
-                                </td>
-                                <td>Apr 28, 2025, 10:12 AM</td>
-                                <td>192.168.1.105</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-danger bg-opacity-10 p-2 rounded-circle me-3">
-                                            <i class="fas fa-trash-alt text-danger small"></i>
-                                        </div>
-                                        <span>Deleted Outdated Content</span>
-                                    </div>
-                                </td>
-                                <td>Apr 27, 2025, 02:30 PM</td>
-                                <td>192.168.1.105</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="mb-4">
+            <h4 class="fw-bold">Recent Activity</h4>
         </div>
 
-
-        {{-- <div class="card mt-4">
-            <div class="card-body">
-
-            </div>
-        </div> --}}
         <div class="position-relative ps-4 mt-4">
             <div class="timeline-line"></div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
-                <div class="timeline-icon text-success">
-                    <i class="bx bx-pencil"></i>
-                </div>
-                <div>
-                    <strong>$2400, Design changes</strong><br>
-                    <small class="text-muted">22 DEC 7:20 PM</small>
-                </div>
-            </div>
-
-            <div class="mb-4 d-flex align-items-start gap-3">
-                <div class="timeline-icon text-danger">
-                    <i class="bx bx-trash"></i>
-                </div>
-                <div>
-                    <strong class="text-danger">New order #1832412</strong><br>
-                    <small class="text-muted">21 DEC 11 PM</small>
-                </div>
-            </div>
-
-            <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-primary">
-                    <i class="bx bx-pencil"></i>
+                    <i class="bx bx-plus"></i>
                 </div>
                 <div>
-                    <strong>Server payments for April</strong><br>
-                    <small class="text-muted">21 DEC 9:34 PM</small>
+                    <strong>Create Resource</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                    </small>
                 </div>
             </div>
 
@@ -223,83 +134,53 @@
                     <i class="bx bx-pencil"></i>
                 </div>
                 <div>
-                    <strong>New card added for order #4395133</strong><br>
-                    <small class="text-muted">20 DEC 2:20 AM</small>
+                    <strong>Update Resource</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                    </small>
                 </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-danger">
-                    <i class="bx bx-pencil"></i>
+                    <i class="bx bx-trash"></i>
                 </div>
                 <div>
-                    <strong>Unlock packages for development</strong><br>
-                    <small class="text-muted">18 DEC 4:54 AM</small>
+                    <strong class="text-danger">Delete Resource</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                    </small>
                 </div>
             </div>
 
-            <div class="d-flex align-items-start gap-3">
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-success">
+                    <i class="bx bx-user-check"></i>
+                </div>
+                <div>
+                    <strong>Activate Resource</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                    </small>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-dark">
-                    <i class="bx bx-pencil"></i>
+                    <i class="bx bx-user-x"></i>
                 </div>
                 <div>
-                    <strong>New order #9583120</strong><br>
-                    <small class="text-muted">17 DEC</small>
+                    <strong>Deactivate Resource</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> 22 DEC 7:20 PM
+                    </small>
                 </div>
             </div>
-
         </div>
-
-        <!-- Personal Information -->
-        {{-- <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Full Name</label>
-                            <p class="fw-medium" id="fullName">{{ $user->name }}</p>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="mb-3">
-        <label class="form-label text-muted">Employee ID</label>
-        <p class="fw-medium" id="employeeId">...</p>
-    </div>
-</div>
-</div>
-<div class="row mb-3">
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label class="form-label text-muted">Department</label>
-            <p class="fw-medium" id="department">...</p>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label class="form-label text-muted">Position</label>
-            <p class="fw-medium" id="position">...</p>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label class="form-label text-muted">Phone</label>
-            <p class="fw-medium" id="phone">...</p>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="mb-3">
-            <label class="form-label text-muted">Join Date</label>
-            <p class="fw-medium" id="joinDate">...</p>
-        </div>
-    </div>
-</div>
-</div>
-</div> --}}
 </div>
 </div>
 @endsection
