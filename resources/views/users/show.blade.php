@@ -18,21 +18,21 @@
         @endif
 
         @if ($user->is_active && auth()->user()->hasPermission('deactivate', 'users'))
-            <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
-                    <i class="bx bx-user-x me-1"></i> Deactivate
-                </button>
-            </form>
+        <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
+                <i class="bx bx-user-x me-1"></i> Deactivate
+            </button>
+        </form>
         @endif
 
         @if (!$user->is_active && auth()->user()->hasPermission('activate', 'users'))
-            <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
-                @csrf
-                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">
-                    <i class="bx bx-user-check me-1"></i> Activate
-                </button>
-            </form>
+        <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">
+                <i class="bx bx-user-check me-1"></i> Activate
+            </button>
+        </form>
         @endif
 
 
@@ -72,9 +72,9 @@
                     <div class="col">
                         <span class="d-block fw-bold">Status</span>
                         @if ($user->is_active)
-                            <span class="badge rounded-pill bg-success">Active</span>    
+                        <span class="badge rounded-pill bg-success">Active</span>
                         @else
-                            <span class="badge rounded-pill bg-danger">Inactive</span>
+                        <span class="badge rounded-pill bg-danger">Inactive</span>
                         @endif
                     </div>
                 </div>
@@ -90,12 +90,12 @@
                             <div class="small text-muted">Created On</div>
                             <div>{{ $user->createdAt() }}</div>
                         </div>
-    
+
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated By</div>
                             <div>{{ $user->lastUpdaterName() ?? '-' }}</div>
                         </div>
-    
+
                         <div class="mb-3">
                             <div class="small text-muted">Last Updated</div>
                             <div>{{ $user->lastUpdate() ?? '-' }}</div>
@@ -179,6 +179,77 @@
             </div>
         </div>
 
+
+        {{-- <div class="card mt-4">
+            <div class="card-body">
+
+            </div>
+        </div> --}}
+        <div class="position-relative ps-4 mt-4">
+            <div class="timeline-line"></div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-success">
+                    <i class="bx bx-pencil"></i>
+                </div>
+                <div>
+                    <strong>$2400, Design changes</strong><br>
+                    <small class="text-muted">22 DEC 7:20 PM</small>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-danger">
+                    <i class="bx bx-trash"></i>
+                </div>
+                <div>
+                    <strong class="text-danger">New order #1832412</strong><br>
+                    <small class="text-muted">21 DEC 11 PM</small>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-primary">
+                    <i class="bx bx-pencil"></i>
+                </div>
+                <div>
+                    <strong>Server payments for April</strong><br>
+                    <small class="text-muted">21 DEC 9:34 PM</small>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-warning">
+                    <i class="bx bx-pencil"></i>
+                </div>
+                <div>
+                    <strong>New card added for order #4395133</strong><br>
+                    <small class="text-muted">20 DEC 2:20 AM</small>
+                </div>
+            </div>
+
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-danger">
+                    <i class="bx bx-pencil"></i>
+                </div>
+                <div>
+                    <strong>Unlock packages for development</strong><br>
+                    <small class="text-muted">18 DEC 4:54 AM</small>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start gap-3">
+                <div class="timeline-icon text-dark">
+                    <i class="bx bx-pencil"></i>
+                </div>
+                <div>
+                    <strong>New order #9583120</strong><br>
+                    <small class="text-muted">17 DEC</small>
+                </div>
+            </div>
+
+        </div>
+
         <!-- Personal Information -->
         {{-- <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -190,45 +261,45 @@
                         <div class="mb-3">
                             <label class="form-label text-muted">Full Name</label>
                             <p class="fw-medium" id="fullName">{{ $user->name }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Employee ID</label>
-                            <p class="fw-medium" id="employeeId">...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Department</label>
-                            <p class="fw-medium" id="department">...</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Position</label>
-                            <p class="fw-medium" id="position">...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Phone</label>
-                            <p class="fw-medium" id="phone">...</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Join Date</label>
-                            <p class="fw-medium" id="joinDate">...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
+</div>
+<div class="col-md-6">
+    <div class="mb-3">
+        <label class="form-label text-muted">Employee ID</label>
+        <p class="fw-medium" id="employeeId">...</p>
+    </div>
+</div>
+</div>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label text-muted">Department</label>
+            <p class="fw-medium" id="department">...</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label text-muted">Position</label>
+            <p class="fw-medium" id="position">...</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label text-muted">Phone</label>
+            <p class="fw-medium" id="phone">...</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label text-muted">Join Date</label>
+            <p class="fw-medium" id="joinDate">...</p>
+        </div>
+    </div>
+</div>
+</div>
+</div> --}}
+</div>
 </div>
 @endsection
