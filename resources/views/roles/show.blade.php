@@ -202,7 +202,7 @@
             <div class="fw-bold">Activity Logs</div>
             <div class="position-relative ps-4 mt-4">
                 <div class="timeline-line"></div>
-                @forelse ($role->activityLogs as $activity)
+                @forelse ($activityLogs as $activity)
                 <div class="mb-4 d-flex align-items-start gap-3">
                     <div class="timeline-icon {{ $activity->getActionTextColor() }}">
                         <i class="{{ $activity->getActionIcon() }}"></i>
