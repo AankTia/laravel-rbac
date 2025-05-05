@@ -220,15 +220,19 @@
                                 <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
                             </small>
                         </div>
-                        <div class="mt-2">
-                            <button type="button" class="btn btn-xs btn-outline-primary">Details</button>
-                        </div>
                     </div>
                 </div>
                 @empty
                 No activity history
                 @endforelse
             </div>
+
+            <div class="mt-2">
+                <button type="button" class="btn btn-sm btn-outline-primary">
+                    <i class="{{ historyIcon() }}"></i> Detail Activities
+                </button>
+            </div>
+            <hr>
         </div>
     </div>
 </div>
