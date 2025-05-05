@@ -115,6 +115,28 @@
 
         <div class="position-relative ps-4 mt-4">
             <div class="timeline-line"></div>
+            @foreach ($recentActivities as $activity)
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon text-primary">
+                    {{-- <i class="bx bx-plus"></i> --}}
+                    {{ $activity->action }}
+                </div>
+                <div>
+                    <strong>{{ $activity->description }}</strong><br>
+
+                    <small class="text-muted">
+                        <i class="bx bx-time"></i> {{ $activity->created_at }}
+                    </small>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        
+        {{-- $recentActivities --}}
+        <hr>
+
+        <div class="position-relative ps-4 mt-4">
+            <div class="timeline-line"></div>
 
             <div class="mb-4 d-flex align-items-start gap-3">
                 <div class="timeline-icon text-primary">
