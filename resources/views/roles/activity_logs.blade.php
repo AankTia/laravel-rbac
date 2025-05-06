@@ -104,7 +104,7 @@
                                     <table class="table table-bordered">
                                         <thead class="table-light">
                                             <tr>
-                                                <th class="text-center">Field Name</th>
+                                                <th class="text-center">Attribute</th>
                                                 <th class="text-center">Value</th>
                                             </tr>
                                         </thead>
@@ -123,9 +123,9 @@
                                     <table class="table table-bordered">
                                         <thead class="table-light">
                                             <tr>
-                                                <th class="text-center">Field Name</th>
-                                                <th class="text-center">Before</th>
-                                                <th class="text-center">After</th>
+                                                <th class="text-center">Attribute</th>
+                                                <th class="text-center">Old Value</th>
+                                                <th class="text-center">New Value</th>
                                             </tr>
                                         </thead>
 

@@ -220,6 +220,19 @@
                                 <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
                             </small>
                         </div>
+
+                        @if ($activity->isUpdated())
+                        <div class="card shadow-none bg-transparent border border-secondary mb-3">
+                            <div class="card-body">
+                                @foreach ($activity->properties as $propertyName => $data)
+                                <div class="mb-3">
+                                    <small>{{ $propertyName }}</small><br>
+                                    {{ $data['before'] }} <i class="{{ rightArrowIcon() }}"></i> {{ $data['after'] }}
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 @empty
