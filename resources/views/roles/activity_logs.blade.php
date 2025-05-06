@@ -73,82 +73,76 @@
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h2 class="card-title h4 mb-4">Activity Logs</h2>
+        <div class="position-relative ps-4 mt-4">
+            <div class="timeline-line"></div>
+            @forelse ($activityLogs as $activity)
+            <div class="mb-4 d-flex align-items-start gap-3">
+                <div class="timeline-icon {{ $activity->getActionTextColor() }}">
+                    <i class="{{ $activity->getActionIcon() }}"></i>
+                </div>
 
-                <div class="position-relative ps-4 mt-4">
-                    <div class="timeline-line"></div>
-                    @forelse ($activityLogs as $activity)
-                    <div class="mb-4 d-flex align-items-start gap-3">
-                        <div class="timeline-icon {{ $activity->getActionTextColor() }}">
-                            <i class="{{ $activity->getActionIcon() }}"></i>
-                        </div>
+                <div class="col-md-2">
+                    <h6 class="card-subtitle text-muted"><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</h6>
+                    <h6 class="card-subtitle text-muted"><i class="{{ userIcon() }}"></i> {{ $activity->user->name }}</h6>
+                </div>
 
-                        <div>
-                            <strong>{{ ucwords($activity->action) }}</strong><br>
-                            <div class="mb-2">
-                                <small class="text-muted">
-                                    <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
-                                </small>
-                            </div>
-                            <div class="mb-3">
-                                <small class="text-muted">
-                                    <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
-                                </small>
-                            </div>
 
-                            <div class="mb-3">
-                                <div class="table-responsive">
-                                    @if ($activity->isCreated())
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th class="text-center">Attribute</th>
-                                                <th class="text-center">Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($activity->properties as $propertyName => $value)
-                                            <tr>
-                                                <td>{{ $propertyName }}</td>
-                                                <td>{{ $value }}
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @endif
+                <div class="card w-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ucwords($activity->action) }}</h5>
+                        <h6 class="card-subtitle text-muted"><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</h6>
+                        <h6 class="card-subtitle text-muted"><i class="{{ userIcon() }}"></i> {{ $activity->user->name }}</h6>
+                    </div>
+                    <div class="card-body">
 
-                                    @if ($activity->isUpdated())
-                                    <table class="table table-bordered">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th class="text-center">Attribute</th>
-                                                <th class="text-center">Old Value</th>
-                                                <th class="text-center">New Value</th>
-                                            </tr>
-                                        </thead>
+                        <div class="table-responsive">
+                            @if ($activity->isCreated())
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center">Attribute</th>
+                                        <th class="text-center">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($activity->properties as $propertyName => $value)
+                                    <tr>
+                                        <td>{{ $propertyName }}</td>
+                                        <td>{{ $value }}
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @endif
 
-                                        <tbody>
-                                            @foreach ($activity->properties as $propertyName => $data)
-                                            <tr>
-                                                <td>{{ $propertyName }}</td>
-                                                <td>{{ $data['before'] }}</td>
-                                                <td>{{ $data['after'] }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    @endif
-                                </div>
-                            </div>
+                            @if ($activity->isUpdated())
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center">Attribute</th>
+                                        <th class="text-center">Old Value</th>
+                                        <th class="text-center">New Value</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($activity->properties as $propertyName => $data)
+                                    <tr>
+                                        <td>{{ $propertyName }}</td>
+                                        <td>{{ $data['before'] }}</td>
+                                        <td>{{ $data['after'] }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @endif
                         </div>
                     </div>
-                    @empty
-                    No activity history
-                    @endforelse
                 </div>
             </div>
+            @empty
+            No activity history
+            @endforelse
         </div>
     </div>
 </div>
