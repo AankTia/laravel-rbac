@@ -15,7 +15,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 @if(auth()->user()->hasPermission('update', 'roles'))
@@ -174,80 +174,73 @@
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         @if ($role->creatorName() || $role->createdAt())
-        <div>
-            <div class="fw-bold mb-3">Created</div>
-            @if ($role->creatorName())
-            <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
-            @endif
-            @if ($role->createdAt())
-            <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</div>
-            @endif
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Created</h5>
+            </div>
+            <div class="card-body">
+                <div>
+                    @if ($role->creatorName())
+                    <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
+                    @endif
+                    @if ($role->createdAt())
+                    <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</div>
+                    @endif
+                </div>
+            </div>
         </div>
-        <hr>
         @endif
-
 
         @if ($role->lastUpdaterName() || $role->lastUpdate())
-        <div class="mt-4">
-            <div class="fw-bold mb-3">Last Updated</div>
-            <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
-            <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Last Updated</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
+                <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
+            </div>
         </div>
-        <hr>
         @endif
 
-        <div class="mt-4">
-            <div class="fw-bold">Activity Logs</div>
-            <div class="position-relative ps-4 mt-4">
-                <div class="timeline-line"></div>
-                @forelse ($activityLogs as $activity)
-                <div class="mb-4 d-flex align-items-start gap-3">
-                    <div class="timeline-icon {{ $activity->getActionTextColor() }}">
-                        <i class="{{ $activity->getActionIcon() }}"></i>
-                    </div>
-
-                    <div>
-                        <strong>{{ ucwords($activity->action) }}</strong><br>
-                        <div class="mb-2">
-                            <small class="text-muted">
-                                <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
-                            </small>
-                        </div>
-                        <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
-                            </small>
-                        </div>
-
-                        @if ($activity->isUpdated())
-                        <div class="card shadow-none bg-transparent border border-secondary mb-3">
-                            <div class="card-body">
-                                @foreach ($activity->properties as $propertyName => $data)
-                                <div class="mb-3">
-                                    <small>{{ $propertyName }}</small><br>
-                                    {{ $data['before'] }} <i class="{{ rightArrowIcon() }}"></i> {{ $data['after'] }}
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @empty
-                No activity history
-                @endforelse
-            </div>
-
-            <div class="mt-2">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0 me-2">Activities</h5>
                 <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary">
-                    <i class="{{ historyIcon() }}"></i> Detail Activities
+                    <i class="{{ historyIcon() }}"></i> All Activities
                 </a>
             </div>
-            <hr>
+            <div class="card-body">
+                <div class="position-relative ps-4">
+                    <div class="timeline-line"></div>
+                    @forelse ($activityLogs as $activity)
+                    <div class="mb-4 d-flex align-items-start gap-3">
+                        <div class="timeline-icon {{ $activity->getActionTextColor() }}">
+                            <i class="{{ $activity->getActionIcon() }}"></i>
+                        </div>
+
+                        <div>
+                            <strong>{{ ucwords($activity->action) }}</strong><br>
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
+                                </small>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    No activity history
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 @endsection
