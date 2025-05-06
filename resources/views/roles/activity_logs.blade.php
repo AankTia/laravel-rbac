@@ -17,9 +17,8 @@
 <div class="row">
     <div class="col-md-3">
         <div class="card shadow-sm mb-4">
+            <h5 class="card-header">Role Data</h5>
             <div class="card-body">
-                <h5 class="pb-1 mb-4">Role Data</h5>
-
                 <div class="col-md-6 mb-4">
                     <h3 class="h6 text-muted">Name</h3>
                     <div class="mb-2">{{ $role->name }}</div>
@@ -49,18 +48,22 @@
         </div>
 
         <div class="card shadow-sm mb-4">
+            <h5 class="card-header">Info</h5>
             <div class="card-body">
-                <h5 class="pb-1 mb-4">Info</h5>
-
                 @if ($role->creatorName() || $role->createdAt())
                 <div class="col-md-12 mb-4">
-                    <h3 class="h6 text-muted">Created By</h3>
+                    <h3 class="h6 text-muted">Created</h3>
+                    @if ($role->creatorName())
                     <div class="mb-1">
                         <i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}
                     </div>
+                    @endif
+
+                    @if ($role->createdAt())
                     <div>
                         <i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}
                     </div>
+                    @endif
                 </div>
                 @endif
 
@@ -81,14 +84,13 @@
 
     <div class="col-md-9">
         <div class="card shadow-sm mb-4">
-            <div class="card-body">
+            <div class="card-header">
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-6">
                         <h5 class="pb-1 mb-2">Activity Histories</h5>
                     </div>
         
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
-        
                         <div class="input-group">
                             <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
                             <select class="form-select" id="inputGroupSelect01">
@@ -99,7 +101,8 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div class="card-body">
                 @forelse ($activityLogs as $activity)
                 <div class="card shadow mb-4">
                     <div class="card-body">
