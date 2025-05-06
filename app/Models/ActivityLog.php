@@ -28,7 +28,7 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getActionIcon()
+    public function getActionIcon() // need move to helper
     {
         $result = '';
 
@@ -55,7 +55,35 @@ class ActivityLog extends Model
         return $result;
     }
 
-    public function getActionTextColor()
+    public function getActionBackgroundColor() // need move to helper
+    {
+
+        $result = '';
+
+        switch ($this->action) {
+            case 'created':
+                $result = 'bg-primary';
+                break;
+            case 'updated':
+                $result = 'bg-warning';
+                break;
+            case 'deleted':
+                $result = 'bg-danger';
+                break;
+            case 'activated':
+                $result = 'bg-success';
+                break;
+            case 'deactivated':
+                $result = 'bg-danger';
+                break;
+            default:
+                $result = '';
+        }
+
+        return $result;
+    }
+
+    public function getActionTextColor() // unused
     {
         $result = '';
 
