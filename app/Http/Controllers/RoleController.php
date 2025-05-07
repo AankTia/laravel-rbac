@@ -38,11 +38,6 @@ class RoleController extends Controller
      */
     public function create()
     {
-        // $viewData = [
-        //     'title' => "Create New Role",
-        //     // 'subtitle' => $role->name
-        // ];
-
         return view('roles.create')
             ->with('title', 'Create New Role')
             ->with('attributeLabels', Role::$attributeLabels);
@@ -176,13 +171,10 @@ class RoleController extends Controller
      */
     public function editPermissions(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role Permission"
-        ];
         $modules = Module::all();
 
         return view('roles.edit_permissions', compact('role'))
-            ->with('viewData', $viewData)
+            ->with('title', 'Edit ' . $role->name . ' Permissions')
             ->with('modules', $modules);
     }
 
