@@ -9,6 +9,10 @@
         @if(auth()->user()->hasPermission('read', 'roles'))
         {!! backButton(route('roles.index'), 'Back to List') !!}
         @endif
+
+        @if(auth()->user()->hasPermission('create', 'roles'))
+        {!! createButton(route('roles.create'), 'Role') !!}
+        @endif
     </div>
 </div>
 @endsection
