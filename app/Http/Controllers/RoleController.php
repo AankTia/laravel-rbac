@@ -134,16 +134,16 @@ class RoleController extends Controller
             ->pluck('id', 'slug')
             ->toArray();
 
-        $activityLogs = $role->activityLogs()
+        $lastActivity = $role->activityLogs()
             ->latest()
-            ->limit(3)
-            ->get();
+            ->limit(1)
+            ->first();
 
         return view('roles.show', compact('role'))
             ->with('viewData', $viewData)
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('modulePermissions', $modulePermissions)
-            ->with('activityLogs', $activityLogs);
+            ->with('lastActivity', $lastActivity);
     }
 
     /**

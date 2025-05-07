@@ -17,17 +17,22 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                @if(auth()->user()->hasPermission('update', 'roles'))
-                {!! editButton(route('roles.edit', ['role' => $role])) !!}
-                @endif
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0 me-2">Details</h5>
 
-                @if(auth()->user()->hasPermission('delete', 'roles'))
-                {!! deleteButton(route('roles.destroy', $role)) !!}
-                @endif
+                <div class="text-end">
+                    @if(auth()->user()->hasPermission('update', 'roles'))
+                    {!! editButton(route('roles.edit', ['role' => $role])) !!}
+                    @endif
+    
+                    @if(auth()->user()->hasPermission('delete', 'roles'))
+                    {!! deleteButton(route('roles.destroy', $role)) !!}
+                    @endif
+                </div>
             </div>
 
             <div class="card-body">
+                <hr class="mt-0">
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <h3 class="h6 text-muted">{{ $attributeLabels['name'] }}</h3>
@@ -55,9 +60,13 @@
         </div>
 
         <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Assigned Users</h5>
+            </div>
+
             <div class="card-body">
+                <hr class="mt-0">
                 <div class="row">
-                    <h2 class="card-title h4 mb-4">Assigned Users</h2>
                     <div class="mb-2">
                         <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.</p>
                     </div>
@@ -79,8 +88,6 @@
                                             <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
                                                 <span class="tf-icons {{ deleteIcon() }}"></span>
                                             </button>
-
-                                            <span class="badge badge-center rounded-pill bg-primary">1</span>
 
                                             <div class="user-avatar">
                                                 {{ $roleUser->user->initialName() }}
@@ -107,16 +114,16 @@
         </div>
 
         <div class="card shadow-sm mb-4">
-            <div class="card-header">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0 me-2">Allowed Permissions</h5>
                 @if(auth()->user()->hasPermission('update', 'roles'))
                 {!! editButton(route('roles.edit-permissions', $role), 'Update Permissions') !!}
                 @endif
             </div>
 
             <div class="card-body">
+                <hr class="mt-0">
                 <div class="row">
-                    <h2 class="card-title h4 mb-4">Allowed Permissions</h2>
-
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead class="table-light">
@@ -179,6 +186,7 @@
                 <h5 class="card-title m-0 me-2">Created</h5>
             </div>
             <div class="card-body">
+                <hr class="mt-0">
                 <div>
                     @if ($role->creatorName())
                     <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
@@ -193,52 +201,46 @@
 
         @if ($role->lastUpdaterName() || $role->lastUpdate())
         <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title m-0 me-2">Last Updated</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
-                <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
-            </div>
-        </div>
-        @endif
-
-        <div class="card mb-4">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Activities</h5>
+                <h5 class="card-title m-0 me-2">Last Updated</h5>
                 <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary">
-                    <i class="{{ historyIcon() }}"></i> All Activities
+                    <i class="{{ historyIcon() }}"></i> Show Histories
                 </a>
             </div>
-            <div class="card-body">
-                <div class="position-relative ps-4">
-                    <div class="timeline-line"></div>
-                    @forelse ($activityLogs as $activity)
-                    <div class="mb-4 d-flex align-items-start gap-3">
-                        <div class="timeline-icon {{ $activity->getActionTextColor() }}">
-                            <i class="{{ $activity->getActionIcon() }}"></i>
-                        </div>
 
-                        <div>
-                            <strong>{{ ucwords($activity->action) }}</strong><br>
-                            <div class="mb-2">
-                                <small class="text-muted">
-                                    <i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}
-                                </small>
-                            </div>
-                            <div class="mb-3">
-                                <small class="text-muted">
-                                    <i class="{{ userIcon() }}"></i> {{ $activity->user->name }}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    No activity history
-                    @endforelse
+            <div class="card-body">
+                <hr class="mt-0">
+                <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
+                <div class="mb-4"><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center" nowrap>Attribute</th>
+                                <th class="text-center" nowrap>Old Value</th>
+                                <th class="text-center" nowrap>New Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($lastActivity->properties as $attribute => $data)
+                            <tr>
+                                <td>{{ $attributeLabels[$attribute] }}</td>
+                                @if ($attribute == 'allow_to_be_assigne')
+                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['old_value']) !!}</td>
+                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['new_value']) !!}</td>
+                                @else
+                                <td>{{ $data['old_value'] }}</td>
+                                <td>{{ $data['new_value'] }}</td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection
