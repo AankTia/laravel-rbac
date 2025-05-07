@@ -15,12 +15,6 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $viewData = [
-            'title' => "Roles",
-            'subtitle' => "Manage all roles in the system"
-        ];
-
-        // $roles = Role::all();
         $query = Role::query();
         if ($request->has('search_keyword')) {
             $keyword = $request->search_keyword;
@@ -30,12 +24,11 @@ class RoleController extends Controller
             });
         }
         $roles = $query->orderBy('id', 'asc')
-            ->paginate(10);
-
-        $roles->appends($request->all());
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('roles.index')
-            ->with('viewData', $viewData)
+            ->with('title', 'Roles')
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('roles', $roles);
     }
