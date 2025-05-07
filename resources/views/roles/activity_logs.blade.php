@@ -109,12 +109,13 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="avatar flex-shrink-0 rounded me-3">
-                                <span class="avatar-initial rounded {{ $activity->getActionBackgroundColor() }}">
+                                <span class="badge badge-center rounded-pill {{ $activity->getActionBackgroundColor() }}">
                                     <i class="{{ $activity->getActionIcon() }}"></i>
                                 </span>
                             </div>
 
                             <div class="d-flex w-100 flex-wrap adivgn-items-center justify-content-between gap-2">
+
                                 <div class="me-2">
                                     <h6 class="mb-0">{{ ucwords($activity->action) }} Data</h6>
                                     <small class="text-muted">{{ $activity->user->name }} </small><br>

@@ -80,6 +80,8 @@
                                                 <span class="tf-icons {{ deleteIcon() }}"></span>
                                             </button>
 
+                                            <span class="badge badge-center rounded-pill bg-primary">1</span>
+
                                             <div class="user-avatar">
                                                 {{ $roleUser->user->initialName() }}
                                             </div>
