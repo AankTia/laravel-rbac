@@ -212,10 +212,6 @@ class RoleController extends Controller
 
     public function activityLogs(Request $request, Role $role)
     {
-        $viewData = [
-            'title' => "Role Activity Logs"
-        ];
-
         $orderBy = 'desc';
         if ($request->has('sort_by')) {
             if ($request->sort_by == 'asc') {
@@ -230,7 +226,7 @@ class RoleController extends Controller
         $activityLogs->appends($request->all());
 
         return view('roles.activity_logs', compact('role'))
-            ->with('viewData', $viewData)
+            ->with('title', $role->name . ' Activity Histories')
             ->with('activityLogs', $activityLogs)
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('orderBy', $orderBy);

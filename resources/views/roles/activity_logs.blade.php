@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', $title . " | Laravel RBAC")
+@section('pageTitle', $title)
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
@@ -17,7 +17,10 @@
 <div class="row">
     <div class="col-md-3">
         <div class="card shadow-sm mb-4">
-            <h5 class="card-header">Role Data</h5>
+            <div class="card-header mb-0">
+                <h5 class="card-title m-0">Role Data</h5>
+                <hr class="mt-3">
+            </div>
             <div class="card-body">
                 <div class="col-md-12 mb-4">
                     <h3 class="h6 text-muted">{{ $attributeLabels['name'] }}</h3>
@@ -48,7 +51,10 @@
         </div>
 
         <div class="card shadow-sm mb-4">
-            <h5 class="card-header">Info</h5>
+            <div class="card-header mb-0">
+                <h5 class="card-title m-0">Info</h5>
+                <hr class="mt-3">
+            </div>
             <div class="card-body">
                 @if ($role->creatorName() || $role->createdAt())
                 <div class="col-md-12 mb-4">
@@ -93,19 +99,41 @@
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
                         <form action="{{ route("roles.activity-logs", $role) }}" method="GET">
                             <div class="input-group">
-                                <select class="form-select" id="sort_by" name="sort_by">
+                                <select class="form-select form-select-sm" id="sort_by" name="sort_by">
                                     <option value="desc" {{ $orderBy === 'desc' ? 'selected' : '' }}>Newest</option>
                                     <option value="asc" {{ $orderBy === 'asc' ? 'selected' : '' }}>Latest</option>
                                 </select>
-                                <button class="btn btn-outline-primary" type="submit">Sort</button>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Sort</button>
                             </div>
                         </form>
                     </div>
                 </div>
+
+                <hr class="mt-0">
             </div>
             <div class="card-body">
                 @forelse ($activityLogs as $activity)
                 <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="badge badge-center rounded-pill {{ $activity->getActionBackgroundColor() }}">
+                                        <i class="{{ $activity->getActionIcon() }}"></i>
+                                    </span>
+                                    <h6 class="mb-0">{{ ucwords($activity->action) }} Data</h6>
+                                    <small class="fw-semibold">{{ humanDateTime($activity->created_at) }}</small>
+                                </div>
+
+                                <div class="col-md-6 text-end">
+                                    <small class="fw-semibold">{{ humanDateTime($activity->created_at) }}</small>
+                                </div>
+                            </div>
+                            <hr class="mt-0">
+                        </div>
+
+                        <hr class="mt-0">
+                    </div>
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="avatar flex-shrink-0 rounded me-3">
