@@ -129,7 +129,7 @@
                                         <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</em>
                                     </small>
                                 </div>
-                                <div>
+                                <div class="d-flex align-item-center">
                                     <em><small class="text-muted"><i class="{{ userIcon() }}"></i> {{ $activity->user->name }} </small></em>
                                 </div>
                             </div>
