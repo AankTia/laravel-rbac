@@ -15,12 +15,6 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $viewData = [
-            'title' => "Roles",
-            'subtitle' => "Manage all roles in the system"
-        ];
-
-        // $roles = Role::all();
         $query = Role::query();
         if ($request->has('search_keyword')) {
             $keyword = $request->search_keyword;
@@ -30,12 +24,12 @@ class RoleController extends Controller
             });
         }
         $roles = $query->orderBy('id', 'asc')
-            ->paginate(10);
-
-        $roles->appends($request->all());
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('roles.index')
-            ->with('viewData', $viewData)
+            ->with('title', 'Roles')
+            ->with('attributeLabels', Role::$attributeLabels)
             ->with('roles', $roles);
     }
 
@@ -44,13 +38,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $viewData = [
-            'title' => "Create New Role",
-            // 'subtitle' => $role->name
-        ];
-
         return view('roles.create')
-            ->with('viewData', $viewData);
+            ->with('title', 'Create New Role')
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -59,7 +49,8 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $role = new Role();
         $validated = $role->validate('create', $roleData);
@@ -76,11 +67,6 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $viewData = [
-            'title' => "Role Details",
-            'subtitle' => $role->name
-        ];
-
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -131,9 +117,16 @@ class RoleController extends Controller
             ->pluck('id', 'slug')
             ->toArray();
 
+        $lastActivity = $role->activityLogs()
+            ->latest()
+            ->limit(1)
+            ->first();
+
         return view('roles.show', compact('role'))
-            ->with('viewData', $viewData)
-            ->with('modulePermissions', $modulePermissions);
+            ->with('title', 'Role Details')
+            ->with('attributeLabels', Role::$attributeLabels)
+            ->with('modulePermissions', $modulePermissions)
+            ->with('lastActivity', $lastActivity);
     }
 
     /**
@@ -141,12 +134,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role"
-        ];
-
         return view('roles.edit', compact('role'))
-            ->with('viewData', $viewData);
+            ->with('title', 'Edit Role')
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -155,7 +145,8 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $validated = $role->validate('update', $roleData);
 
@@ -180,13 +171,10 @@ class RoleController extends Controller
      */
     public function editPermissions(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role Permission"
-        ];
         $modules = Module::all();
 
         return view('roles.edit_permissions', compact('role'))
-            ->with('viewData', $viewData)
+            ->with('title', 'Edit ' . $role->name . ' Permissions')
             ->with('modules', $modules);
     }
 
@@ -220,5 +208,27 @@ class RoleController extends Controller
 
         return redirect()->route('roles.show', $role)
             ->with('success', 'Role Permissions updated successfully.');
+    }
+
+    public function activityLogs(Request $request, Role $role)
+    {
+        $orderBy = 'desc';
+        if ($request->has('sort_by')) {
+            if ($request->sort_by == 'asc') {
+                $orderBy = 'asc';
+            }
+        }
+
+        $activityLogs = $role->activityLogs()
+            ->orderBy('created_at', $orderBy)
+            ->paginate(10);
+
+        $activityLogs->appends($request->all());
+
+        return view('roles.activity_logs', compact('role'))
+            ->with('title', $role->name . ' Activity Histories')
+            ->with('activityLogs', $activityLogs)
+            ->with('attributeLabels', Role::$attributeLabels)
+            ->with('orderBy', $orderBy);
     }
 }

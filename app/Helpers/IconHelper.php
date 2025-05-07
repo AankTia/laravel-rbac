@@ -55,3 +55,17 @@ if (!function_exists('leftArrowIcon')) {
         return 'bx bx-left-arrow-alt';
     }
 }
+
+if (!function_exists('rightArrowIcon')) {
+    function rightArrowIcon()
+    {
+        return 'bx bx-right-arrow-alt';
+    }
+}
+
+if (!function_exists('historyIcon')) {
+    function historyIcon()
+    {
+        return 'bx bx-history';
+    }
+}

@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLog extends Model
 {
     protected $fillable = [
+        'log_name',
         'user_id',
         'action',
         'description',
-        // 'ip_address',
-        // 'user_agent',
-        // module ==> polymorphic
-        // old_value
-        // new_value
+        'properties'
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
     ];
 
     public function subject()
@@ -27,7 +28,7 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getActionIcon()
+    public function getActionIcon() // need move to helper
     {
         $result = '';
 
@@ -54,7 +55,35 @@ class ActivityLog extends Model
         return $result;
     }
 
-    public function getActionTextColor()
+    public function getActionBackgroundColor() // need move to helper
+    {
+
+        $result = '';
+
+        switch ($this->action) {
+            case 'created':
+                $result = 'bg-primary';
+                break;
+            case 'updated':
+                $result = 'bg-warning';
+                break;
+            case 'deleted':
+                $result = 'bg-danger';
+                break;
+            case 'activated':
+                $result = 'bg-success';
+                break;
+            case 'deactivated':
+                $result = 'bg-danger';
+                break;
+            default:
+                $result = '';
+        }
+
+        return $result;
+    }
+
+    public function getActionTextColor() // unused
     {
         $result = '';
 
@@ -79,5 +108,13 @@ class ActivityLog extends Model
         }
 
         return $result;
+    }
+
+    public function isCreated() {
+        return $this->action == 'created';
+    }
+
+    public function isUpdated() {
+        return $this->action == 'updated';
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\TimestampAndUserTrackingTrait;
 use App\Traits\LogsActivity;
+use App\Traits\TracksChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, TracksChanges, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -23,6 +24,15 @@ class Role extends Model
         'allow_to_be_assigne',
         'created_by_id',
         'last_updated_by_id'
+    ];
+
+    public static $attributeLabels = [
+        'name' => 'Role Name',
+        'slug' => 'Role Identifier',
+        'description' => 'Role Description',
+        'allow_to_be_assigne' => 'Available for Assignment'
+        // 'created_at' => 'Created At',
+        // 'updated_at' => 'Updated At',
     ];
 
     protected static $rules = [
@@ -151,6 +161,5 @@ class Role extends Model
     public function getCustomActivityDescription($event)
     {
         return ucfirst($event) . " " . $this->name . " " . class_basename($this);
-        
     }
 }

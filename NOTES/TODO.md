@@ -1,5 +1,9 @@
 # TODO
 
+## Model
+
+-   [ ] Create base model
+
 ## Helper
 
 -   [ ] Button helper
@@ -11,6 +15,8 @@
 -   [ ] Activity log detail modal
 -   [ ] Update slug when role name updated
 -   [ ] paginate activity logs
+-   [ ] Detail actiity page
+-   [ ] route, use slug instead of id
 
 ## Activity Log
 
@@ -20,3 +26,7 @@
 ## User
 
 -   [ ] Enhance button to use button helper
+
+## Seeder
+
+-   [ ] Insert logs activity
