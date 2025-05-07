@@ -17,7 +17,7 @@ class CheckPermission
     {
         if (!$request->user() || !$request->user()->hasPermission($permission, $module)) {
             return redirect('/')
-                ->with('error', 'You do not have permission to ' . $permission . ' ' . $module);
+                ->with('error', 'You do not have permission to ' . ucwords($permission) . ' ' . ucwords($module));
         }
 
         return $next($request);

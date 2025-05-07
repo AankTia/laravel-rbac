@@ -6,7 +6,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'roles'))
+        @if(auth()->user()->hasPermission('read', 'role'))
         {!! backButton(route('roles.show', $role), 'Back to Role') !!}
         @endif
     </div>

@@ -6,11 +6,11 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'roles'))
+        @if(auth()->user()->hasPermission('read', 'role'))
         {!! backButton(route('roles.index'), 'Back to Roles') !!}
         @endif
 
-        @if(auth()->user()->hasPermission('create', 'roles'))
+        @if(auth()->user()->hasPermission('create', 'role'))
         {!! createButton(route('roles.create'), 'Role') !!}
         @endif
     </div>
@@ -25,11 +25,11 @@
                 <h5 class="card-title m-0 me-2">Details</h5>
 
                 <div class="text-end">
-                    @if(auth()->user()->hasPermission('update', 'roles'))
+                    @if(auth()->user()->hasPermission('update', 'role'))
                     {!! editButton(route('roles.edit', ['role' => $role])) !!}
                     @endif
 
-                    @if(auth()->user()->hasPermission('delete', 'roles'))
+                    @if(auth()->user()->hasPermission('delete', 'role'))
                     {!! deleteButton(route('roles.destroy', $role)) !!}
                     @endif
                 </div>
@@ -120,7 +120,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="card-title m-0 me-2">Allowed Permissions</h5>
-                @if(auth()->user()->hasPermission('update', 'roles'))
+                @if(auth()->user()->hasPermission('update-role-permissions', 'roles'))
                 {!! editButton(route('roles.edit-permissions', $role), 'Update Permissions') !!}
                 @endif
             </div>
