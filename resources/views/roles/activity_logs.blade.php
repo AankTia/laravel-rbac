@@ -114,26 +114,6 @@
             <div class="card-body">
                 @forelse ($activityLogs as $activity)
                 <div class="card shadow mb-4">
-                    <div class="card-header">
-                        <div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <span class="badge badge-center rounded-pill {{ $activity->getActionBackgroundColor() }}">
-                                        <i class="{{ $activity->getActionIcon() }}"></i>
-                                    </span>
-                                    <h6 class="mb-0">{{ ucwords($activity->action) }} Data</h6>
-                                    <small class="fw-semibold">{{ humanDateTime($activity->created_at) }}</small>
-                                </div>
-
-                                <div class="col-md-6 text-end">
-                                    <small class="fw-semibold">{{ humanDateTime($activity->created_at) }}</small>
-                                </div>
-                            </div>
-                            <hr class="mt-0">
-                        </div>
-
-                        <hr class="mt-0">
-                    </div>
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="avatar flex-shrink-0 rounded me-3">
@@ -143,16 +123,19 @@
                             </div>
 
                             <div class="d-flex w-100 flex-wrap adivgn-items-center justify-content-between gap-2">
-
                                 <div class="me-2">
                                     <h6 class="mb-0">{{ ucwords($activity->action) }} Data</h6>
-                                    <small class="text-muted">{{ $activity->user->name }} </small><br>
+                                    <small class="text-muted">
+                                        <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</em>
+                                    </small>
                                 </div>
                                 <div>
-                                    <small class="fw-semibold">{{ humanDateTime($activity->created_at) }}</small>
+                                    <em><small class="text-muted"><i class="{{ userIcon() }}"></i> {{ $activity->user->name }} </small></em>
                                 </div>
                             </div>
                         </div>
+
+                        <hr>
 
                         <div class="mt-3">
                             <div class="table-responsive">
