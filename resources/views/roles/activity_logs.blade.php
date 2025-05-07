@@ -94,9 +94,8 @@
                         <form action="{{ route("roles.activity-logs", $role) }}" method="GET">
                             <div class="input-group">
                                 <select class="form-select" id="sort_by" name="sort_by">
-                                    <option selected="">Sort By</option>
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Latest</option>
+                                    <option value="desc" {{ $orderBy === 'desc' ? 'selected' : '' }}>Newest</option>
+                                    <option value="asc" {{ $orderBy === 'asc' ? 'selected' : '' }}>Latest</option>
                                 </select>
                                 <button class="btn btn-outline-primary" type="submit">Sort</button>
                             </div>

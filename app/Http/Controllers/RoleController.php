@@ -251,6 +251,7 @@ class RoleController extends Controller
 
         return view('roles.activity_logs', compact('role'))
             ->with('viewData', $viewData)
-            ->with('activityLogs', $activityLogs);
+            ->with('activityLogs', $activityLogs)
+            ->with('orderBy', $orderBy);
     }
 }
