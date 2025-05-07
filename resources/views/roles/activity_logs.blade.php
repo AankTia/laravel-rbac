@@ -139,8 +139,13 @@
                                         @foreach ($activity->properties as $attribute => $data)
                                         <tr>
                                             <td>{{ $attributeLabels[$attribute] }}</td>
+                                            @if ($attribute == 'allow_to_be_assigne')
+                                            <td>{!! roleAllowToBeAssigneBadge($data['old_value']) !!}</td>
+                                            <td>{!! roleAllowToBeAssigneBadge($data['new_value']) !!}</td>
+                                            @else
                                             <td>{{ $data['old_value'] }}</td>
                                             <td>{{ $data['new_value'] }}</td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

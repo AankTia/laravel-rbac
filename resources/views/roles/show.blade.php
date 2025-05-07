@@ -47,11 +47,7 @@
                     <div class="col-md-6">
                         <h3 class="h6 text-muted">{{ $attributeLabels['allow_to_be_assigne'] }}</h3>
                         <p>
-                            @if ($role->allow_to_be_assigne)
-                            <span class="badge bg-label-primary">Allowed</span>
-                            @else
-                            <span class="badge bg-label-secondary">Not Allowed</span>
-                            @endif
+                            {!! roleAllowToBeAssigneBadge($role->allow_to_be_assigne) !!}
                         </p>
                     </div>
                 </div>
