@@ -6,9 +6,9 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
+        @if(auth()->user()->hasPermission('read', 'roles'))
+        {!! backButton(route('roles.index'), 'Back to Roles') !!}
+        @endif
     </div>
 </div>
 @endsection
@@ -52,10 +52,11 @@
                     </div>
                 </div>
             </div>
+            <hr>
 
             <div class="text-end">
-                <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Role</button>
+                {!! cancelButton(route('roles.index')) !!}
+                {!! submitCreateButton() !!}
             </div>
         </form>
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-function backButton($route, $label)
+function backButton($route, $label = 'Back')
 {
     $icon = leftArrowIcon();
     return <<<HTML
@@ -10,12 +10,29 @@ function backButton($route, $label)
         HTML;
 }
 
-function createButton($route, $label = '') {
+function cancelButton($route, $label = 'Cancel')
+{
+    return <<<HTML
+            <a href="{$route}" class="btn btn-sm btn-outline-secondary me-2">
+                {$label}
+            </a>
+        HTML;
+}
+
+function createButton($route, $label = '')
+{
     $icon = createIcon();
     return <<<HTML
             <a href='{$route}' class='btn btn-sm btn-primary'>
                 <i class='{$icon}'></i> Add New {$label}
             </a>
+        HTML;
+}
+
+function submitCreateButton($label = 'Save')
+{
+    return <<< HTML
+            <button type="submit" class="btn btn-sm btn-primary">{$label}</button>
         HTML;
 }
 
