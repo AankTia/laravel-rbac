@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', $title . " | Laravel RBAC")
+@section('pageTitle', $title)
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
+        @if(auth()->user()->hasPermission('read', 'roles'))
+        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        @endif
     </div>
 </div>
 @endsection
@@ -53,10 +53,11 @@
                     </div>
                 </div>
             </div>
+            <hr>
 
             <div class="text-end">
-                <a href="{{ route('roles.show', $role) }}" class="btn btn-outline-secondary me-2">Cancel</a>
-                <button type="submit" class="btn btn-warning">Update Role</button>
+                {!! cancelButton(route('roles.show', $role)) !!}
+                {!! submitEditButton() !!}
             </div>
         </form>
     </div>
