@@ -127,26 +127,6 @@
 
                         <div class="mt-3">
                             <div class="table-responsive">
-                                @if ($activity->isCreated())
-                                <table class="table table-bordered">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="text-center">Attribute</th>
-                                            <th class="text-center">Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($activity->properties as $propertyName => $value)
-                                        <tr>
-                                            <td>{{ $propertyName }}</td>
-                                            <td>{{ $value }}
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                @endif
-
-                                @if ($activity->isUpdated())
                                 <table class="table table-bordered">
                                     <thead class="table-light">
                                         <tr>
@@ -155,18 +135,16 @@
                                             <th class="text-center">New Value</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         @foreach ($activity->properties as $propertyName => $data)
                                         <tr>
                                             <td>{{ $propertyName }}</td>
-                                            <td>{{ $data['before'] }}</td>
-                                            <td>{{ $data['after'] }}</td>
+                                            <td>{{ $data['old_value'] }}</td>
+                                            <td>{{ $data['new_value'] }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @endif
                             </div>
                         </div>
                     </div>

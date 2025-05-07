@@ -16,14 +16,17 @@ trait LogsActivity
 
                     $skipTimestampAttributes = ['created_at', 'updated_at', 'deleted_at', 'created_by_id', 'last_updated_by_id'];
 
-                    $properties = null;
+                    $properties = [];
                     if ($event === 'created') {
                         foreach ($model->originalAttributes as $attributeName => $value) {
                             if (in_array($attributeName, $skipTimestampAttributes)) {
                                 continue;
                             }
                             
-                            $properties[$attributeName] = $value;
+                            $properties[$attributeName] = [
+                                'old_value' => null,
+                                'new_value' => $value
+                            ];
                         }
                     } elseif ($event === 'updated') {
                         $oldAttributes = $model->getOriginalAttributes();
@@ -35,8 +38,8 @@ trait LogsActivity
                             }
                             
                             $properties[$attributeName] = [
-                                'before' => $oldAttributes[$attributeName],
-                                'after' => $newValue
+                                'old_value' => $oldAttributes[$attributeName],
+                                'new_value' => $newValue
                             ];
                         }
                     }
