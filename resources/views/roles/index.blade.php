@@ -34,8 +34,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Role Name</th>
-                        <th>Description</th>
+                        <th>{{ $attributeLabels['name'] }}</th>
+                        <th>{{ $attributeLabels['description'] }}</th>
                         <th class="text-center">Total Users</th>
                         <th>
                             <div class="text-end">Action</div>

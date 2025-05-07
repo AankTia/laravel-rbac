@@ -26,6 +26,15 @@ class Role extends Model
         'last_updated_by_id'
     ];
 
+    public static $attributeLabels = [
+        'name' => 'Role Name',
+        'slug' => 'Role Identifier',
+        'description' => 'Role Description',
+        'allow_to_be_assigne' => 'Available for Assignment'
+        // 'created_at' => 'Created At',
+        // 'updated_at' => 'Updated At',
+    ];
+
     protected static $rules = [
         'name' => 'required|string|max:255|unique:roles,name',
         'description' => 'required|string|max:255',
@@ -152,6 +161,5 @@ class Role extends Model
     public function getCustomActivityDescription($event)
     {
         return ucfirst($event) . " " . $this->name . " " . class_basename($this);
-        
     }
 }

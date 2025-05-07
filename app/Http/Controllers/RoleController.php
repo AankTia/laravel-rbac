@@ -36,6 +36,7 @@ class RoleController extends Controller
 
         return view('roles.index')
             ->with('viewData', $viewData)
+            ->with('attributeLabels', Role::$attributeLabels)
             ->with('roles', $roles);
     }
 
@@ -50,7 +51,8 @@ class RoleController extends Controller
         ];
 
         return view('roles.create')
-            ->with('viewData', $viewData);
+            ->with('viewData', $viewData)
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -139,6 +141,7 @@ class RoleController extends Controller
 
         return view('roles.show', compact('role'))
             ->with('viewData', $viewData)
+            ->with('attributeLabels', Role::$attributeLabels)
             ->with('modulePermissions', $modulePermissions)
             ->with('activityLogs', $activityLogs);
     }
@@ -153,7 +156,8 @@ class RoleController extends Controller
         ];
 
         return view('roles.edit', compact('role'))
-            ->with('viewData', $viewData);
+            ->with('viewData', $viewData)
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -252,6 +256,7 @@ class RoleController extends Controller
         return view('roles.activity_logs', compact('role'))
             ->with('viewData', $viewData)
             ->with('activityLogs', $activityLogs)
+            ->with('attributeLabels', Role::$attributeLabels)
             ->with('orderBy', $orderBy);
     }
 }

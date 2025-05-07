@@ -30,22 +30,22 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <h3 class="h6 text-muted">Role Name</h3>
+                        <h3 class="h6 text-muted">{{ $attributeLabels['name'] }}</h3>
                         <div class="mb-2">{{ $role->name }}</div>
                     </div>
 
                     <div class="col-md-6 mb-4">
-                        <h3 class="h6 text-muted">Role Identifier</h3>
+                        <h3 class="h6 text-muted">{{ $attributeLabels['slug'] }}</h3>
                         <div class="mb-2">{{ $role->slug }}</div>
                     </div>
 
                     <div class="col-md-6 mb-4">
-                        <h3 class="h6 text-muted">Description</h3>
+                        <h3 class="h6 text-muted">{{ $attributeLabels['description'] }}</h3>
                         <p>{{ $role->description }}</p>
                     </div>
 
                     <div class="col-md-6">
-                        <h3 class="h6 text-muted">Allow to be assigned to users</h3>
+                        <h3 class="h6 text-muted">{{ $attributeLabels['allow_to_be_assigne'] }}</h3>
                         <p>
                             @if ($role->allow_to_be_assigne)
                             <span class="badge bg-label-primary">Allowed</span>
