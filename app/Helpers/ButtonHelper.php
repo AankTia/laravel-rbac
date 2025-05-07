@@ -46,6 +46,13 @@ function editButton($route, $label = 'Edit')
         HTML;
 }
 
+function submitEditButton($label = 'Update')
+{
+    return <<< HTML
+            <button type="submit" class="btn btn-sm btn-warning">{$label}</button>
+        HTML;
+}
+
 function deleteButton($route, $label = 'Delete')
 {
     $deleteIcon = deleteIcon();

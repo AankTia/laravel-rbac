@@ -38,13 +38,13 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $viewData = [
-            'title' => "Create New Role",
-            // 'subtitle' => $role->name
-        ];
+        // $viewData = [
+        //     'title' => "Create New Role",
+        //     // 'subtitle' => $role->name
+        // ];
 
         return view('roles.create')
-            ->with('viewData', $viewData)
+            ->with('title', 'Create New Role')
             ->with('attributeLabels', Role::$attributeLabels);
     }
 
@@ -139,12 +139,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role"
-        ];
-
         return view('roles.edit', compact('role'))
-            ->with('viewData', $viewData)
+            ->with('title', 'Edit Role')
             ->with('attributeLabels', Role::$attributeLabels);
     }
 
