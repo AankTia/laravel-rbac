@@ -13,7 +13,7 @@ class CheckPermission
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $permission, $module)
+    public function handle(Request $request, Closure $next, $module, $permission)
     {
         if (!$request->user() || !$request->user()->hasPermission($permission, $module)) {
             return redirect('/')

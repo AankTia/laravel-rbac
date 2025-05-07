@@ -12,12 +12,12 @@ class RoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('check.permission:read,role')->only('index', 'show');
-        $this->middleware('check.permission:create,role')->only('create', 'store');
-        $this->middleware('check.permission:update,role')->only('edit', 'update');
-        $this->middleware('check.permission:delete,role')->only('destroy');
-        $this->middleware('check.permission:update-role-permissions,role')->only('editPermissions', 'updatePermissions');
-        $this->middleware('check.permission:read-activity-log,role')->only('editPermissions', 'activityLogs');
+        $this->middleware('check.permission:role,read')->only('index', 'show');
+        $this->middleware('check.permission:role,create')->only('create', 'store');
+        $this->middleware('check.permission:role,update')->only('edit', 'update');
+        $this->middleware('check.permission:role,delete')->only('destroy');
+        $this->middleware('check.permission:role,update-role-permissions')->only('editPermissions', 'updatePermissions');
+        $this->middleware('check.permission:role,read-activity-log')->only('editPermissions', 'activityLogs');
     }
 
     /**
