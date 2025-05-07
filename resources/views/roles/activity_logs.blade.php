@@ -91,14 +91,16 @@
                     </div>
 
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                        <div class="input-group">
-                            <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
-                            <select class="form-select" id="inputGroupSelect01">
-                                <option selected="">Choose...</option>
-                                <option value="1">Newest</option>
-                                <option value="2">Latest</option>
-                            </select>
-                        </div>
+                        <form action="{{ route("roles.activity-logs", $role) }}" method="GET">
+                            <div class="input-group">
+                                <select class="form-select" id="sort_by" name="sort_by">
+                                    <option selected="">Sort By</option>
+                                    <option value="desc">Newest</option>
+                                    <option value="asc">Latest</option>
+                                </select>
+                                <button class="btn btn-outline-primary" type="submit">Sort</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

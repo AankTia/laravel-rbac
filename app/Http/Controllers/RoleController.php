@@ -230,15 +230,24 @@ class RoleController extends Controller
             ->with('success', 'Role Permissions updated successfully.');
     }
 
-    public function activityLogs(Role $role)
+    public function activityLogs(Request $request, Role $role)
     {
         $viewData = [
             'title' => "Role Activity Logs"
         ];
 
+        $orderBy = 'desc';
+        if ($request->has('sort_by')) {
+            if ($request->sort_by == 'asc') {
+                $orderBy = 'asc';
+            }
+        }
+
         $activityLogs = $role->activityLogs()
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', $orderBy)
             ->paginate(10);
+
+        $activityLogs->appends($request->all());
 
         return view('roles.activity_logs', compact('role'))
             ->with('viewData', $viewData)
