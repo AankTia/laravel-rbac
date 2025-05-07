@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', $title . " | Laravel RBAC")
+@section('pageTitle', $title)
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">

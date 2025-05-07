@@ -72,11 +72,6 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $viewData = [
-            'title' => "Role Details",
-            'subtitle' => $role->name
-        ];
-
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -133,7 +128,7 @@ class RoleController extends Controller
             ->first();
 
         return view('roles.show', compact('role'))
-            ->with('viewData', $viewData)
+            ->with('title', 'Role Details')
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('modulePermissions', $modulePermissions)
             ->with('lastActivity', $lastActivity);
