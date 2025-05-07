@@ -28,7 +28,7 @@
                     @if(auth()->user()->hasPermission('update', 'roles'))
                     {!! editButton(route('roles.edit', ['role' => $role])) !!}
                     @endif
-    
+
                     @if(auth()->user()->hasPermission('delete', 'roles'))
                     {!! deleteButton(route('roles.destroy', $role)) !!}
                     @endif
@@ -193,10 +193,14 @@
                 <hr class="mt-0">
                 <div>
                     @if ($role->creatorName())
-                    <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</div>
+                    <div class="mb-2">
+                        <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
+                    </div>
                     @endif
                     @if ($role->createdAt())
-                    <div><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</div>
+                    <div>
+                        <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -214,8 +218,12 @@
 
             <div class="card-body">
                 <hr class="mt-0">
-                <div class="mb-2"><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</div>
-                <div class="mb-4"><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</div>
+                <div class="mb-2">
+                    <em><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</em>
+                </div>
+                <div class="mb-4">
+                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</em>
+                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered">
