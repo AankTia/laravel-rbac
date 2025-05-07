@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check.permission:read,role')->only('index', 'show');
+        $this->middleware('check.permission:create,role')->only('create', 'store');
+        $this->middleware('check.permission:update,role')->only('edit', 'update');
+        $this->middleware('check.permission:delete,role')->only('destroy');
+        $this->middleware('check.permission:update-role-permissions,role')->only('editPermissions', 'updatePermissions');
+        $this->middleware('check.permission:read-activity-log,role')->only('editPermissions', 'activityLogs');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -123,7 +133,7 @@ class RoleController extends Controller
             ->first();
 
         return view('roles.show', compact('role'))
-            ->with('title', 'Role Details')
+            ->with('title', $role->name . ' Details')
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('modulePermissions', $modulePermissions)
             ->with('lastActivity', $lastActivity);
