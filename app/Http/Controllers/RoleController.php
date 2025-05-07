@@ -237,9 +237,8 @@ class RoleController extends Controller
         ];
 
         $activityLogs = $role->activityLogs()
-            ->latest()
-            ->get();
-        // ->limit(10)
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
         return view('roles.activity_logs', compact('role'))
             ->with('viewData', $viewData)

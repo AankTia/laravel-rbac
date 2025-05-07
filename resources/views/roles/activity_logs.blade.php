@@ -89,7 +89,7 @@
                     <div class="col-md-6">
                         <h5 class="pb-1 mb-2">Activity Histories</h5>
                     </div>
-        
+
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
                         <div class="input-group">
                             <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
@@ -173,6 +173,9 @@
                 @empty
                 No activity history
                 @endforelse
+
+                {{-- Pagination --}}
+                {{ $activityLogs->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>
