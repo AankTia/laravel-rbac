@@ -24,10 +24,10 @@ trait LogsActivity
      * @var array
      */
     protected static $logExceptAttributes = [
-        'id', 
-        'created_at', 
-        'updated_at', 
-        'deleted_at', 
+        'id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
         'created_by_id'
     ];
 
@@ -45,7 +45,6 @@ trait LogsActivity
         });
 
         static::updated(function ($model) {
-            dd('updated');
             // // Check if a status change occurred that indicates activation/deactivation
             // if ($model->isDirty('status') || $model->isDirty('active') || $model->isDirty('is_active')) {
             //     $statusField = $model->isDirty('status') ? 'status' : 
@@ -64,7 +63,7 @@ trait LogsActivity
             //     }
             // }
 
-            // $model->logActivity('updated');
+            $model->logActivity('updated');
         });
 
         static::deleted(function ($model) {
@@ -152,6 +151,24 @@ trait LogsActivity
 
         if ($event === 'created') {
             $properties['attributes'] = $this->getActivityAttributes();
+        } elseif ($event === 'updated') {
+            $dirty = $this->getDirty();
+            $changedAttributes = $this->getChangedActivityAttributes($dirty);
+
+            // Only log if there are actual changes to be logged
+            if (empty($changedAttributes)) {
+                return null;
+            }
+            
+            $originalAttributes = $this->getOriginalActivityAttributes($dirty);
+
+            $properties['attributes'] = [];
+            foreach ($changedAttributes as $name => $value) {
+                $properties['attributes'][$name] = [
+                    'old' => $originalAttributes[$name],
+                    'new' => $value
+                ];
+            }
         }
 
         // if ($event === 'created') {
@@ -182,16 +199,6 @@ trait LogsActivity
         //     }
         // }
 
-        // return ActivityLog::create([
-        //     'log_name' => $logName,
-        //     'description' => $this->getActivityDescription($event),
-        //     'subject_type' => get_class($this),
-        //     'subject_id' => $this->getKey(),
-        //     'causer_type' => Auth::user() ? get_class(Auth::user()) : null,
-        //     'causer_id' => Auth::id(),
-        //     'properties' => $properties,
-        //     'event' => $event,
-        // ]);
 
         $description = str_replace('-', ' ', Str::title($event));
 
@@ -246,17 +253,69 @@ trait LogsActivity
     protected function getActivityAttributes(): array
     {
         $attributes = $this->getAttributes();
-        
+
         // If specific attributes are set to be logged
         if (!empty(static::$logAttributes)) {
             $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
         }
-        
+
         // Remove excluded attributes
         if (!empty(static::$logExceptAttributes)) {
             $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
         }
-        
+
+        return $attributes;
+    }
+
+    /**
+     * Get the original attributes for changed attributes.
+     *
+     * @param array $dirty
+     * @return array
+     */
+    protected function getOriginalActivityAttributes(array $dirty): array
+    {
+        $original = [];
+
+        foreach (array_keys($dirty) as $key) {
+            if (array_key_exists($key, $this->getOriginal())) {
+                $original[$key] = $this->getOriginal($key);
+            }
+        }
+
+        // If specific attributes are set to be logged
+        if (!empty(static::$logAttributes)) {
+            $original = array_intersect_key($original, array_flip(static::$logAttributes));
+        }
+
+        // Remove excluded attributes
+        if (!empty(static::$logExceptAttributes)) {
+            $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
+        }
+
+        return $original;
+    }
+
+    /**
+     * Get the changed attributes for activity logging.
+     *
+     * @param array $dirty
+     * @return array
+     */
+    protected function getChangedActivityAttributes(array $dirty): array
+    {
+        $attributes = $dirty;
+
+        // If specific attributes are set to be logged
+        if (!empty(static::$logAttributes)) {
+            $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+        }
+
+        // Remove excluded attributes
+        if (!empty(static::$logExceptAttributes)) {
+            $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+        }
+
         return $attributes;
     }
 
