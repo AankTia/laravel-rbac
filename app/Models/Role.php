@@ -23,7 +23,8 @@ class Role extends Model
         'description',
         'allow_to_be_assigne',
         'created_by_id',
-        'last_updated_by_id'
+        'last_updated_by_id',
+        'updated_at'
     ];
 
     public static $attributeLabels = [
@@ -137,7 +138,7 @@ class Role extends Model
 
     public function assignPermission($moduleId, $permissionId)
     {
-        PermissionRoleModule::create([
+        return PermissionRoleModule::create([
             'role_id' => $this->id,
             'permission_id' => $permissionId,
             'module_id' => $moduleId,

@@ -18,8 +18,8 @@ class Permission extends Model
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'permission_role_module')
-                    ->withPivot('module_id')
-                    ->using(PermissionRoleModule::class);
+            ->withPivot('module_id')
+            ->using(PermissionRoleModule::class);
     }
 
     /**
@@ -28,7 +28,15 @@ class Permission extends Model
     public function modules()
     {
         return $this->belongsToMany(Module::class, 'permission_role_module')
-                    ->withPivot('role_id')
-                    ->using(PermissionRoleModule::class);
+            ->withPivot('role_id')
+            ->using(PermissionRoleModule::class);
+    }
+
+    public static function idsBySlug()
+    {
+        return (new self)
+            ->all()
+            ->pluck('id', 'slug')
+            ->toArray();
     }
 }

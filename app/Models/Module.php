@@ -12,37 +12,52 @@ class Module extends Model
 
     protected $fillable = ['name', 'slug', 'description'];
 
-    /**
-     * Get roles that have access to this module.
-     */
-    public function roles()
+    public function permissionRoleModule()
     {
-        return $this->belongsToMany(Role::class, 'permission_role_module')
-                    ->withPivot('permission_id')
-                    ->using(PermissionRoleModule::class);
+        return $this->hasMany(PermissionRoleModule::class);
     }
+
+    // /**
+    //  * Get roles that have access to this module.
+    //  */
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class, 'permission_role_module')
+    //                 ->withPivot('permission_id')
+    //                 ->using(PermissionRoleModule::class);
+    // }
 
     /**
      * Get permissions for this module.
      */
-    public function permissions() {
+    public function permissions()
+    {
         return $this->belongsToMany(Permission::class, 'module_permission');
     }
 
-    /**
-     * Get Role permissions for this module.
-     */
-    public function rolePermissions()
-    {
-        return $this->belongsToMany(Permission::class, 'permission_role_module')
-                    ->withPivot('role_id')
-                    ->using(PermissionRoleModule::class);
-    }
+    // /**
+    //  * Get Role permissions for this module.
+    //  */
+    // public function rolePermissions()
+    // {
+    //     return $this->belongsToMany(Permission::class, 'permission_role_module')
+    //                 ->withPivot('role_id')
+    //                 ->using(PermissionRoleModule::class);
+    // }
 
-    public function assignPermission($permissionId) {
+    public function assignPermission($permissionId)
+    {
         ModulePermission::create([
             'module_id' => $this->id,
             'permission_id' => $permissionId
         ]);
+    }
+
+    public static function idsBySlug()
+    {
+        return (new self)
+            ->all()
+            ->pluck('id', 'slug')
+            ->toArray();
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -193,28 +196,77 @@ class RoleController extends Controller
      */
     public function updatePermissions(Request $request, Role $role)
     {
-        PermissionRoleModule::where('role_id', $role->id)->delete();
+        $modulesBySlug = [];
+        $permissionsBySlug = [];
+        $logProperties = [];
 
-        if (isset($request->modules)) {
-            $newRolePermissionsData = [];
-            foreach ($request->modules as $moduleSlug => $permissionsSlug) {
-                $module = Module::where('slug', $moduleSlug)->first();
-                if ($module) {
-                    $permissionsId = Permission::whereIn('slug', $permissionsSlug)->pluck('id')->toArray();
-                    foreach ($permissionsId as $permissionId) {
-                        $newRolePermissionsData[] = [
-                            'role_id' => $role->id,
-                            'module_id' => $module->id,
-                            'permission_id' => $permissionId
-                        ];
+        $modules = Module::select('id', 'name', 'slug')->get();
+        foreach ($modules as $module) {
+            $modulesBySlug[$module->slug] = [
+                'id' => $module->id,
+                'name' => $module->name
+            ];
+        }
+
+        $permissions = Permission::select('id', 'name', 'slug')->get();
+        foreach ($permissions as $permission) {
+            $permissionsBySlug[$permission->slug] = [
+                'id' => $permission->id,
+                'name' => $permission->name
+            ];
+        }
+
+        $currentModulePermissions = PermissionRoleModule::with('module', 'permission')
+            ->where('role_id', $role->id)
+            ->get();
+
+        // Add Module Permission
+        foreach ($request->modules as $moduleslug => $permissions) {
+            $modulePermissions = $currentModulePermissions->where('module.slug', $moduleslug);
+            if (empty($modulePermissions->toArray())) {
+                // Add new module permission
+                $modulData = $modulesBySlug[$moduleslug];
+                foreach ($permissions as $permissionSlug) {
+                    $permissionData = $permissionsBySlug[$permissionSlug];
+
+                    $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
+                    if ($assignedNewPermission) {
+                        if (isset($logProperties['module-permissions'][$modulData['name']])) {
+                            dd('...');
+                        } else {
+                            $logProperties['module-permissions'][$modulData['name']] = [
+                                'added' => [$permissionData['name']],
+                                'removed' => []
+                            ];
+                        }
                     }
                 }
-            }
-
-            if (count($newRolePermissionsData) > 0) {
-                PermissionRoleModule::insert($newRolePermissionsData);
+            } else {
+                dd('???');
             }
         }
+
+        // $removeRolePermissions = [];
+
+        // foreach ($currentModulePermissions as $currentModulePermission) {
+        //     if (!in_array($currentModulePermission->module->slug, array_keys($request->modules))) {
+        //         $removeRolePermissions[] = $currentModulePermission;
+        //     }
+        // }
+
+
+        // foreach ($removeRolePermissions as $rolePermission) {
+        //     dd($rolePermission);
+        //     // if (isset($logProperties[$rolePermission->module->name])) {
+        //     //     dd($rolePermission);
+        //     // } else {
+        //     //     $logProperties[$rolePermission->module->name]['removed'] = [$rolePermission->permission->name];
+        //     // }
+
+        //     // todo : remove permission from db
+        // }
+
+        $role->customLogActivity('role-permission-updated', $logProperties);
 
         return redirect()->route('roles.show', $role)
             ->with('success', 'Role Permissions updated successfully.');
