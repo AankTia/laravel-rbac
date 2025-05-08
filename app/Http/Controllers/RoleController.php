@@ -231,7 +231,7 @@ class RoleController extends Controller
                         $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
                         if ($assignedNewPermission) {
                             if (isset($logProperties['module-permissions'][$modulData['name']])) {
-                                dd('...');
+                                $logProperties['module-permissions'][$modulData['name']]['added'][] = $permissionData['name'];
                             } else {
                                 $logProperties['module-permissions'][$modulData['name']] = [
                                     'added' => [$permissionData['name']],
@@ -248,7 +248,7 @@ class RoleController extends Controller
             // Delete all permissions
             foreach ($role->modulePermissions as $modulePermission) {
                 if (isset($logProperties['module-permissions'][$modulePermission->module->name])) {
-                    dd('...');
+                    $logProperties['module-permissions'][$modulePermission->module->name]['removed'][] = $modulePermission->permission->name;
                 } else {
                     $logProperties['module-permissions'][$modulePermission->module->name] = [
                         'added' => [],
