@@ -210,7 +210,7 @@ class RoleController extends Controller
         }
 
         $logProperties = [
-            'module-permission' => [
+            'attributes' => [
                 'old' => [],
                 'new' => []
             ]
@@ -218,13 +218,13 @@ class RoleController extends Controller
 
         if (!empty($requestPermissions)) {
             if(empty($currentPermissionData)) {
-                $logProperties['module-permission']['new'] = $requestPermissions;
+                $logProperties['attributes']['new'] = $requestPermissions;
             } else {
-                $logProperties['module-permission']['new'] = $requestPermissions;
-                $logProperties['module-permission']['old'] = $currentPermissionData;
+                $logProperties['attributes']['new'] = $requestPermissions;
+                $logProperties['attributes']['old'] = $currentPermissionData;
             }
         } else {
-            $logProperties['module-permission']['old'] = $currentPermissionData;
+            $logProperties['attributes']['old'] = $currentPermissionData;
         }
 
         $moduleIdBySlug = Module::pluck('id', 'slug')->toArray();
