@@ -67,61 +67,8 @@ trait LogsActivity
         });
 
         static::deleted(function ($model) {
-            dd('deleted');
-            // $model->logActivity('deleted');
+            $model->logActivity('deleted');
         });
-
-
-        // if (Auth::id()) {
-        //     foreach (['created', 'updated', 'deleted'] as $event) {
-        //         static::$event(function ($model) use ($event) {
-        //             $description = static::getActivityDescription($event, $model);
-
-        //             $skipTimestampAttributes = ['created_at', 'updated_at', 'deleted_at', 'created_by_id', 'last_updated_by_id'];
-
-        //             $properties = [];
-        //             if ($event === 'created') {
-        //                 foreach ($model->originalAttributes as $attributeName => $value) {
-        //                     if (in_array($attributeName, $skipTimestampAttributes)) {
-        //                         continue;
-        //                     }
-
-        //                     $properties[$attributeName] = [
-        //                         'old_value' => null,
-        //                         'new_value' => $value
-        //                     ];
-        //                 }
-        //             } elseif ($event === 'updated') {
-        //                 $oldAttributes = $model->getOriginalAttributes();
-        //                 $changedAttributes = $model->getChangedAttributes();
-
-        //                 foreach ($changedAttributes as $attributeName => $newValue) {
-        //                     if (in_array($attributeName, $skipTimestampAttributes)) {
-        //                         continue;
-        //                     }
-
-        //                     $properties[$attributeName] = [
-        //                         'old_value' => $oldAttributes[$attributeName],
-        //                         'new_value' => $newValue
-        //                     ];
-        //                 }
-        //             }
-
-        //             $activity = new ActivityLog([
-        //                 'log_name' => class_basename($model),
-        //                 'user_id' => Auth::id(), // Set the actor (e.g. currently logged in user)
-        //                 'action' => $event,
-        //                 'description' => $description,
-        //                 'properties' => ($properties ? $properties : null)
-        //             ]);
-
-        //             // Set the subject (the model that was changed)
-        //             $activity->subject()->associate($model);
-
-        //             $activity->save();
-        //         });
-        //     }
-        // }
     }
 
     // /**
@@ -169,35 +116,9 @@ trait LogsActivity
                     'new' => $value
                 ];
             }
+        } elseif ($event === 'deleted') {
+            $properties['attributes'] = $this->getActivityAttributes();
         }
-
-        // if ($event === 'created') {
-        //     $properties['attributes'] = $this->getActivityAttributes();
-        // } elseif ($event === 'updated') {
-        //     $dirty = $this->getDirty();
-
-        //     // Only log if there are actual changes to be logged
-        //     if (empty($this->getChangedActivityAttributes($dirty))) {
-        //         return null;
-        //     }
-
-        //     $properties['attributes'] = $this->getChangedActivityAttributes($dirty);
-        //     $properties['old'] = $this->getOriginalActivityAttributes($dirty);
-        // } elseif ($event === 'deleted') {
-        //     $properties['attributes'] = $this->getActivityAttributes();
-        // } elseif ($event === 'activated' || $event === 'deactivated') {
-        //     // For activation/deactivation, log status field and any other relevant fields
-        //     $statusField = $this->getStatusField();
-
-        //     if ($statusField) {
-        //         $properties['attributes'] = [
-        //             $statusField => $this->getAttribute($statusField)
-        //         ];
-        //         $properties['old'] = [
-        //             $statusField => $this->getOriginal($statusField)
-        //         ];
-        //     }
-        // }
 
 
         $description = str_replace('-', ' ', Str::title($event));
