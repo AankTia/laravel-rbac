@@ -163,4 +163,8 @@ class Role extends Model
     {
         return ucfirst($event) . " " . $this->name . " " . class_basename($this);
     }
+
+    public function clearPermissions() {
+        return $this->modulePermissions()->delete();
+    }
 }

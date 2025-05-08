@@ -7,9 +7,7 @@ use App\Models\Module;
 use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -220,30 +218,45 @@ class RoleController extends Controller
             ->where('role_id', $role->id)
             ->get();
 
-        // Add Module Permission
-        foreach ($request->modules as $moduleslug => $permissions) {
-            $modulePermissions = $currentModulePermissions->where('module.slug', $moduleslug);
-            if (empty($modulePermissions->toArray())) {
-                // Add new module permission
-                $modulData = $modulesBySlug[$moduleslug];
-                foreach ($permissions as $permissionSlug) {
-                    $permissionData = $permissionsBySlug[$permissionSlug];
-
-                    $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
-                    if ($assignedNewPermission) {
-                        if (isset($logProperties['module-permissions'][$modulData['name']])) {
-                            dd('...');
-                        } else {
-                            $logProperties['module-permissions'][$modulData['name']] = [
-                                'added' => [$permissionData['name']],
-                                'removed' => []
-                            ];
+        if (isset($request->modules)) {
+            // Add Module Permission
+            foreach ($request->modules as $moduleslug => $permissions) {
+                $modulePermissions = $currentModulePermissions->where('module.slug', $moduleslug);
+                if (empty($modulePermissions->toArray())) {
+                    // Add new module permission
+                    $modulData = $modulesBySlug[$moduleslug];
+                    foreach ($permissions as $permissionSlug) {
+                        $permissionData = $permissionsBySlug[$permissionSlug];
+    
+                        $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
+                        if ($assignedNewPermission) {
+                            if (isset($logProperties['module-permissions'][$modulData['name']])) {
+                                dd('...');
+                            } else {
+                                $logProperties['module-permissions'][$modulData['name']] = [
+                                    'added' => [$permissionData['name']],
+                                    'removed' => []
+                                ];
+                            }
                         }
                     }
+                } else {
+                    dd('???');
                 }
-            } else {
-                dd('???');
             }
+        } else {
+            // Delete all permissions
+            foreach ($role->modulePermissions as $modulePermission) {
+                if (isset($logProperties['module-permissions'][$modulePermission->module->name])) {
+                    dd('...');
+                } else {
+                    $logProperties['module-permissions'][$modulePermission->module->name] = [
+                        'added' => [],
+                        'removed' => [ $modulePermission->permission->name ]
+                    ];
+                }
+            }
+            $role->clearPermissions();
         }
 
         // $removeRolePermissions = [];
