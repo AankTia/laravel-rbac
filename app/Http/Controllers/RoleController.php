@@ -194,115 +194,51 @@ class RoleController extends Controller
      */
     public function updatePermissions(Request $request, Role $role)
     {
-        $modulesBySlug = [];
-        $permissionsBySlug = [];
-        $logProperties = [];
+        $requestPermissions = $request->modules ?? [];
 
-        $modules = Module::select('id', 'name', 'slug')->get();
-        foreach ($modules as $module) {
-            $modulesBySlug[$module->slug] = [
-                'id' => $module->id,
-                'name' => $module->name
-            ];
-        }
-
-        $permissions = Permission::select('id', 'name', 'slug')->get();
-        foreach ($permissions as $permission) {
-            $permissionsBySlug[$permission->slug] = [
-                'id' => $permission->id,
-                'name' => $permission->name
-            ];
-        }
-
-        $currentModulePermissions = PermissionRoleModule::with('module', 'permission')
+        $currentPermissionData = [];
+        $currentPermissions = PermissionRoleModule::with('module', 'permission')
             ->where('role_id', $role->id)
             ->get();
 
-        if (isset($request->modules)) {
-            // Add Module Permission
-            foreach ($request->modules as $requestModule => $requestPermissions) {
-                $modulData = $modulesBySlug[$requestModule];
-                $modulePermissions = $currentModulePermissions->where('module.slug', $requestModule);
-
-                if (empty($modulePermissions->toArray())) {
-                    // Add new module permission
-                    foreach ($requestPermissions as $requestPermission) {
-                        $permissionData = $permissionsBySlug[$requestPermission];
-
-                        $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
-                        if ($assignedNewPermission) {
-                            if (isset($logProperties['module-permissions'][$modulData['name']])) {
-                                $logProperties['module-permissions'][$modulData['name']]['added'][] = $permissionData['name'];
-                            } else {
-                                $logProperties['module-permissions'][$modulData['name']] = [
-                                    'added' => [$permissionData['name']],
-                                    'removed' => []
-                                ];
-                            }
-                        }
-                    }
-                } else {
-                    foreach ($requestPermissions as $requestPermission) {
-                        $isHasPermission = false;
-                        foreach ($modulePermissions as $modulePermission) {
-                            if (($modulePermission->module->slug == $requestModule) && ($modulePermission->permission->slug == $requestPermission)) {
-                                $isHasPermission = true;
-                                break;
-                            }
-                        }
-
-                        if (!$isHasPermission) {
-                            // Append new module permission
-                            $permissionData = $permissionsBySlug[$requestPermission];
-                            $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
-                            if ($assignedNewPermission) {
-                                if (isset($logProperties['module-permissions'][$modulData['name']])) {
-                                    $logProperties['module-permissions'][$modulData['name']]['added'][] = $permissionData['name'];
-                                } else {
-                                    $logProperties['module-permissions'][$modulData['name']] = [
-                                        'added' => [$permissionData['name']],
-                                        'removed' => []
-                                    ];
-                                }
-                            }
-                        }
-                    }
-                }
+        foreach ($currentPermissions as $currentPermission) {
+            if (isset($currentPermissionData[$currentPermission->module->slug])) {
+                $currentPermissionData[$currentPermission->module->slug][] = $currentPermission->permission->slug;
+            } else {
+                $currentPermissionData[$currentPermission->module->slug] = [$currentPermission->permission->slug];
             }
-        } else {
-            // Delete all permissions
-            foreach ($role->modulePermissions as $modulePermission) {
-                if (isset($logProperties['module-permissions'][$modulePermission->module->name])) {
-                    $logProperties['module-permissions'][$modulePermission->module->name]['removed'][] = $modulePermission->permission->name;
-                } else {
-                    $logProperties['module-permissions'][$modulePermission->module->name] = [
-                        'added' => [],
-                        'removed' => [$modulePermission->permission->name]
-                    ];
-                }
-            }
-            $role->clearPermissions();
         }
 
-        // $removeRolePermissions = [];
+        $logProperties = [
+            'module-permission' => [
+                'old' => [],
+                'new' => []
+            ]
+        ];
 
-        // foreach ($currentModulePermissions as $currentModulePermission) {
-        //     if (!in_array($currentModulePermission->module->slug, array_keys($request->modules))) {
-        //         $removeRolePermissions[] = $currentModulePermission;
-        //     }
-        // }
+        if (!empty($requestPermissions)) {
+            if(empty($currentPermissionData)) {
+                $logProperties['module-permission']['new'] = $requestPermissions;
+            } else {
+                $logProperties['module-permission']['new'] = $requestPermissions;
+                $logProperties['module-permission']['old'] = $currentPermissionData;
+            }
+        } else {
+            $logProperties['module-permission']['old'] = $currentPermissionData;
+        }
 
+        $moduleIdBySlug = Module::pluck('id', 'slug')->toArray();
+        $permissionIdBySlug = Permission::pluck('id', 'slug')->toArray();
 
-        // foreach ($removeRolePermissions as $rolePermission) {
-        //     dd($rolePermission);
-        //     // if (isset($logProperties[$rolePermission->module->name])) {
-        //     //     dd($rolePermission);
-        //     // } else {
-        //     //     $logProperties[$rolePermission->module->name]['removed'] = [$rolePermission->permission->name];
-        //     // }
+        $role->clearPermissions();
 
-        //     // todo : remove permission from db
-        // }
+        foreach ($requestPermissions as $requestModule => $reqPermissions) {
+            $moduleId = $moduleIdBySlug[$requestModule];
+            foreach ($reqPermissions as $reqPermission) {
+                $permissionId = $permissionIdBySlug[$reqPermission];
+                $role->assignPermission($moduleId, $permissionId);
+            }
+        }
 
         $role->customLogActivity('role-permission-updated', $logProperties);
 
