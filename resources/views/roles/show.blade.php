@@ -235,15 +235,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($lastActivity->properties as $attribute => $data)
+                            @foreach ($lastActivity->properties['attributes'] as $attribute => $data)
                             <tr>
-                                <td>{{ $attributeLabels[$attribute] }}</td>
+                                <td>{{ $attributeLabels[$attribute] ?? $attribute}}</td>
                                 @if ($attribute == 'allow_to_be_assigne')
-                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['old_value']) !!}</td>
-                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['new_value']) !!}</td>
+                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['old']) !!}</td>
+                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['new']) !!}</td>
                                 @else
-                                <td>{{ $data['old_value'] }}</td>
-                                <td>{{ $data['new_value'] }}</td>
+                                <td>{{ $data['old'] }}</td>
+                                <td>{{ $data['new'] }}</td>
                                 @endif
                             </tr>
                             @endforeach

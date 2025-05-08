@@ -143,20 +143,32 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th class="text-center">Attribute</th>
-                                            <th class="text-center">Old Value</th>
-                                            <th class="text-center">New Value</th>
+                                            @if ($activity->action == 'created')
+                                                <th class="text-center">Value</th>
+                                            @else
+                                                <th class="text-center">Old Value</th>
+                                                <th class="text-center">New Value</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($activity->properties as $attribute => $data)
+                                        @foreach ($activity->properties['attributes'] as $attribute => $data)
                                         <tr>
-                                            <td>{{ $attributeLabels[$attribute] }}</td>
+                                            <td>{{ $attributeLabels[$attribute] ?? $attribute }}</td>
                                             @if ($attribute == 'allow_to_be_assigne')
-                                            <td>{!! roleAllowToBeAssigneBadge($data['old_value']) !!}</td>
-                                            <td>{!! roleAllowToBeAssigneBadge($data['new_value']) !!}</td>
+                                                @if ($activity->action == 'created')
+                                                    <td>{!! roleAllowToBeAssigneBadge($data) !!}</td>
+                                                @else
+                                                    <td>{!! roleAllowToBeAssigneBadge($data['old']) !!}</td>
+                                                    <td>{!! roleAllowToBeAssigneBadge($data['new']) !!}</td>
+                                                @endif
                                             @else
-                                            <td>{{ $data['old_value'] }}</td>
-                                            <td>{{ $data['new_value'] }}</td>
+                                                @if ($activity->action == 'created')
+                                                    <td>{{ $data }}</td>
+                                                @else
+                                                    <td>{{ $data['old'] }}</td>
+                                                    <td>{{ $data['new'] }}</td>
+                                                @endif
                                             @endif
                                         </tr>
                                         @endforeach
