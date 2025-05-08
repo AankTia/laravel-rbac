@@ -220,14 +220,15 @@ class RoleController extends Controller
 
         if (isset($request->modules)) {
             // Add Module Permission
-            foreach ($request->modules as $moduleslug => $permissions) {
-                $modulePermissions = $currentModulePermissions->where('module.slug', $moduleslug);
+            foreach ($request->modules as $requestModule => $requestPermissions) {
+                $modulData = $modulesBySlug[$requestModule];
+                $modulePermissions = $currentModulePermissions->where('module.slug', $requestModule);
+
                 if (empty($modulePermissions->toArray())) {
                     // Add new module permission
-                    $modulData = $modulesBySlug[$moduleslug];
-                    foreach ($permissions as $permissionSlug) {
-                        $permissionData = $permissionsBySlug[$permissionSlug];
-    
+                    foreach ($requestPermissions as $requestPermission) {
+                        $permissionData = $permissionsBySlug[$requestPermission];
+
                         $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
                         if ($assignedNewPermission) {
                             if (isset($logProperties['module-permissions'][$modulData['name']])) {
@@ -241,7 +242,31 @@ class RoleController extends Controller
                         }
                     }
                 } else {
-                    dd('???');
+                    foreach ($requestPermissions as $requestPermission) {
+                        $isHasPermission = false;
+                        foreach ($modulePermissions as $modulePermission) {
+                            if (($modulePermission->module->slug == $requestModule) && ($modulePermission->permission->slug == $requestPermission)) {
+                                $isHasPermission = true;
+                                break;
+                            }
+                        }
+
+                        if (!$isHasPermission) {
+                            // Append new module permission
+                            $permissionData = $permissionsBySlug[$requestPermission];
+                            $assignedNewPermission = $role->assignPermission($modulData['id'], $permissionData['id']);
+                            if ($assignedNewPermission) {
+                                if (isset($logProperties['module-permissions'][$modulData['name']])) {
+                                    $logProperties['module-permissions'][$modulData['name']]['added'][] = $permissionData['name'];
+                                } else {
+                                    $logProperties['module-permissions'][$modulData['name']] = [
+                                        'added' => [$permissionData['name']],
+                                        'removed' => []
+                                    ];
+                                }
+                            }
+                        }
+                    }
                 }
             }
         } else {
@@ -252,7 +277,7 @@ class RoleController extends Controller
                 } else {
                     $logProperties['module-permissions'][$modulePermission->module->name] = [
                         'added' => [],
-                        'removed' => [ $modulePermission->permission->name ]
+                        'removed' => [$modulePermission->permission->name]
                     ];
                 }
             }
