@@ -122,7 +122,7 @@ trait LogsActivity
         }
 
 
-        $description = str_replace('-', ' ', Str::title($event));
+        $description = $logName . " " . str_replace('-', ' ', Str::title($event));
 
         $activity = new ActivityLog([
             'log_name' => $logName,

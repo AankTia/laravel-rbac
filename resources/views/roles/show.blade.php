@@ -191,16 +191,14 @@
             </div>
             <div class="card-body">
                 <hr class="mt-0">
-                <div>
-                    @if ($role->creatorName())
-                    <div class="mb-2">
-                        <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
-                    </div>
-                    @endif
+
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
                     @if ($role->createdAt())
-                    <div>
                         <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
-                    </div>
+                    @endif
+                    @if ($role->creatorName())
+                        <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
                     @endif
                 </div>
             </div>
@@ -218,38 +216,17 @@
 
             <div class="card-body">
                 <hr class="mt-0">
-                <div class="mb-2">
+
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</em>
                     <em><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</em>
                 </div>
+
                 <div class="mb-4">
-                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</em>
+                    {{ $lastActivity->description }}
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-center" nowrap>Attribute</th>
-                                <th class="text-center" nowrap>Old Value</th>
-                                <th class="text-center" nowrap>New Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($lastActivity->properties['attributes'] as $attribute => $data)
-                            <tr>
-                                <td>{{ $attributeLabels[$attribute] ?? $attribute}}</td>
-                                @if ($attribute == 'allow_to_be_assigne')
-                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['old']) !!}</td>
-                                <td nowrap>{!! roleAllowToBeAssigneBadge($data['new']) !!}</td>
-                                @else
-                                <td>{{ $data['old'] }}</td>
-                                <td>{{ $data['new'] }}</td>
-                                @endif
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                @include('activity_logs.partials._details', ['activity' => $lastActivity])
             </div>
         </div>
         @endif
