@@ -39,6 +39,9 @@ class ActivityLog extends Model
             case 'updated':
                 $result = updateIcon();
                 break;
+            case 'role-permission-updated';
+                $result = updateIcon();
+                break;
             case 'deleted':
                 $result = deleteIcon();
                 break;
@@ -110,11 +113,17 @@ class ActivityLog extends Model
         return $result;
     }
 
-    public function isCreated() {
+    public function isCreated()
+    {
         return $this->action == 'created';
     }
 
-    public function isUpdated() {
+    public function isUpdated()
+    {
         return $this->action == 'updated';
+    }
+
+    public function isRoleLog() {
+        return $this->log_name === 'Role';
     }
 }

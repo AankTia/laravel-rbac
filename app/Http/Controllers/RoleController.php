@@ -218,12 +218,15 @@ class RoleController extends Controller
 
         if (!empty($requestPermissions)) {
             if(empty($currentPermissionData)) {
+                dd();
                 $logProperties['attributes']['new'] = $requestPermissions;
             } else {
+                dd();
                 $logProperties['attributes']['new'] = $requestPermissions;
                 $logProperties['attributes']['old'] = $currentPermissionData;
             }
         } else {
+            dd();
             $logProperties['attributes']['old'] = $currentPermissionData;
         }
 
