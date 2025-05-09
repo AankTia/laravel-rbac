@@ -82,6 +82,7 @@
                                     <th>User</th>
                                     <th class="text-center">Assigned At</th>
                                     <th class="text-center">Assigned By</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,10 +90,6 @@
                                 <tr>
                                     <td class="fw-medium">
                                         <div class="user-info">
-                                            <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
-                                                <span class="tf-icons {{ deleteIcon() }}"></span>
-                                            </button>
-
                                             <div class="user-avatar">
                                                 {{ $roleUser->user->initialName() }}
                                             </div>
@@ -104,6 +101,11 @@
                                     </td>
                                     <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
                                     <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
+                                    <td class="fw-medium text-center" nowrap>
+                                        <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
+                                            <span class="tf-icons {{ deleteIcon() }}"></span>
+                                        </button>
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>

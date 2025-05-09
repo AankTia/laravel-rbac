@@ -15,9 +15,10 @@
 ## Role
 
 -   [ ] Delete user from role
--   [ ] Update permission activity log
 -   [ ] Update slug when role name updated
 -   [ ] route, use slug instead of id
+-   [ ] create helper for auth()->user()->hasPermission in blade
+-   [x] Update permission activity log
 -   [x] Activity log detail modal
 -   [x] paginate activity logs
 -   [x] Detail actiity page
