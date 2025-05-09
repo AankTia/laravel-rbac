@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', "Create New Role | Laravel RBAC")
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -12,9 +11,7 @@
         <li class="breadcrumb-item">
             <a href="{{ route('roles.index') }}">Role</a>
         </li>
-        <li class="breadcrumb-item active">
-            Create New
-        </li>
+        <li class="breadcrumb-item active">Create New</li>
     </ol>
 </nav>
 @endsection
@@ -31,6 +28,10 @@
 
 @section('content')
 <div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="pb-1 mb-2">Create New Role</h5>
+        <hr>
+    </div>
     <div class="card-body">
         <form method="post" action="{{ route('roles.store') }}">
             @csrf

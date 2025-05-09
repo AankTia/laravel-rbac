@@ -50,9 +50,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create')
-            ->with('title', 'Create New Role')
-            ->with('attributeLabels', Role::$attributeLabels);
+        $attributeLabels = Role::$attributeLabels;
+
+        return view('roles.create', compact('attributeLabels'));
     }
 
     /**
