@@ -211,16 +211,25 @@ class RoleController extends Controller
 
             foreach(['read', 'create', 'update','delete'] as $action) {
                 if (in_array($action, $modulePermissionSLugs)) {
-                    $permissionsData[$action] = in_array($action, $roleModulePermissions[$module->slug]) ? 'checked' : 'unchecked';
+                    if (isset($roleModulePermissions[$module->slug])) {
+                        $permissionsData[$action] = in_array($action, $roleModulePermissions[$module->slug]) ? 'checked' : 'unchecked';
+                    } else {
+                        $permissionsData[$action] = 'unchecked';
+                    }
                 }
             }
 
             foreach ($module->permissions as $permission) {
                 $modulePermissionSlugs[] = $permission->slug;
                 if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
+                    if (isset($roleModulePermissions[$module->slug])) {
+                        $isChecked = in_array($permission->slug, $roleModulePermissions[$module->slug]);
+                    } else {
+                        $isChecked = false;
+                    }
                     $permissionsData['others'][$permission->slug] = [
                         'label' => $permission->name,
-                        'checked' => in_array($permission->slug, $roleModulePermissions[$module->slug])
+                        'checked' => $isChecked
                     ];
                 }
             }
@@ -271,8 +280,8 @@ class RoleController extends Controller
                     if ($newPermissions != $oldPermissions) {
                         $modulName = $moduleNameBySlug[$moduleSlug];
                         $logProperties['attributes'][$modulName] = [
-                            'old' => implode(", ", $oldPermissions),
-                            'new' => implode(", ", $newPermissions)
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
                         ];
                     }
                 }
@@ -288,8 +297,8 @@ class RoleController extends Controller
                     if ($newPermissions != $oldPermissions) {
                         $modulName = $moduleNameBySlug[$moduleSlug];
                         $logProperties['attributes'][$modulName] = [
-                            'old' => implode(", ", $oldPermissions),
-                            'new' => implode(", ", $newPermissions)
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
                         ];
                     }
                 }
@@ -306,8 +315,8 @@ class RoleController extends Controller
                     if ($newPermissions != $oldPermissions) {
                         $modulName = $moduleNameBySlug[$moduleSlug];
                         $logProperties['attributes'][$modulName] = [
-                            'old' => implode(", ", $oldPermissions),
-                            'new' => implode(", ", $newPermissions)
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
                         ];
                     }
                 }

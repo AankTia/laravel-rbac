@@ -15,7 +15,7 @@
                     @if ($activity->isRoleLog() && $attribute == 'allow_to_be_assigne')
                     {!! roleAllowToBeAssigneBadge($data) !!}
                     @else
-                    {{ $data }}    
+                    {{ $data }}
                     @endif
                 </td>
             </tr>
@@ -41,14 +41,14 @@
                     @if ($activity->isRoleLog() && $attribute == 'allow_to_be_assigne')
                     {!! roleAllowToBeAssigneBadge($data['old']) !!}
                     @else
-                    {{ $data['old'] }}    
+                    {{ $data['old'] }}
                     @endif
                 </td>
                 <td>
                     @if ($activity->isRoleLog() && $attribute == 'allow_to_be_assigne')
                     {!! roleAllowToBeAssigneBadge($data['new']) !!}
                     @else
-                    {{ $data['new'] }}    
+                    {{ $data['new'] }}
                     @endif
                 </td>
             </tr>
@@ -70,8 +70,16 @@
             @foreach ($activity->properties['attributes'] as $attribute => $data)
             <tr>
                 <td>{{ $attributeLabels[$attribute] ?? $attribute }}</td>
-                <td>{{ $data['old'] }}</td>
-                <td>{{ $data['new'] }}</td>
+                <td style="vertical-align: top;">
+                    @foreach ($data['old'] as $oldData)
+                    <div>{{ $oldData }}</div>
+                    @endforeach
+                </td>
+                <td style="vertical-align: top;">
+                    @foreach ($data['new'] as $newData)
+                    <div>{{ $newData }}</div>
+                    @endforeach
+                </td>
             </tr>
             @endforeach
         </tbody>
