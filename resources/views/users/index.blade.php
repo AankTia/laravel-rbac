@@ -39,32 +39,35 @@
 
                 <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
                     <div class="accordion-body">
-                        <div class="row mt-2">
-                            <div class="col-md-4">
-                                <input class="form-control form-control-sm mb-3" type="text" name="serach_name" value="{{ request('search_keyword') }}" placeholder="Name">
+                        <form action="{{ route('users.index') }}" method="GET">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input class="form-control form-control-sm mb-3" type="text" name="search_name" value="{{ request('search_name') }}" placeholder="Name">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select class="form-select form-select-sm mb-3">
+                                        <option selected="">-- Status --</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select class="form-select form-select-sm mb-3">
+                                        <option selected="">-- Role --</option>
+                                        <option value="1">Super Admin</option>
+                                        <option value="2">Admin</option>
+                                        <option value="3">Viewer</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-sm btn-primary mb-3">Search</button>
+                                    <button type="button" class="btn btn-sm btn-secondary mb-3">Reset</button>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <select class="form-select form-select-sm mb-3">
-                                    <option selected="">-- Status --</option>
-                                    <option value="1">Active</option>
-                                    <option value="2">Inactive</option>
-                                </select>
-                            </div>
-                
-                            <div class="col-md-3">
-                                <select class="form-select form-select-sm mb-3">
-                                    <option selected="">-- Role --</option>
-                                    <option value="1">Super Admin</option>
-                                    <option value="2">Admin</option>
-                                    <option value="3">Viewer</option>
-                                </select>
-                            </div>
-                
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-sm btn-primary mb-3">Search</button>
-                                <button type="button" class="btn btn-sm btn-secondary mb-3">Reset</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

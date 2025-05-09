@@ -33,13 +33,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::query();
-        // if ($request->has('search_keyword')) {
-        //     $keyword = $request->search_keyword;
+        if ($request->has('search_name')) {
+            $keyword = $request->search_name;
 
-        //     $query->where(function ($q) use ($keyword) {
-        //         $q->where('name', 'LIKE', "%{$keyword}%");
-        //     });
-        // }
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', "%{$keyword}%");
+            });
+        }
         $users = $query->orderBy('id', 'asc')
             ->paginate(10);
 
