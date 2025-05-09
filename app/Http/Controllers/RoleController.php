@@ -142,9 +142,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit', compact('role'))
-            ->with('title', 'Edit Role')
-            ->with('attributeLabels', Role::$attributeLabels);
+        $attributeLabels = Role::$attributeLabels;
+        return view('roles.edit', compact('role', 'attributeLabels'));
     }
 
     /**

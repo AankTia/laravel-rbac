@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', "Edit " . $role->name . " Role | Laravel RBAC")
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -34,6 +33,10 @@
 
 @section('content')
 <div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="card-title m-0 me-2">Edit {{ $role->name }}</h5>
+        <hr>
+    </div>
     <div class="card-body">
         <form method="post" action="{{ route('roles.update', $role) }}">
             @csrf
