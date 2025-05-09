@@ -72,11 +72,15 @@ function deleteButton($route, $label = 'Delete')
 
 function deleteUserFromRoleButton()
 {
-    $buttonIcon = deleteIcon();
-
-    return <<<HTML
-            <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
-                <span class="tf-icons { $buttonIcon }"></span>
-            </button>
-        HTML;
+    if (isUserCan('delete-user', 'role')) {
+        $buttonIcon = deleteIcon();
+    
+        return <<<HTML
+                <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
+                    <span class="tf-icons { $buttonIcon }"></span>
+                </button>
+            HTML;
+    } else {
+        return null;
+    }
 }
