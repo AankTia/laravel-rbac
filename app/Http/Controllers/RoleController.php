@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityLog;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -19,6 +19,7 @@ class RoleController extends Controller
         $this->middleware('check.permission:role,delete')->only('destroy');
         $this->middleware('check.permission:role,update-role-permissions')->only('editPermissions', 'updatePermissions');
         $this->middleware('check.permission:role,read-activity-log')->only('editPermissions', 'activityLogs');
+        $this->middleware('check.permission:role,delete-user')->only('deleteUser');
     }
 
     /**
@@ -362,5 +363,12 @@ class RoleController extends Controller
             ->with('activityLogs', $activityLogs)
             ->with('attributeLabels', Role::$attributeLabels)
             ->with('orderBy', $orderBy);
+    }
+
+    /**
+     * Update the specified user from role.
+     */
+    public function deleteUser(Role $role, User $user) {
+        dd();
     }
 }
