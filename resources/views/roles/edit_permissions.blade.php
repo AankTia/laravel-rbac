@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', "Edit ". $role->name . " Role Permissions | Laravel RBAC")
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -26,7 +25,7 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(isUserCan('read', 'role'))
-        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        {!! backButton(route('roles.show', $role), 'Back to Role Detail') !!}
         @endif
     </div>
 </div>
@@ -34,6 +33,10 @@
 
 @section('content')
 <div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h5 class="card-title m-0 me-2">Edit {{ $role->name }} Permissions</h5>
+        <hr>
+    </div>
     <div class="card-body">
         <div class="row">
             <form method="post" action="{{ route('roles.update-permissions', $role) }}">

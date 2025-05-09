@@ -233,10 +233,7 @@ class RoleController extends Controller
             $modulePermissions[$module->slug] = $permissionsData;
         }
 
-        return view('roles.edit_permissions', compact('role'))
-            ->with('title', 'Edit ' . $role->name . ' Permissions')
-            ->with('moduleNamebySlug', $moduleNamebySlug)
-            ->with('modulePermissions', $modulePermissions);
+        return view('roles.edit_permissions', compact('role', 'moduleNamebySlug', 'modulePermissions'));
     }
 
     /**

@@ -25,7 +25,7 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(isUserCan('read', 'role'))
-        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        {!! backButton(route('roles.show', $role), 'Back to Role Detail') !!}
         @endif
     </div>
 </div>
