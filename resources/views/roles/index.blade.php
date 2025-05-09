@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
+@section('title', "Roles | Laravel RBAC")
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -30,7 +30,7 @@
     <div class="card-header">
         <div class="row mb-4">
             <div class="col-md-9">
-                <h5 class="pb-1 mb-2">{{ $title }}</h5>
+                <h5 class="pb-1 mb-2">Roles</h5>
             </div>
 
             <div class="col-md-3 text-md-end mt-3 mt-md-0">

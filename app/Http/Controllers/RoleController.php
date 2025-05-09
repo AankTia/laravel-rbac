@@ -27,7 +27,6 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'Roles';
         $attributeLabels = Role::$attributeLabels;
 
         $query = Role::query();
@@ -42,7 +41,7 @@ class RoleController extends Controller
             ->paginate(10)
             ->appends($request->all());
 
-        return view('roles.index', compact('roles', 'title', 'attributeLabels'));
+        return view('roles.index', compact('roles', 'attributeLabels'));
     }
 
     /**
@@ -79,6 +78,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $attributeLabels = Role::$attributeLabels;
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -134,11 +134,7 @@ class RoleController extends Controller
             ->limit(1)
             ->first();
 
-        return view('roles.show', compact('role'))
-            ->with('title', $role->name . ' Details')
-            ->with('attributeLabels', Role::$attributeLabels)
-            ->with('modulePermissions', $modulePermissions)
-            ->with('lastActivity', $lastActivity);
+        return view('roles.show', compact('role', 'attributeLabels', 'modulePermissions', 'lastActivity'));
     }
 
     /**

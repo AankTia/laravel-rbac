@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', $role->name . " Role Detail | Laravel RBAC")
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -37,22 +36,24 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card shadow-sm mb-4">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Details</h5>
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 class="card-title m-0 me-2">{{ $role->name }} Detail</h5>
 
-                <div class="text-end">
-                    @if(isUserCan('update', 'role'))
-                    {!! editButton(route('roles.edit', ['role' => $role])) !!}
-                    @endif
+                    <div class="text-end">
+                        @if(isUserCan('update', 'role'))
+                        {!! editButton(route('roles.edit', ['role' => $role])) !!}
+                        @endif
 
-                    @if(isUserCan('delete', 'role'))
-                    {!! deleteButton(route('roles.destroy', $role)) !!}
-                    @endif
+                        @if(isUserCan('delete', 'role'))
+                        {!! deleteButton(route('roles.destroy', $role)) !!}
+                        @endif
+                    </div>
                 </div>
+                <hr>
             </div>
 
             <div class="card-body">
-                <hr class="mt-0">
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <h3 class="h6 text-muted">{{ $attributeLabels['name'] }}</h3>
