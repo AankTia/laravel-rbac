@@ -210,24 +210,59 @@ class RoleController extends Controller
         }
 
         $logProperties = [
-            'attributes' => [
-                'old' => [],
-                'new' => []
-            ]
+            'attributes' => []
         ];
 
         if (!empty($requestPermissions)) {
             if(empty($currentPermissionData)) {
-                dd();
-                $logProperties['attributes']['new'] = $requestPermissions;
+                $requestModules = array_keys($requestPermissions);
+                $changesModules = $requestModules;
+
+                foreach($changesModules as $moduleSlug) {
+                    $newPermissions = isset($requestPermissions[$moduleSlug]) ? $requestPermissions[$moduleSlug] : [];
+                    $oldPermissions = [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
+                        ];
+                    }
+                }
             } else {
-                dd();
-                $logProperties['attributes']['new'] = $requestPermissions;
-                $logProperties['attributes']['old'] = $currentPermissionData;
+                $requestModules = array_keys($requestPermissions);
+                $currentModules = array_keys($currentPermissionData);
+                $changesModules = $requestModules + $currentModules;
+                
+                foreach($changesModules as $moduleSlug) {
+                    $newPermissions = isset($requestPermissions[$moduleSlug]) ? $requestPermissions[$moduleSlug] : [];
+                    $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
+                        ];
+                    } 
+                }
             }
         } else {
-            dd();
-            $logProperties['attributes']['old'] = $currentPermissionData;
+            if(!empty($currentPermissionData)) {
+                $currentModules = array_keys($currentPermissionData);
+                $changesModules = $currentModules;
+
+                foreach($changesModules as $moduleSlug) {
+                    $newPermissions = [];
+                    $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
+                        ];
+                    }
+                }
+            }
         }
 
         $moduleIdBySlug = Module::pluck('id', 'slug')->toArray();
