@@ -51,6 +51,10 @@ class ActivityLog extends Model
             case 'deactivated':
                 $result = deactivateIcon();
                 break;
+
+            case 'delete-user':
+                $result = deactivateIcon();
+                break;
             default:
                 $result = '';
         }
@@ -80,6 +84,9 @@ class ActivityLog extends Model
                 $result = 'bg-success';
                 break;
             case 'deactivated':
+                $result = 'bg-danger';
+                break;
+            case 'delete-user':
                 $result = 'bg-danger';
                 break;
             default:

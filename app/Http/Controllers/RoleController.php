@@ -201,7 +201,7 @@ class RoleController extends Controller
         foreach ($modules as $module) {
             $moduleNamebySlug[$module->slug] = $module->name;
             $modulePermissionSLugs = $module->getPermissionSlugs();
-            
+
             $permissionsData = [
                 'read' => null,
                 'create' => null,
@@ -210,7 +210,7 @@ class RoleController extends Controller
                 'others' => []
             ];
 
-            foreach(['read', 'create', 'update','delete'] as $action) {
+            foreach (['read', 'create', 'update', 'delete'] as $action) {
                 if (in_array($action, $modulePermissionSLugs)) {
                     if (isset($roleModulePermissions[$module->slug])) {
                         $permissionsData[$action] = in_array($action, $roleModulePermissions[$module->slug]) ? 'checked' : 'unchecked';
@@ -337,7 +337,7 @@ class RoleController extends Controller
             }
         }
 
-        $role->customLogActivity('role-permission-updated', $logProperties);
+        $role->customLogActivity('role-permission-updated', 'Updated Role Permissions', $logProperties);
 
         return redirect()->route('roles.show', $role)
             ->with('success', 'Role Permissions updated successfully.');
@@ -368,7 +368,22 @@ class RoleController extends Controller
     /**
      * Update the specified user from role.
      */
-    public function deleteUser(Role $role, User $user) {
-        dd();
+    public function deleteUser(Role $role, User $user)
+    {
+        $message = 'Unset ' . $role->name . ' Role from ' . $user->name;
+
+        $unsetRole = $user->unsetRole();
+        if ($unsetRole) {
+            $role->customLogActivity('delete-user', $message);
+            $user->customLogActivity('delete-user', $message);
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('success', ' Successfully ' . $message);
+        } else {
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('error', ' Failed to ' . $message);
+        }
     }
 }

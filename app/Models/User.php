@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\TimestampAndUserTrackingTrait;
 use App\Traits\LogsActivity;
+use App\Traits\TracksChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity;
+    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity, TracksChanges;
 
     /**
      * The attributes that are mass assignable.
@@ -87,6 +88,10 @@ class User extends Authenticatable
     public function userRole()
     {
         return $this->hasOne(UserRole::class);
+    }
+
+    public function unsetRole() {
+        return $this->userRole()->delete();
     }
 
     public function getRoleId()

@@ -142,7 +142,7 @@ trait LogsActivity
      * @param array $properties
      * @return \App\Models\ActivityLog
      */
-    public function customLogActivity(string $event, array $properties = [])
+    public function customLogActivity(string $event, string $description, array $properties = [])
     {
         $updatedRole = $this->update([
             'last_updated_by_id' => Auth::id(),
@@ -151,8 +151,10 @@ trait LogsActivity
 
         if ($updatedRole) {
             $logName = static::$logName ?? class_basename($this);
-            $description = str_replace('-', ' ', Str::title($event));
-
+            if (trim($description) == '') {
+                $description = str_replace('-', ' ', Str::title($event));
+            }
+            
             $activity = new ActivityLog([
                 'log_name' => $logName,
                 'action' => $event,

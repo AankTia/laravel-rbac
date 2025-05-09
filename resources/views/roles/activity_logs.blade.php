@@ -91,7 +91,7 @@
     <div class="col-md-9">
         <div class="card shadow-sm mb-4">
             <div class="card-header">
-                <div class="row mb-4 align-items-center">
+                <div class="row mb-4">
                     <div class="col-md-6">
                         <h5 class="pb-1 mb-2">Activity Histories</h5>
                         <small class="text-muted">{{ $activityLogs->total() }} Histories</small>
