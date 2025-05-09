@@ -31,36 +31,51 @@
                                     <th class="text-center">Create</th>
                                     <th class="text-center">Update</th>
                                     <th class="text-center">Delete</th>
-                                    <th>Special Permissions</th>
+                                    <th class="text-center">Special Permissions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($modules as $module)
+                                @foreach ($modulePermissions as $moduleSlug => $permissions)
                                 <tr>
-                                    <td>{{ $module->name }}</td>
-                                    <td class="text-center">
+                                    <td>{{ $moduleNamebySlug[$moduleSlug] }}</td>
+                                    <td>
+                                        @if ($permissions['read'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="read" class="form-check-input" {{ $role->hasPermission('read', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="read" class="form-check-input" {{ $permissions['read'] ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
+                                        @if ($permissions['create'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="create" class="form-check-input" {{ $role->hasPermission('create', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="create" class="form-check-input" {{ $permissions['create'] ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
+                                        @if ($permissions['update'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="update" class="form-check-input" {{ $role->hasPermission('update', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="update" class="form-check-input" {{ $permissions['update'] ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>@if ($permissions['delete'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="delete" class="form-check-input" {{ $role->hasPermission('delete', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="delete" class="form-check-input" {{ $permissions['delete'] ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td></td>
+                                    <td nowrap>
+                                        @foreach ($permissions['others'] as $otherPermissionSlug => $otherPermissionData)
+                                        <div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>  
+                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label> 
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
                         </table>

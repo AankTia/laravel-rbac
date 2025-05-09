@@ -60,4 +60,9 @@ class Module extends Model
             ->pluck('id', 'slug')
             ->toArray();
     }
+
+    public function getPermissionSlugs()
+    {
+        return $this->permissions()->pluck('slug')->toArray();
+    }
 }

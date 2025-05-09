@@ -182,11 +182,51 @@ class RoleController extends Controller
      */
     public function editPermissions(Role $role)
     {
+        $roleModulePermissions = [];
+        foreach ($role->modulePermissions as $roleModulePermission) {
+            $moduleSlug = $roleModulePermission->module->slug;
+            $permissionSlug = $roleModulePermission->permission->slug;
+            if (isset($roleModulePermissions[$moduleSlug])) {
+                $roleModulePermissions[$moduleSlug][] = $permissionSlug;
+            } else {
+                $roleModulePermissions[$moduleSlug] = [$permissionSlug];
+            }
+        }
+
+        $modulePermissions = [];
+        $moduleNamebySlug = [];
         $modules = Module::all();
+
+        foreach ($modules as $module) {
+            $moduleNamebySlug[$module->slug] = $module->name;
+            $modulePermissionSLugs = $module->getPermissionSlugs();
+            $permissionsData = [
+                'read' => (in_array('read', $modulePermissionSLugs) ? true : null),
+                'create' => (in_array('create', $modulePermissionSLugs) ? true : null),
+                'update' => (in_array('update', $modulePermissionSLugs) ? true : null),
+                'delete' => (in_array('delete', $modulePermissionSLugs) ? true : null),
+                'others' => []
+            ];
+
+            foreach ($module->permissions as $permission) {
+                $modulePermissionSlugs[] = $permission->slug;
+                if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
+                    $permissionsData['others'][$permission->slug] = [
+                        'label' => $permission->name,
+                        'checked' => true
+                    ];
+                    
+                }
+            }
+
+            $modulePermissions[$module->slug] = $permissionsData;
+        }
+
 
         return view('roles.edit_permissions', compact('role'))
             ->with('title', 'Edit ' . $role->name . ' Permissions')
-            ->with('modules', $modules);
+            ->with('moduleNamebySlug', $moduleNamebySlug)
+            ->with('modulePermissions', $modulePermissions);
     }
 
     /**
