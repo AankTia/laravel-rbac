@@ -138,11 +138,14 @@
                             </div>
                         </div>
 
+                        @if (count($activity->properties) >= 1)
                         <hr>
 
                         <div class="mt-3">
                             @include('activity_logs.partials._details', ['activity' => $activity])
                         </div>
+
+                        @endif
                     </div>
                 </div>
                 @empty
