@@ -1,13 +1,31 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', "Edit ". $role->name . " Role Permissions | Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.index') }}">Role</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Edit Permissions
+        </li>
+    </ol>
+</nav>
+@endsection
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'role'))
-        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        @if(isUserCan('read', 'role'))
+        {!! backButton(route('roles.show', $role), 'Back to Role Detail') !!}
         @endif
     </div>
 </div>
@@ -15,6 +33,10 @@
 
 @section('content')
 <div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h5 class="card-title m-0 me-2">Edit {{ $role->name }} Permissions</h5>
+        <hr>
+    </div>
     <div class="card-body">
         <div class="row">
             <form method="post" action="{{ route('roles.update-permissions', $role) }}">
@@ -69,8 +91,8 @@
                                         @foreach ($permissions['others'] as $otherPermissionSlug => $otherPermissionData)
                                         <div>
                                             <div class="form-check">
-                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>  
-                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label> 
+                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>
+                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label>
                                             </div>
                                         </div>
                                         @endforeach

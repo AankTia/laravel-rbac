@@ -69,3 +69,24 @@ function deleteButton($route, $label = 'Delete')
             </form>
         HTML;
 }
+
+function deleteUserFromRoleButton($route)
+{
+    if (isUserCan('delete-user', 'role')) {
+        $csrf = csrf_field();
+        $method = method_field('DELETE');
+        $deleteIcon = deleteIcon();
+
+        return <<<HTML
+            <form action="{$route}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this User from Role?');">
+                {$csrf}
+                {$method}
+                <button type="submit" class="btn btn-sm btn-danger">
+                    <i class="{$deleteIcon}"></i> Delete
+                </button>
+            </form>
+        HTML;
+    } else {
+        return null;
+    }
+}

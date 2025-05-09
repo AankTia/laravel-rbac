@@ -3,11 +3,30 @@
 @section('title', $title . " | Laravel RBAC")
 @section('pageTitle', $title)
 
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.index') }}">Role</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Activity Histories
+        </li>
+    </ol>
+</nav>
+@endsection
+
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'role'))
-        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        @if(isUserCan('read', 'role'))
+        {!! backButton(route('roles.show', $role), 'Back to Role Detail') !!}
         @endif
     </div>
 </div>
@@ -91,7 +110,7 @@
     <div class="col-md-9">
         <div class="card shadow-sm mb-4">
             <div class="card-header">
-                <div class="row mb-4 align-items-center">
+                <div class="row mb-4">
                     <div class="col-md-6">
                         <h5 class="pb-1 mb-2">Activity Histories</h5>
                         <small class="text-muted">{{ $activityLogs->total() }} Histories</small>
@@ -138,11 +157,14 @@
                             </div>
                         </div>
 
+                        @if (count($activity->properties) >= 1)
                         <hr>
 
                         <div class="mt-3">
                             @include('activity_logs.partials._details', ['activity' => $activity])
                         </div>
+
+                        @endif
                     </div>
                 </div>
                 @empty

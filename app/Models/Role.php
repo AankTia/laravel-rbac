@@ -32,8 +32,6 @@ class Role extends Model
         'slug' => 'Role Identifier',
         'description' => 'Role Description',
         'allow_to_be_assigne' => 'Available for Assignment'
-        // 'created_at' => 'Created At',
-        // 'updated_at' => 'Updated At',
     ];
 
     protected static $rules = [
@@ -53,10 +51,13 @@ class Role extends Model
             }
         });
 
-        // // Before update
-        // static::updating(function ($model) {
-        //     $model->validate($model->getAttributes(), $model->id);
-        // });
+        // Before update
+        static::updating(function ($model) {
+            // update slug if name changed
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->name);
+            }
+        });
     }
 
     public function validate($action, $data)
@@ -164,7 +165,8 @@ class Role extends Model
         return ucfirst($event) . " " . $this->name . " " . class_basename($this);
     }
 
-    public function clearPermissions() {
+    public function clearPermissions()
+    {
         return $this->modulePermissions()->delete();
     }
 }

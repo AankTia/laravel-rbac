@@ -6,21 +6,23 @@
 
 ## Controller
 
--   [ ] Refactor auth()->user()->hasPermission, use helper
+-   [x] Refactor auth()->user()->hasPermission, use helper
 
 ## Helper
 
--   [ ] Button helper
+-   [ ] check permission for each buttons
 
 ## Role
 
--   [ ] Delete user from role
--   [ ] Update permission activity log
--   [ ] Update slug when role name updated
 -   [ ] route, use slug instead of id
+-   [#] Update slug when role name updated
+-   [x] add breadcrumb
+-   [x] create helper for auth()->user()->hasPermission in blade
+-   [x] Update permission activity log
 -   [x] Activity log detail modal
 -   [x] paginate activity logs
 -   [x] Detail actiity page
+-   [x] Delete user from role
 
 ## Activity Log
 
@@ -34,3 +36,7 @@
 ## Seeder
 
 -   [ ] Insert logs activity
+
+## dashboard layout
+
+-   [ ] split contents

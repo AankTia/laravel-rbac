@@ -1,22 +1,42 @@
 @extends('layouts.dashboard')
 
-@section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
+@section('title', "Roles | Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Role
+        </li>
+    </ol>
+</nav>
+@endsection
+
+@section('pageAction')
+<div class="row mb-4 align-items-center">
+    <div class="col-md-12 mt-3 mt-md-0">
+        @if(isUserCan('create', 'role'))
+        {!! createButton(route('roles.create'), 'Role') !!}
+        @endif
+    </div>
+</div>
+@endsection
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <div class="col-md-6 d-flex align-items-center">
-                @if(auth()->user()->hasPermission('create', 'role'))
-                {!! createButton(route('roles.create'), 'Role') !!}
-                @endif
+        <div class="row mb-4">
+            <div class="col-md-9">
+                <h5 class="pb-1 mb-2">Roles</h5>
             </div>
 
-            <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                @if(auth()->user()->hasPermission('read', 'role'))
+            <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                @if(isUserCan('read', 'role'))
                 <form action="{{ route('roles.index') }}" method="GET">
-                    <div class="input-group">
+                    <div class="input-group input-group-sm">
                         <span class="input-group-text bg-white">
                             <i class="bx bx-search-alt"></i>
                         </span>
@@ -29,7 +49,6 @@
     </div>
 
     <div class="card-body">
-        <hr class="mt-0">
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -53,19 +72,19 @@
                         <td>
                             <div class="row">
                                 <div class="text-end">
-                                    @if(auth()->user()->hasPermission('read', 'role'))
+                                    @if(isUserCan('read', 'role'))
                                     <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary mt-2">
                                         <i class="bx bx-show-alt me-1"></i>
                                     </a>
                                     @endif
 
-                                    @if(auth()->user()->hasPermission('update', 'role'))
+                                    @if(isUserCan('update', 'role'))
                                     <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning mt-2">
                                         <i class="bx bx-edit-alt me-1"></i>
                                     </a>
                                     @endif
 
-                                    @if(auth()->user()->hasPermission('delete', 'role'))
+                                    @if(isUserCan('delete', 'role'))
                                     <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
@@ -93,5 +112,4 @@
         {{ $roles->links('vendor.pagination.custom') }}
     </div>
 </div>
-
 @endsection

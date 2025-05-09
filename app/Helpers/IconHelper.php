@@ -49,6 +49,13 @@ if (!function_exists('userIcon')) {
     }
 }
 
+if (!function_exists('userMinusIcon')) {
+    function userMinusIcon()
+    {
+        return 'bx bx-user-minus';
+    }
+}
+
 if (!function_exists('leftArrowIcon')) {
     function leftArrowIcon()
     {
