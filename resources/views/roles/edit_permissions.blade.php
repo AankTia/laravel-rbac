@@ -41,27 +41,27 @@
                                     <td>
                                         @if ($permissions['read'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="read" class="form-check-input" {{ $permissions['read'] ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="read" class="form-check-input" {{ $permissions['read'] == 'checked' ? 'checked' : '' }}>
                                         </div>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($permissions['create'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="create" class="form-check-input" {{ $permissions['create'] ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="create" class="form-check-input" {{ $permissions['create'] == 'checked' ? 'checked' : '' }}>
                                         </div>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($permissions['update'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="update" class="form-check-input" {{ $permissions['update'] ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="update" class="form-check-input" {{ $permissions['update'] == 'checked' ? 'checked' : '' }}>
                                         </div>
                                         @endif
                                     </td>
                                     <td>@if ($permissions['delete'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="delete" class="form-check-input" {{ $permissions['delete'] ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="delete" class="form-check-input" {{ $permissions['delete'] == 'checked' ? 'checked' : '' }}>
                                         </div>
                                         @endif
                                     </td>

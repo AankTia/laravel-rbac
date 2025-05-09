@@ -200,28 +200,33 @@ class RoleController extends Controller
         foreach ($modules as $module) {
             $moduleNamebySlug[$module->slug] = $module->name;
             $modulePermissionSLugs = $module->getPermissionSlugs();
+            
             $permissionsData = [
-                'read' => (in_array('read', $modulePermissionSLugs) ? true : null),
-                'create' => (in_array('create', $modulePermissionSLugs) ? true : null),
-                'update' => (in_array('update', $modulePermissionSLugs) ? true : null),
-                'delete' => (in_array('delete', $modulePermissionSLugs) ? true : null),
+                'read' => null,
+                'create' => null,
+                'update' => null,
+                'delete' => null,
                 'others' => []
             ];
+
+            foreach(['read', 'create', 'update','delete'] as $action) {
+                if (in_array($action, $modulePermissionSLugs)) {
+                    $permissionsData[$action] = in_array($action, $roleModulePermissions[$module->slug]) ? 'checked' : 'unchecked';
+                }
+            }
 
             foreach ($module->permissions as $permission) {
                 $modulePermissionSlugs[] = $permission->slug;
                 if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
                     $permissionsData['others'][$permission->slug] = [
                         'label' => $permission->name,
-                        'checked' => true
+                        'checked' => in_array($permission->slug, $roleModulePermissions[$module->slug])
                     ];
-                    
                 }
             }
 
             $modulePermissions[$module->slug] = $permissionsData;
         }
-
 
         return view('roles.edit_permissions', compact('role'))
             ->with('title', 'Edit ' . $role->name . ' Permissions')
