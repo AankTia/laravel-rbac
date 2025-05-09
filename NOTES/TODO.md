@@ -14,8 +14,8 @@
 
 ## Role
 
--   [ ] route, use slug instead of id
--   [#] Update slug when role name updated
+-   [x] route, use slug instead of id
+-   [x] Update slug when role name updated
 -   [x] add breadcrumb
 -   [x] create helper for auth()->user()->hasPermission in blade
 -   [x] Update permission activity log
@@ -40,3 +40,9 @@
 ## dashboard layout
 
 -   [ ] split contents
+
+## Sidebar
+- [ ] make it fix position
+
+## Top bar
+- [ ] make it fix position
