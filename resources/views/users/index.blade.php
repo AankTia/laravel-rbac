@@ -29,31 +29,44 @@
         <h5 class="card-title mb-0">Users</h5>
         <hr>
 
-        <h7 class="card-title mb-0">Search Filters</h7>
-        <div class="row mt-2">
-            <div class="col-md-4">
-                <input class="form-control form-control-sm mb-3" type="text" name="serach_name" value="{{ request('search_keyword') }}" placeholder="Name">
-            </div>
-            <div class="col-md-3">
-                <select class="form-select form-select-sm mb-3">
-                    <option selected="">-- Status --</option>
-                    <option value="1">Active</option>
-                    <option value="2">Inactive</option>
-                </select>
-            </div>
+        <div class="accordion mt-3" id="accordionExample">
+            <div class="card accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="false" aria-controls="accordionOne">
+                        Search Filters
+                    </button>
+                </h2>
 
-            <div class="col-md-3">
-                <select class="form-select form-select-sm mb-3">
-                    <option selected="">-- Role --</option>
-                    <option value="1">Super Admin</option>
-                    <option value="2">Admin</option>
-                    <option value="3">Viewer</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-primary mb-3">Primary</button>
-                <button type="button" class="btn btn-sm btn-secondary mb-3">Secondary</button>
+                <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
+                    <div class="accordion-body">
+                        <div class="row mt-2">
+                            <div class="col-md-4">
+                                <input class="form-control form-control-sm mb-3" type="text" name="serach_name" value="{{ request('search_keyword') }}" placeholder="Name">
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select form-select-sm mb-3">
+                                    <option selected="">-- Status --</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Inactive</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-3">
+                                <select class="form-select form-select-sm mb-3">
+                                    <option selected="">-- Role --</option>
+                                    <option value="1">Super Admin</option>
+                                    <option value="2">Admin</option>
+                                    <option value="3">Viewer</option>
+                                </select>
+                            </div>
+                
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-primary mb-3">Search</button>
+                                <button type="button" class="btn btn-sm btn-secondary mb-3">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
