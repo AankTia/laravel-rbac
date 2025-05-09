@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 
 @section('title', $title . " | Laravel RBAC")
-@section('pageTitle', $title)
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -16,20 +15,28 @@
 </nav>
 @endsection
 
+@section('pageAction')
+<div class="row mb-4 align-items-center">
+    <div class="col-md-12 mt-3 mt-md-0">
+        @if(isUserCan('create', 'role'))
+        {!! createButton(route('roles.create'), 'Role') !!}
+        @endif
+    </div>
+</div>
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header">
-        <div class="row">
-            <div class="col-md-6 d-flex align-items-center">
-                @if(isUserCan('create', 'role'))
-                {!! createButton(route('roles.create'), 'Role') !!}
-                @endif
+        <div class="row mb-4">
+            <div class="col-md-9">
+                <h5 class="pb-1 mb-2">{{ $title }}</h5>
             </div>
 
-            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <div class="col-md-3 text-md-end mt-3 mt-md-0">
                 @if(isUserCan('read', 'role'))
                 <form action="{{ route('roles.index') }}" method="GET">
-                    <div class="input-group">
+                    <div class="input-group input-group-sm">
                         <span class="input-group-text bg-white">
                             <i class="bx bx-search-alt"></i>
                         </span>
@@ -42,7 +49,6 @@
     </div>
 
     <div class="card-body">
-        <hr class="mt-0">
         <div class="table-responsive">
             <table class="table">
                 <thead>

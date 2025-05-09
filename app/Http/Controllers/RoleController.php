@@ -27,6 +27,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
+        $title = 'Roles';
+        $attributeLabels = Role::$attributeLabels;
+
         $query = Role::query();
         if ($request->has('search_keyword')) {
             $keyword = $request->search_keyword;
@@ -39,10 +42,7 @@ class RoleController extends Controller
             ->paginate(10)
             ->appends($request->all());
 
-        return view('roles.index')
-            ->with('title', 'Roles')
-            ->with('attributeLabels', Role::$attributeLabels)
-            ->with('roles', $roles);
+        return view('roles.index', compact('roles', 'title', 'attributeLabels'));
     }
 
     /**
