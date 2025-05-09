@@ -36,10 +36,8 @@
                             </td>
                             <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
                             <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
-                            <td class="fw-medium text-center" nowrap>
-                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
-                                    <span class="tf-icons {{ deleteIcon() }}"></span>
-                                </button>
+                            <td class="fw-medium text-center">
+                                {!! deleteUserFromRoleButton() !!}
                             </td>
                         </tr>
                         @empty

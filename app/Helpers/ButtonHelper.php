@@ -69,3 +69,14 @@ function deleteButton($route, $label = 'Delete')
             </form>
         HTML;
 }
+
+function deleteUserFromRoleButton()
+{
+    $buttonIcon = deleteIcon();
+
+    return <<<HTML
+            <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
+                <span class="tf-icons { $buttonIcon }"></span>
+            </button>
+        HTML;
+}
