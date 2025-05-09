@@ -353,7 +353,7 @@ class RoleController extends Controller
 
         $activityLogs = $role->activityLogs()
             ->orderBy('created_at', $orderBy)
-            ->paginate(10);
+            ->paginate(5);
 
         $activityLogs->appends($request->all());
 

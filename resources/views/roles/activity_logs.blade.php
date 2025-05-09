@@ -94,6 +94,7 @@
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-6">
                         <h5 class="pb-1 mb-2">Activity Histories</h5>
+                        <small class="text-muted">{{ $activityLogs->total() }} Histories</small>
                     </div>
 
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
@@ -124,7 +125,9 @@
 
                             <div class="d-flex w-100 flex-wrap adivgn-items-center justify-content-between gap-2">
                                 <div class="me-2">
-                                    <h6 class="mb-0">{{ $activity->description }}</h6>
+                                    <h6 class="mb-0">
+                                        {{ $activity->description }}
+                                    </h6>
                                     <small class="text-muted">
                                         <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</em>
                                     </small>
