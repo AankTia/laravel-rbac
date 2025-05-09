@@ -78,6 +78,12 @@ class Role extends Model
 
         return $validator->validated();
     }
+    
+    // Define route key name to use slug instead of ID
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     /**
      * Get the users that belong to this role.
