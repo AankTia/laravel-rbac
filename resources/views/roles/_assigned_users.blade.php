@@ -14,7 +14,8 @@
                 <table class="table table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th>User</th>
+                            <th class="text-center">User</th>
+                            <th class="text-center">User Status</th>
                             <th class="text-center">Assigned At</th>
                             <th class="text-center">Assigned By</th>
                             <th class="text-center">Action</th>
@@ -33,6 +34,9 @@
                                         <p class="user-email">{{ $roleUser->user->email }}</p>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="fw-medium text-center" nowrap>
+                                {!! userStatusBadge($roleUser->user->is_active) !!}
                             </td>
                             <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
                             <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
