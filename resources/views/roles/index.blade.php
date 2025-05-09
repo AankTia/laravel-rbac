@@ -3,6 +3,19 @@
 @section('title', $title . " | Laravel RBAC")
 @section('pageTitle', $title)
 
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Role
+        </li>
+    </ol>
+</nav>
+@endsection
+
 @section('content')
 <div class="card">
     <div class="card-header">
@@ -93,5 +106,4 @@
         {{ $roles->links('vendor.pagination.custom') }}
     </div>
 </div>
-
 @endsection

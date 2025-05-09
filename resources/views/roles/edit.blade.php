@@ -3,6 +3,25 @@
 @section('title', $title . " | Laravel RBAC")
 @section('pageTitle', $title)
 
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.index') }}">Role</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Edit
+        </li>
+    </ol>
+</nav>
+@endsection
+
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">

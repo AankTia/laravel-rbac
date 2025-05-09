@@ -55,11 +55,13 @@
 
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        @include('partials._alert')
+                        @yield('breadcrumb')
 
                         <header class="mb-4">
                             <h1 class="display-5 fw-bold">@yield('pageTitle')</h1>
                             <p class="text-muted">@yield('pageSubTitle')</p>
+
+                            @include('partials._alert')
                         </header>
 
                         @yield('pageAction')
