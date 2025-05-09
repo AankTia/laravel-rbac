@@ -10,7 +10,7 @@
 
 ## Helper
 
--   [ ] Button helper
+-   [ ] check permission for each buttons
 
 ## Role
 
