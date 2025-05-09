@@ -1,30 +1,44 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', "Users | Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item active">
+            User
+        </li>
+    </ol>
+</nav>
+@endsection
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-6 mt-3 mt-md-0">
-        @if(isUserCan('create', 'role'))
-        <a href="{{ route('users.create') }}" class="btn btn-primary">
-            <i class="bx bx-plus-circle me-2"></i> Add New User
-        </a>
-        @endif
+        {!! createButton(route('users.create'), 'user.create', 'User') !!}
     </div>
 </div>
 @endsection
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="pb-1 mb-2">Users</h5>
+        </div>
+    </div>
+
     <div class="card-body">
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Role</th>
                         <th>Status</th>
+                        <th>Role</th>
                         <th>
                             <div class="text-end">Action</div>
                         </th>
@@ -44,14 +58,10 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $user->getRoleName() }}</td>
                         <td>
-                            @if ($user->is_active)
-                            <span class="badge rounded-pill bg-success">Active</span>
-                            @else
-                            <span class="badge rounded-pill bg-danger">Inactive</span>
-                            @endif
+                            {!! userStatusBadge($user->is_active) !!}
                         </td>
+                        <td>{{ $user->getRoleName() }}</td>
                         <td>
                             <div class="text-end">
                                 @if(isUserCan('read', 'user'))

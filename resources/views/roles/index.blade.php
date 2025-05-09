@@ -19,7 +19,7 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         @if(isUserCan('create', 'role'))
-        {!! createButton(route('roles.create'), 'Role') !!}
+        {!! createButton(route('roles.create'), 'role.create', 'Role') !!}
         @endif
     </div>
 </div>
@@ -30,7 +30,7 @@
     <div class="card-header">
         <div class="row mb-4">
             <div class="col-md-9">
-                <h5 class="pb-1 mb-2">Roles</h5>
+                <h5 class="pb-1">Roles</h5>
             </div>
 
             <div class="col-md-3 text-md-end mt-3 mt-md-0">

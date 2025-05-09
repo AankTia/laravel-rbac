@@ -14,16 +14,24 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('check.permission:user,read')->only('index');
+        // show
+        // create
+        // store
+        // edit
+        // update
+        // destroy
+        // activate
+        // deactivate
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $viewData = [
-            'title' => "Users",
-            // 'subtitle' => "Manage all roles in the system"
-        ];
-
         $query = User::query();
         // if ($request->has('search_keyword')) {
         //     $keyword = $request->search_keyword;
@@ -37,9 +45,7 @@ class UserController extends Controller
 
         $users->appends($request->all());
 
-        return view('users.index')
-            ->with('viewData', $viewData)
-            ->with('users', $users);
+        return view('users.index', compact('users'));
     }
 
     /**

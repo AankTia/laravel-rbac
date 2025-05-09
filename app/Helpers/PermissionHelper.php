@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Auth;
 
-function currentUser() {
+function currentUser()
+{
     return Auth::user();
 }
 
-function currentUserId() {
+function currentUserId()
+{
     return Auth::id();
 }
 
@@ -17,4 +19,19 @@ function isUserCan($action, $module)
     } else {
         return false;
     }
+}
+
+/**
+ * Parse module and permission for check permission.
+ *
+ * @param string $value (e.g., 'user.create')
+ * @return array (e.g., ['module' => 'user', 'permission' => 'create'])
+ */
+function explodePermission(string $value)
+{
+    $explodedValue = explode('.', $value);
+    return [
+        'module' => $explodedValue[0],
+        'permission' => $explodedValue[1]
+    ];
 }

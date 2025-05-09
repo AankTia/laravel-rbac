@@ -19,14 +19,20 @@ function cancelButton($route, $label = 'Cancel')
         HTML;
 }
 
-function createButton($route, $label = '')
+function createButton($route, $permission, $label)
 {
-    $icon = createIcon();
-    return <<<HTML
-            <a href='{$route}' class='btn btn-sm btn-primary'>
-                <i class='{$icon}'></i> Add New {$label}
-            </a>
-        HTML;
+    $explodedPermission = explodePermission($permission);
+
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+        $icon = createIcon();
+        return <<<HTML
+                <a href='{$route}' class='btn btn-sm btn-primary'>
+                    <i class='{$icon}'></i> Create New {$label}
+                </a>
+            HTML;
+    } else {
+        return null;
+    }
 }
 
 function submitCreateButton($label = 'Save')

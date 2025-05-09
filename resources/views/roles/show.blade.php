@@ -26,7 +26,7 @@
         @endif
 
         @if(isUserCan('create', 'role'))
-        {!! createButton(route('roles.create'), 'Role') !!}
+        {!! createButton(route('roles.create'), 'role.create', 'Role') !!}
         @endif
     </div>
 </div>
