@@ -8,13 +8,13 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-6 d-flex align-items-center">
-                @if(auth()->user()->hasPermission('create', 'role'))
+                @if(isUserCan('create', 'role'))
                 {!! createButton(route('roles.create'), 'Role') !!}
                 @endif
             </div>
 
             <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                @if(auth()->user()->hasPermission('read', 'role'))
+                @if(isUserCan('read', 'role'))
                 <form action="{{ route('roles.index') }}" method="GET">
                     <div class="input-group">
                         <span class="input-group-text bg-white">
@@ -53,19 +53,19 @@
                         <td>
                             <div class="row">
                                 <div class="text-end">
-                                    @if(auth()->user()->hasPermission('read', 'role'))
+                                    @if(isUserCan('read', 'role'))
                                     <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary mt-2">
                                         <i class="bx bx-show-alt me-1"></i>
                                     </a>
                                     @endif
 
-                                    @if(auth()->user()->hasPermission('update', 'role'))
+                                    @if(isUserCan('update', 'role'))
                                     <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning mt-2">
                                         <i class="bx bx-edit-alt me-1"></i>
                                     </a>
                                     @endif
 
-                                    @if(auth()->user()->hasPermission('delete', 'role'))
+                                    @if(isUserCan('delete', 'role'))
                                     <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')

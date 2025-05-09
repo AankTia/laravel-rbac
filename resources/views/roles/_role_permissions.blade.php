@@ -1,7 +1,7 @@
 <div class="card shadow-sm mb-4">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="card-title m-0 me-2">Allowed Permissions</h5>
-        @if(auth()->user()->hasPermission('update-role-permissions', 'role'))
+        @if(isUserCan('update-role-permissions', 'role'))
         {!! editButton(route('roles.edit-permissions', $role), 'Update Permissions') !!}
         @endif
     </div>

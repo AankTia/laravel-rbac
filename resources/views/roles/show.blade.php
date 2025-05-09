@@ -6,11 +6,11 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'role'))
+        @if(isUserCan('read', 'role'))
         {!! backButton(route('roles.index'), 'Back to Roles') !!}
         @endif
 
-        @if(auth()->user()->hasPermission('create', 'role'))
+        @if(isUserCan('create', 'role'))
         {!! createButton(route('roles.create'), 'Role') !!}
         @endif
     </div>
@@ -25,11 +25,11 @@
                 <h5 class="card-title m-0 me-2">Details</h5>
 
                 <div class="text-end">
-                    @if(auth()->user()->hasPermission('update', 'role'))
+                    @if(isUserCan('update', 'role'))
                     {!! editButton(route('roles.edit', ['role' => $role])) !!}
                     @endif
 
-                    @if(auth()->user()->hasPermission('delete', 'role'))
+                    @if(isUserCan('delete', 'role'))
                     {!! deleteButton(route('roles.destroy', $role)) !!}
                     @endif
                 </div>
@@ -79,10 +79,10 @@
 
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     @if ($role->createdAt())
-                        <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
+                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
                     @endif
                     @if ($role->creatorName())
-                        <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
+                    <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
                     @endif
                 </div>
             </div>

@@ -6,7 +6,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('read', 'role'))
+        @if(isUserCan('read', 'role'))
         {!! backButton(route('roles.show', $role), 'Back to Role') !!}
         @endif
     </div>
@@ -69,8 +69,8 @@
                                         @foreach ($permissions['others'] as $otherPermissionSlug => $otherPermissionData)
                                         <div>
                                             <div class="form-check">
-                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>  
-                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label> 
+                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>
+                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label>
                                             </div>
                                         </div>
                                         @endforeach
