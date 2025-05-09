@@ -53,7 +53,7 @@ class ActivityLog extends Model
                 break;
 
             case 'delete-user':
-                $result = deactivateIcon();
+                $result = userMinusIcon();
                 break;
             default:
                 $result = '';
