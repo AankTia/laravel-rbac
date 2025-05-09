@@ -69,3 +69,10 @@ if (!function_exists('historyIcon')) {
         return 'bx bx-history';
     }
 }
+
+if (!function_exists('lockIcon')) {
+    function lockIcon()
+    {
+        return 'bx bx-lock';
+    }
+}

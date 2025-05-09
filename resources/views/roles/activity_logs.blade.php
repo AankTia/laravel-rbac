@@ -124,7 +124,7 @@
 
                             <div class="d-flex w-100 flex-wrap adivgn-items-center justify-content-between gap-2">
                                 <div class="me-2">
-                                    <h6 class="mb-0">{{ ucwords($activity->action) }} Data</h6>
+                                    <h6 class="mb-0">{{ $activity->description }}</h6>
                                     <small class="text-muted">
                                         <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</em>
                                     </small>
