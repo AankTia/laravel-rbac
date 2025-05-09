@@ -87,26 +87,24 @@
 
         @if ($role->lastUpdaterName() || $role->lastUpdate())
         <div class="card mb-4">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Last Updated</h5>
-                <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary">
-                    <i class="{{ historyIcon() }}"></i> Show Histories
-                </a>
-            </div>
-
             <div class="card-body">
-                <hr class="mt-0">
-
-                <div class="d-flex align-items-center justify-content-between mb-4">
+                <h5 class="card-title m-0 me-2 mb-2">Last Updated</h5>
+                <div class="d-flex align-items-center justify-content-between">
                     <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</em>
                     <em><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</em>
                 </div>
+
+                <hr/>
 
                 <div class="mb-4">
                     {{ $lastActivity->description }}
                 </div>
 
                 @include('activity_logs.partials._details', ['activity' => $lastActivity])
+
+                <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary mt-4">
+                    <i class="{{ historyIcon() }}"></i> Show All Histories
+                </a>
             </div>
         </div>
         @endif
