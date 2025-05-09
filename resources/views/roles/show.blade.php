@@ -70,14 +70,10 @@
     <div class="col-md-4">
         @if ($role->creatorName() || $role->createdAt())
         <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title m-0 me-2">Created</h5>
-            </div>
             <div class="card-body">
-                <hr class="mt-0">
+                <h5 class="card-title m-0 me-2 mb-2">Created</h5>
 
-
-                <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center justify-content-between">
                     @if ($role->createdAt())
                     <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
                     @endif

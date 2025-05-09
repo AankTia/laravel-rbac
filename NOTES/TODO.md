@@ -16,6 +16,7 @@
 
 -   [ ] Update slug when role name updated
 -   [ ] route, use slug instead of id
+-   [ ] add breadcrumb
 -   [x] create helper for auth()->user()->hasPermission in blade
 -   [x] Update permission activity log
 -   [x] Activity log detail modal
