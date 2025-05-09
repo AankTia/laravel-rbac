@@ -6,7 +6,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-6 mt-3 mt-md-0">
-        @if(auth()->user()->hasPermission('create', 'roles'))
+        @if(auth()->user()->hasPermission('create', 'role'))
         <a href="{{ route('users.create') }}" class="btn btn-primary">
             <i class="bx bx-plus-circle me-2"></i> Add New User
         </a>
@@ -54,19 +54,19 @@
                         </td>
                         <td>
                             <div class="text-end">
-                                @if(auth()->user()->hasPermission('read', 'users'))
+                                @if(auth()->user()->hasPermission('read', 'user'))
                                 <a href="{{ route('users.show', $user) }}" class="btn btn-icon btn-outline-primary">
                                     <i class="bx bx-show-alt me-1"></i>
                                 </a>
                                 @endif
 
-                                @if(auth()->user()->hasPermission('update', 'users'))
+                                @if(auth()->user()->hasPermission('update', 'user'))
                                 <a href="{{ route('users.edit', $user) }}" class="btn btn-icon btn-outline-warning">
                                     <i class="bx bx-edit-alt me-1"></i>
                                 </a>
                                 @endif
 
-                                @if(auth()->user()->hasPermission('delete', 'users'))
+                                @if(auth()->user()->hasPermission('delete', 'user'))
                                 <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')

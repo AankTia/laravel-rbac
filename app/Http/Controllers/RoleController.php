@@ -2,28 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
+use App\Models\ActivityLog;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check.permission:role,read')->only('index', 'show');
+        $this->middleware('check.permission:role,create')->only('create', 'store');
+        $this->middleware('check.permission:role,update')->only('edit', 'update');
+        $this->middleware('check.permission:role,delete')->only('destroy');
+        $this->middleware('check.permission:role,update-role-permissions')->only('editPermissions', 'updatePermissions');
+        $this->middleware('check.permission:role,read-activity-log')->only('editPermissions', 'activityLogs');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $viewData = [
-            'title' => "Roles",
-            'subtitle' => "Manage all roles in the system"
-        ];
-
-        // $roles = Role::all();
         $query = Role::query();
         if ($request->has('search_keyword')) {
             $keyword = $request->search_keyword;
@@ -33,12 +35,12 @@ class RoleController extends Controller
             });
         }
         $roles = $query->orderBy('id', 'asc')
-            ->paginate(10);
-
-        $roles->appends($request->all());
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('roles.index')
-            ->with('viewData', $viewData)
+            ->with('title', 'Roles')
+            ->with('attributeLabels', Role::$attributeLabels)
             ->with('roles', $roles);
     }
 
@@ -47,13 +49,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $viewData = [
-            'title' => "Create New Role",
-            // 'subtitle' => $role->name
-        ];
-
         return view('roles.create')
-            ->with('viewData', $viewData);
+            ->with('title', 'Create New Role')
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -62,12 +60,14 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $role = new Role();
         $validated = $role->validate('create', $roleData);
 
         $role->fill($validated)->save();
+        $this->logActivity($request, 'create');
 
         return redirect()->route('roles.show', ['role' => $role])
             ->with('success', 'Role created successfully.');
@@ -78,11 +78,6 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $viewData = [
-            'title' => "Role Details",
-            'subtitle' => $role->name
-        ];
-
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -133,9 +128,16 @@ class RoleController extends Controller
             ->pluck('id', 'slug')
             ->toArray();
 
+        $lastActivity = $role->activityLogs()
+            ->latest()
+            ->limit(1)
+            ->first();
+
         return view('roles.show', compact('role'))
-            ->with('viewData', $viewData)
-            ->with('modulePermissions', $modulePermissions);
+            ->with('title', $role->name . ' Details')
+            ->with('attributeLabels', Role::$attributeLabels)
+            ->with('modulePermissions', $modulePermissions)
+            ->with('lastActivity', $lastActivity);
     }
 
     /**
@@ -143,12 +145,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role"
-        ];
-
         return view('roles.edit', compact('role'))
-            ->with('viewData', $viewData);
+            ->with('title', 'Edit Role')
+            ->with('attributeLabels', Role::$attributeLabels);
     }
 
     /**
@@ -157,7 +156,8 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $roleData = $request->all();
-        $roleData['allow_to_be_assigne'] = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
 
         $validated = $role->validate('update', $roleData);
 
@@ -182,14 +182,65 @@ class RoleController extends Controller
      */
     public function editPermissions(Role $role)
     {
-        $viewData = [
-            'title' => "Edit Role Permission"
-        ];
+        $roleModulePermissions = [];
+        foreach ($role->modulePermissions as $roleModulePermission) {
+            $moduleSlug = $roleModulePermission->module->slug;
+            $permissionSlug = $roleModulePermission->permission->slug;
+            if (isset($roleModulePermissions[$moduleSlug])) {
+                $roleModulePermissions[$moduleSlug][] = $permissionSlug;
+            } else {
+                $roleModulePermissions[$moduleSlug] = [$permissionSlug];
+            }
+        }
+
+        $modulePermissions = [];
+        $moduleNamebySlug = [];
         $modules = Module::all();
 
+        foreach ($modules as $module) {
+            $moduleNamebySlug[$module->slug] = $module->name;
+            $modulePermissionSLugs = $module->getPermissionSlugs();
+            
+            $permissionsData = [
+                'read' => null,
+                'create' => null,
+                'update' => null,
+                'delete' => null,
+                'others' => []
+            ];
+
+            foreach(['read', 'create', 'update','delete'] as $action) {
+                if (in_array($action, $modulePermissionSLugs)) {
+                    if (isset($roleModulePermissions[$module->slug])) {
+                        $permissionsData[$action] = in_array($action, $roleModulePermissions[$module->slug]) ? 'checked' : 'unchecked';
+                    } else {
+                        $permissionsData[$action] = 'unchecked';
+                    }
+                }
+            }
+
+            foreach ($module->permissions as $permission) {
+                $modulePermissionSlugs[] = $permission->slug;
+                if (!in_array($permission->slug, ['read', 'create', 'update', 'delete'])) {
+                    if (isset($roleModulePermissions[$module->slug])) {
+                        $isChecked = in_array($permission->slug, $roleModulePermissions[$module->slug]);
+                    } else {
+                        $isChecked = false;
+                    }
+                    $permissionsData['others'][$permission->slug] = [
+                        'label' => $permission->name,
+                        'checked' => $isChecked
+                    ];
+                }
+            }
+
+            $modulePermissions[$module->slug] = $permissionsData;
+        }
+
         return view('roles.edit_permissions', compact('role'))
-            ->with('viewData', $viewData)
-            ->with('modules', $modules);
+            ->with('title', 'Edit ' . $role->name . ' Permissions')
+            ->with('moduleNamebySlug', $moduleNamebySlug)
+            ->with('modulePermissions', $modulePermissions);
     }
 
     /**
@@ -197,30 +248,119 @@ class RoleController extends Controller
      */
     public function updatePermissions(Request $request, Role $role)
     {
-        PermissionRoleModule::where('role_id', $role->id)->delete();
+        $requestPermissions = $request->modules ?? [];
 
-        if (isset($request->modules)) {
-            $newRolePermissionsData = [];
-            foreach ($request->modules as $moduleSlug => $permissionsSlug) {
-                $module = Module::where('slug', $moduleSlug)->first();
-                if ($module) {
-                    $permissionsId = Permission::whereIn('slug', $permissionsSlug)->pluck('id')->toArray();
-                    foreach ($permissionsId as $permissionId) {
-                        $newRolePermissionsData[] = [
-                            'role_id' => $role->id,
-                            'module_id' => $module->id,
-                            'permission_id' => $permissionId
+        $currentPermissionData = [];
+        $currentPermissions = PermissionRoleModule::with('module', 'permission')
+            ->where('role_id', $role->id)
+            ->get();
+
+        foreach ($currentPermissions as $currentPermission) {
+            if (isset($currentPermissionData[$currentPermission->module->slug])) {
+                $currentPermissionData[$currentPermission->module->slug][] = $currentPermission->permission->slug;
+            } else {
+                $currentPermissionData[$currentPermission->module->slug] = [$currentPermission->permission->slug];
+            }
+        }
+
+        $moduleNameBySlug = Module::pluck('name', 'slug')->toArray();
+
+        $logProperties = [
+            'attributes' => []
+        ];
+        if (!empty($requestPermissions)) {
+            if (empty($currentPermissionData)) {
+                $requestModules = array_keys($requestPermissions);
+                $changesModules = $requestModules;
+
+                foreach ($changesModules as $moduleSlug) {
+                    $newPermissions = isset($requestPermissions[$moduleSlug]) ? $requestPermissions[$moduleSlug] : [];
+                    $oldPermissions = [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $modulName = $moduleNameBySlug[$moduleSlug];
+                        $logProperties['attributes'][$modulName] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
+                        ];
+                    }
+                }
+            } else {
+                $requestModules = array_keys($requestPermissions);
+                $currentModules = array_keys($currentPermissionData);
+                $changesModules = $requestModules + $currentModules;
+
+                foreach ($changesModules as $moduleSlug) {
+                    $newPermissions = isset($requestPermissions[$moduleSlug]) ? $requestPermissions[$moduleSlug] : [];
+                    $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $modulName = $moduleNameBySlug[$moduleSlug];
+                        $logProperties['attributes'][$modulName] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
                         ];
                     }
                 }
             }
+        } else {
+            if (!empty($currentPermissionData)) {
+                $currentModules = array_keys($currentPermissionData);
+                $changesModules = $currentModules;
 
-            if (count($newRolePermissionsData) > 0) {
-                PermissionRoleModule::insert($newRolePermissionsData);
+                foreach ($changesModules as $moduleSlug) {
+                    $newPermissions = [];
+                    $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
+
+                    if ($newPermissions != $oldPermissions) {
+                        $modulName = $moduleNameBySlug[$moduleSlug];
+                        $logProperties['attributes'][$modulName] = [
+                            'old' => $oldPermissions,
+                            'new' => $newPermissions
+                        ];
+                    }
+                }
             }
         }
 
+        $moduleIdBySlug = Module::pluck('id', 'slug')->toArray();
+        $permissionIdBySlug = Permission::pluck('id', 'slug')->toArray();
+
+        $role->clearPermissions();
+
+        foreach ($requestPermissions as $requestModule => $reqPermissions) {
+            $moduleId = $moduleIdBySlug[$requestModule];
+            foreach ($reqPermissions as $reqPermission) {
+                $permissionId = $permissionIdBySlug[$reqPermission];
+                $role->assignPermission($moduleId, $permissionId);
+            }
+        }
+
+        $role->customLogActivity('role-permission-updated', $logProperties);
+
         return redirect()->route('roles.show', $role)
             ->with('success', 'Role Permissions updated successfully.');
+    }
+
+    public function activityLogs(Request $request, Role $role)
+    {
+        $orderBy = 'desc';
+        if ($request->has('sort_by')) {
+            if ($request->sort_by == 'asc') {
+                $orderBy = 'asc';
+            }
+        }
+
+        $activityLogs = $role->activityLogs()
+            ->orderBy('created_at', $orderBy)
+            ->paginate(5);
+
+        $activityLogs->appends($request->all());
+
+        return view('roles.activity_logs', compact('role'))
+            ->with('title', $role->name . ' Activity Histories')
+            ->with('activityLogs', $activityLogs)
+            ->with('attributeLabels', Role::$attributeLabels)
+            ->with('orderBy', $orderBy);
     }
 }

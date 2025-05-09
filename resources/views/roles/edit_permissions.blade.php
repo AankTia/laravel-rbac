@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', 'Update' . ' ' . $role->name . ' Permissions')
+@section('title', $title . " | Laravel RBAC")
+@section('pageTitle', $title)
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        <a href="{{ route('roles.show', $role) }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to Role
-        </a>
+        @if(auth()->user()->hasPermission('read', 'role'))
+        {!! backButton(route('roles.show', $role), 'Back to Role') !!}
+        @endif
     </div>
 </div>
 @endsection
@@ -31,151 +31,60 @@
                                     <th class="text-center">Create</th>
                                     <th class="text-center">Update</th>
                                     <th class="text-center">Delete</th>
-                                    <th>Special Permissions</th>
+                                    <th class="text-center">Special Permissions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($modules as $module)
+                                @foreach ($modulePermissions as $moduleSlug => $permissions)
                                 <tr>
-                                    <td>{{ $module->name }}</td>
-                                    <td class="text-center">
+                                    <td>{{ $moduleNamebySlug[$moduleSlug] }}</td>
+                                    <td>
+                                        @if ($permissions['read'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="read" class="form-check-input" {{ $role->hasPermission('read', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="read" class="form-check-input" {{ $permissions['read'] == 'checked' ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
+                                        @if ($permissions['create'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="create" class="form-check-input" {{ $role->hasPermission('create', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="create" class="form-check-input" {{ $permissions['create'] == 'checked' ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
+                                        @if ($permissions['update'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="update" class="form-check-input" {{ $role->hasPermission('update', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="update" class="form-check-input" {{ $permissions['update'] == 'checked' ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>@if ($permissions['delete'] !== null)
                                         <div class="form-check d-flex justify-content-center">
-                                            <input type="checkbox" name="modules[{{ $module->slug }}][]" value="delete" class="form-check-input" {{ $role->hasPermission('delete', $module->slug) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="delete" class="form-check-input" {{ $permissions['delete'] == 'checked' ? 'checked' : '' }}>
                                         </div>
+                                        @endif
                                     </td>
-                                    <td></td>
+                                    <td nowrap>
+                                        @foreach ($permissions['others'] as $otherPermissionSlug => $otherPermissionData)
+                                        <div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="modules[{{ $moduleSlug }}][]" value="{{ $otherPermissionSlug }}" class="form-check-input" {{ $otherPermissionData['checked'] ? 'checked' : '' }}>  
+                                                <label class="form-check-label"> {{ $otherPermissionData['label'] }} </label> 
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </td>
                                 </tr>
-
                                 @endforeach
-                                <!-- Users Module -->
-                                {{-- <tr>
-                                    <td class="fw-medium">Users</td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="userCreate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="userRead" checked>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="userUpdate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="userDelete">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="userResetPwd">
-                                            <label class="form-check-label" for="userResetPwd">Reset Passwords</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="userImpersonate">
-                                            <label class="form-check-label" for="userImpersonate">Impersonate</label>
-                                        </div>
-                                    </td>
-                                </tr> --}}
-
-                                <!-- Roles Module -->
-                                {{-- <tr>
-                                    <td class="fw-medium">Roles</td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="roleCreate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="roleRead" checked>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="roleUpdate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="roleDelete">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="roleAssign">
-                                            <label class="form-check-label" for="roleAssign">Assign Roles</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="roleAudit">
-                                            <label class="form-check-label" for="roleAudit">View Audit Logs</label>
-                                        </div>
-                                    </td>
-                                </tr> --}}
-
-                                <!-- Reports Module -->
-                                {{-- <tr>
-                                    <td class="fw-medium">Reports</td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="reportCreate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="reportRead" checked>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="reportUpdate">
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="form-check d-flex justify-content-center">
-                                            <input class="form-check-input" type="checkbox" id="reportDelete">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="reportExport">
-                                            <label class="form-check-label" for="reportExport">Export Reports</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="reportSchedule">
-                                            <label class="form-check-label" for="reportSchedule">Schedule Reports</label>
-                                        </div>
-                                    </td>
-                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <a href="{{ route('roles.show', $role) }}" class="btn btn-outline-secondary me-2">Cancel</a>
-                    <button type="submit" class="btn btn-warning">
-                        <i class="bx bx-save me-1"></i>Update Permissions
-                    </button>
+                    {!! cancelButton(route('roles.show', $role)) !!}
+                    {!! submitEditButton() !!}
                 </div>
             </form>
         </div>

@@ -52,8 +52,11 @@ class UserController extends Controller
             'subtitle' => $user->name
         ];
 
+        $recentActivities = $user->actitityLogs;
+
         return view('users.show', compact('user'))
-            ->with('viewData', $viewData);
+            ->with('viewData', $viewData)
+            ->with('recentActivities', $recentActivities);
     }
 
     /**
@@ -176,33 +179,15 @@ class UserController extends Controller
      */
     public function activate(Request $request, User $user)
     {
-        // $userData = $request->all();
-        // $userData['is_active'] = ($userData['is_active'] == 'active');
-
-        // $validated = $user->validate('update', $userData);
-
-        // // Hash password if it was sent
-        // if (!empty($validated['password'])) {
-        //     $validated['password'] = bcrypt($validated['password']);
-        // } else {
-        //     unset($validated['password']); // Don't overwrite if null
-        // }
-
-        // $user->update($validated);
-
-        // return redirect()->route('users.show', ['user' => $user])
-        //     ->with('success', 'User activated successfully.');
-
-
-        if (!$user->is_active) {
-            $user->update(['is_active' => true]);
-
-            return redirect()->route('users.show', ['user' => $user])
-                ->with('success', 'User activated successfully.');
-        } else {
+        if ($user->is_active) {
             return redirect()->route('users.show', ['user' => $user])
                 ->with('info', 'User in inactive status.');
         }
+
+        $user->update(['is_active' => true]);
+
+        return redirect()->route('users.show', ['user' => $user])
+            ->with('success', 'User activated successfully.');
     }
 
     /**
@@ -210,14 +195,19 @@ class UserController extends Controller
      */
     public function deactivate(Request $request, User $user)
     {
-        if ($user->is_active) {
-            $user->update(['is_active' => false]);
-
+        if ($user->isSuperAdmin()) {
             return redirect()->route('users.show', ['user' => $user])
-                ->with('success', 'User deactivated successfully.');
-        } else {
-            return redirect()->route('users.show', ['user' => $user])
-                ->with('info', 'User in active status.');
+                ->with('info', 'Cannot diactivate User with Super Admin Role.');
         }
+
+        if (!$user->is_active) {
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('info', 'User in inactive status.');
+        }
+
+        $user->update(['is_active' => false]);
+
+        return redirect()->route('users.show', ['user' => $user])
+            ->with('success', 'User deactivated successfully.');
     }
 }

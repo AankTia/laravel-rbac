@@ -66,17 +66,24 @@
             </a>
 
             <ul class="menu-sub">
-                @if(auth()->user()->hasPermission('read', 'users'))
+                @if(auth()->user()->hasPermission('read', 'user'))
                 <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'users.')) active @endif">
                     <a href="{{ route('users.index') }}" class="menu-link">Users</a>
                 </li>
                 @endif
-                @if(auth()->user()->hasPermission('read', 'roles'))
+                @if(auth()->user()->hasPermission('read', 'role'))
                     <li class="menu-item @if (Str::startsWith(Route::currentRouteName(), 'roles.')) active @endif">
                         <a href="{{ route('roles.index') }}" class="menu-link">Roles</a>
                     </li>
                 @endif
             </ul>
+        </li>
+
+        <li class="menu-item {{ Route::currentRouteName() === 'home' ? 'active' : '' }}">
+            <a href="{{ route('home') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-history"></i>
+                <div data-i18n="Analytics">Activity Logs</div>
+            </a>
         </li>
 
         <li class="menu-item">

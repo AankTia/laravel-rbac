@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\TimestampAndUserTrackingTrait;
+use App\Traits\LogsActivity;
+use App\Traits\TracksChanges;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
-    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait;
+    use HasFactory, SoftDeletes, TimestampAndUserTrackingTrait, TracksChanges, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -21,7 +23,17 @@ class Role extends Model
         'description',
         'allow_to_be_assigne',
         'created_by_id',
-        'last_updated_by_id'
+        'last_updated_by_id',
+        'updated_at'
+    ];
+
+    public static $attributeLabels = [
+        'name' => 'Role Name',
+        'slug' => 'Role Identifier',
+        'description' => 'Role Description',
+        'allow_to_be_assigne' => 'Available for Assignment'
+        // 'created_at' => 'Created At',
+        // 'updated_at' => 'Updated At',
     ];
 
     protected static $rules = [
@@ -126,18 +138,33 @@ class Role extends Model
 
     public function assignPermission($moduleId, $permissionId)
     {
-        PermissionRoleModule::create([
+        return PermissionRoleModule::create([
             'role_id' => $this->id,
             'permission_id' => $permissionId,
             'module_id' => $moduleId,
         ]);
     }
 
-    public function getTotalUsers() {
+    public function getTotalUsers()
+    {
         if ($this->roleUsers) {
             return $this->roleUsers->count();
         } else {
             return 0;
         }
+    }
+
+    public function activityLogs()
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
+    }
+
+    public function getCustomActivityDescription($event)
+    {
+        return ucfirst($event) . " " . $this->name . " " . class_basename($this);
+    }
+
+    public function clearPermissions() {
+        return $this->modulePermissions()->delete();
     }
 }
