@@ -29,7 +29,8 @@ trait LogsActivity
         'updated_at',
         'deleted_at',
         'created_by_id',
-        'last_updated_by_id'
+        'last_updated_by_id',
+        'remember_token'
     ];
 
     /**

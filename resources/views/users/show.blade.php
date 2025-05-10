@@ -120,7 +120,7 @@
                                     <span class="badge badge-center rounded-pill bg-label-secondary">
                                         <i class="{{ actionIcon($log->action) }}"></i>
                                     </span>
-                                    
+
                                     {{ $log->action }} {{ $log->log_name }}
                                 </h6>
                                 <small class="text-muted">{{ humanDateTime($log->created_at) }}</small>
@@ -168,8 +168,7 @@
                     <em><i class="{{ userIcon() }}"></i> {{ $user->lastUpdaterName() }}</em>
                 </div>
 
-                {{-- <hr /> --}}
-
+                @if ($lastActivity)
                 <div class="mt-4 mb-4">
                     {{ $lastActivity->description }}
                 </div>
@@ -179,6 +178,7 @@
                 <a href="{{ route("users.activity-logs", $user) }}" class="btn btn-sm btn-outline-primary mt-4">
                     <i class="{{ historyIcon() }}"></i> Show All Histories
                 </a>
+                @endif
             </div>
         </div>
         @endif
