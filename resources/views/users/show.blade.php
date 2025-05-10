@@ -120,41 +120,50 @@
     </div>
 
     <div class="col-md-4">
+
+        @if ($user->creatorName() || $user->createdAt())
         <div class="card mb-4">
             <div class="card-body">
-                <small class="card-text text-uppercase text-muted small">Created</small>
-                <ul class="list-unstyled my-3 py-1">
-                    @if ($user->created_at)
-                    <li class="d-flex align-items-center mb-4">
-                        <i class="{{ clockIcon() }}"></i>
-                        <span class="fw-medium mx-2">{{ humanDateTime($user->created_at) }}</span>
-                    </li>
-                    @endif
-
-                    @if ($user->creatorName())
-                    <li class="d-flex align-items-center mb-4">
-                        <i class="{{ userIcon() }}"></i>
-                        <span class="fw-medium mx-2">{{ $user->creatorName() }}</span>
-                    </li>
-                    @endif
-                </ul>
-
-                @if ($user->lastUpdaterName() || $user->lastUpdate())
+                <h5 class="card-title m-0 me-2 mb-2">Created</h5>
                 <hr>
-                <small class="card-text text-uppercase text-muted small">Last Updated</small>
-                <ul class="list-unstyled mb-0 mt-3 pt-1">
-                    <li class="d-flex align-items-center mb-4">
-                        <i class="{{ clockIcon() }}"></i>
-                        <span class="fw-medium mx-2">{{ humanDateTime($user->updated_at) }}</span>
-                    </li>
-                    <li class="d-flex align-items-center mb-4">
-                        <i class="{{ userIcon() }}"></i>
-                        <span class="fw-medium mx-2">{{ $user->lastUpdaterName() }}</span>
-                    </li>
-                </ul>
-                @endif
+
+                <div class="d-flex align-items-center justify-content-between">
+                    @if ($user->createdAt())
+                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($user->created_at) }}</em>
+                    @endif
+                    @if ($user->creatorName())
+                    <em><i class="{{ userIcon() }}"></i> {{ $user->creatorName() }}</em>
+                    @endif
+                </div>
             </div>
         </div>
+
+
+        @if ($user->lastUpdaterName() || $user->lastUpdate())
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title m-0 me-2 mb-2">Last Updated</h5>
+                <hr>
+                <div class="d-flex align-items-center justify-content-between">
+                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($user->updated_at) }}</em>
+                    <em><i class="{{ userIcon() }}"></i> {{ $user->lastUpdaterName() }}</em>
+                </div>
+
+                {{-- <hr /> --}}
+
+                {{-- <div class="mb-4">
+                    {{ $lastActivity->description }}
+                </div> --}}
+
+                {{-- @include('activity_logs.partials._details', ['activity' => $lastActivity]) --}}
+
+                {{-- <a href="{{ route("users.activity-logs", $user) }}" class="btn btn-sm btn-outline-primary mt-4">
+                    <i class="{{ historyIcon() }}"></i> Show All Histories
+                </a> --}}
+            </div>
+        </div>
+        @endif
+        @endif
     </div>
 </div>
 @endsection
