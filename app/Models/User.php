@@ -155,7 +155,7 @@ class User extends Authenticatable
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
-    public function actitityLogs()
+    public function logs()
     {
         return $this->hasMany(ActivityLog::class);
     }
@@ -164,52 +164,4 @@ class User extends Authenticatable
     {
         return ucfirst($event) . " Role: {$this->name}";
     }
-
-    // /**
-    //  * Check if user is admin.
-    //  *
-    //  * @return bool
-    //  */
-    // public function isAdmin()
-    // {
-    //     return $this->hasRole('admin');
-    // }
-
-    // public function createdBy()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-    // public function lastUpdatedBy()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-    // public function lastUpdate() {
-    //     if ($this->created_at == $this->updated_at) {
-    //         return null;
-    //     } else {
-    //         return $this->updated_at->format('d M Y, h:i A');
-    //     }
-    // }
-
-    // /**
-    //  * Check if user is manager.
-    //  *
-    //  * @return bool
-    //  */
-    // public function isManager()
-    // {
-    //     return $this->hasRole('manager');
-    // }
-
-    // /**
-    //  * Check if user is staff.
-    //  *
-    //  * @return bool
-    //  */
-    // public function isStaff()
-    // {
-    //     return $this->hasRole('staff');
-    // }
 }
