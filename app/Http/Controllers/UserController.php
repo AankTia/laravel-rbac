@@ -96,6 +96,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'name'      => 'required|string|max:255',
+                'email'     => 'required|email|unique:users,email',
+                'role_id'   => 'required|exists:roles,id',
+                'is_active' => 'required',
+                'password'  => 'required|min:8|confirmed',
+            ],
+            [
+                'role_id.required' => 'The role field is required.',
+                'role_id.exists' => 'The selected role is not exists.',
+                'is_active.required' => 'The status field is required.'
+            ]
+        );
+
         $userData = $request->all();
         $userData['is_active'] = ($userData['is_active'] == 'active');
 

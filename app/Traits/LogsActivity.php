@@ -30,6 +30,7 @@ trait LogsActivity
         'deleted_at',
         'created_by_id',
         'last_updated_by_id',
+        'password',
         'remember_token'
     ];
 
