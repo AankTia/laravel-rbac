@@ -40,6 +40,13 @@ class UserController extends Controller
                 $q->where('name', 'LIKE', "%{$keyword}%");
             });
         }
+        if ($request->has('search_status')) {
+            if ($request->search_status === 'active') {
+                $query->where('is_active', true);
+            } elseif($request->search_status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
         $users = $query->orderBy('id', 'asc')
             ->paginate(10);
 

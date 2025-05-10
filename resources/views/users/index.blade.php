@@ -46,10 +46,10 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <select class="form-select form-select-sm mb-3">
-                                        <option selected="">-- Status --</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">Inactive</option>
+                                    <select name="search_status" class="form-select form-select-sm mb-3">
+                                        <option value="">-- Status --</option>
+                                        <option value="active" {{ request('search_status') === 'active' ? 'selected' : '' }}>Active</option>
+                                        <option value="inactive" {{ request('search_status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
                                     </select>
                                 </div>
 
