@@ -160,7 +160,7 @@ class UserController extends Controller
             'role_id'   => 'required|exists:roles,id',
             'is_active' => 'required',
         ];
-        if($request->has('password') && $request->password != null) {
+        if ($request->has('password') && $request->password != null) {
             $validationRule['password'] = 'required|min:8|confirmed';
         }
 
@@ -189,19 +189,35 @@ class UserController extends Controller
         $user->update($validated);
 
         if ($request->role_id) {
+            $newRoleName = Role::find($request->role_id)->name;
+
             if ($user->userRole) {
-                $user->userRole->update([
-                    'role_id' => $request->role_id,
-                    'assigned_by_id' => Auth::id(),
-                    'assigned_at' => Carbon::now()
-                ]);
+                if ($user->userRole->role_id != $request->role_id) {
+                    $oldRoleName = $user->getRoleName();
+
+                    $updatedUserRole = $user->userRole->update([
+                        'role_id' => $request->role_id,
+                        'assigned_by_id' => Auth::id(),
+                        'assigned_at' => Carbon::now()
+                    ]);
+
+                    if ($updatedUserRole) {
+                        $historyLogMessage = 'Change User Role from ' . $oldRoleName . ' to ' . $newRoleName;
+                        $user->customLogActivity('change-user-role', $historyLogMessage);
+                    }
+                }
             } else {
-                UserRole::create([
+                $createdUserRole = UserRole::create([
                     'user_id' => $user->id,
                     'role_id' => $request->role_id,
                     'assigned_by_id' => Auth::id(),
                     'assigned_at' => Carbon::now()
                 ]);
+
+                if ($createdUserRole) {
+                    $historyLogMessage = 'Set User Role to ' . $newRoleName;
+                    $user->customLogActivity('set-user-role', $historyLogMessage);
+                }
             }
         }
 

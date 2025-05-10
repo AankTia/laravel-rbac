@@ -366,8 +366,8 @@ class RoleController extends Controller
 
         $unsetRole = $user->unsetRole();
         if ($unsetRole) {
-            $role->customLogActivity('delete-user', $message);
-            $user->customLogActivity('delete-user', $message);
+            $role->customLogActivity('unset-user-role', $message);
+            $user->customLogActivity('unset-user-role', $message);
 
             return redirect()
                 ->route('roles.show', $role)

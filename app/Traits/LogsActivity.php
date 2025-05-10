@@ -48,22 +48,7 @@ trait LogsActivity
         });
 
         static::updated(function ($model) {
-            // Check if a status change occurred that indicates activation/deactivation
-            if ($model->isDirty('is_active')) {
-                $newValue = $model->getAttribute('is_active');
-                $oldValue = $model->getOriginal('is_active');
-
-                // Determine if this is activation or deactivation
-                if ($newValue != $oldValue) {
-                    if($newValue === 1) {
-                        $model->logActivity('activated');
-                    } else {
-                        $model->logActivity('deactivated');
-                    }
-                }
-            } else {
-                $model->logActivity('updated');
-            }
+            $model->logActivity('updated');
         });
 
         static::deleted(function ($model) {
@@ -106,6 +91,14 @@ trait LogsActivity
             if (empty($changedAttributes)) {
                 return null;
             }
+            
+            if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
+                if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
+                    $event = 'activated';
+                } else {
+                    $event = 'deactivated';
+                }
+            } 
             
             $originalAttributes = $this->getOriginalActivityAttributes($dirty);
 
