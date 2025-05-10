@@ -28,6 +28,7 @@
 
 -   [ ] Activate
 -   [ ] Deactivate
+-   [ ] enhance data structure, different info for user timeline and module timeline
 
 ## User
 
