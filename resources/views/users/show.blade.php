@@ -21,9 +21,10 @@
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
         {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
+        {!! createButton(route('users.create'), 'user.create', 'User') !!}
 
         @if(isUserCan('update', 'user'))
-        <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-primary">
+        <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-sm btn-primary">
             <i class="bx bx-pencil me-1"></i> Edit
         </a>
         @endif
@@ -32,7 +33,7 @@
         @if ($user->is_active && isUserCan('deactivate', 'user'))
         <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
             @csrf
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-warning">
                 <i class="bx bx-user-x me-1"></i> Deactivate
             </button>
         </form>
@@ -41,7 +42,7 @@
         @if (!$user->is_active && isUserCan('activate', 'user'))
         <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
             @csrf
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-info">
                 <i class="bx bx-user-check me-1"></i> Activate
             </button>
         </form>
@@ -52,7 +53,7 @@
         <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-danger">
+            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">
                 <i class="bx bx-trash me-1"></i> Delete
             </button>
         </form>
