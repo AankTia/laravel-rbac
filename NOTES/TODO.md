@@ -32,6 +32,7 @@
 ## User
 
 -   [ ] Enhance button to use button helper
+-   [ ] dynamic user profile
 
 ## Seeder
 
@@ -42,7 +43,9 @@
 -   [ ] split contents
 
 ## Sidebar
-- [ ] make it fix position
+
+-   [ ] make it fix position
 
 ## Top bar
-- [ ] make it fix position
+
+-   [ ] make it fix position

@@ -27,6 +27,23 @@
 @endsection
 
 @section('content')
+<style>
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-right: 20px;
+        background-color: #c2beff;
+    }
+
+    .profile-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+
 <div class="row">
     <div class="col-md-8">
         <div class="card shadow-sm mb-4">
@@ -68,10 +85,13 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                    <div class="col-md-2">
+
+                        <div class="profile-image">
+                            <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="Profile Photo">
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-10">
                         <div class="col-md-6 mb-4">
                             <h3 class="h6 text-muted">Name</h3>
                             <div class="mb-2">{{ $user->name }}</div>
@@ -79,6 +99,10 @@
                         <div class="col-md-6 mb-4">
                             <h3 class="h6 text-muted">Email</h3>
                             <div class="mb-2">{{ $user->email }}</div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h6 text-muted">Role</h3>
+                            <div class="mb-2">{{ $user->getRoleName() }}</div>
                         </div>
                         <div class="col-md-6 mb-4">
                             <h3 class="h6 text-muted">Status</h3>
@@ -119,89 +143,6 @@
             <div class="card-body">
                 ...
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- User Profile Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="text-center">
-                    <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="User Avatar" class="user-image-profile mb-4">
-                    <h4>{{ $user->name }}</h4>
-                    <p class="text-muted">{{ $user->email }}</p>
-                    <div class="d-flex justify-content-center mb-3">
-                        <span class="badge bg-primary p-2" id="userRole">{{ $user->getRoleName() }}</span>
-                    </div>
-                </div>
-
-                <div class="row text-center">
-                    <div class="col">
-                        <span class="d-block fw-bold">Last Login</span>
-                        <small class="text-muted" id="lastLogin">...</small>
-                    </div>
-                    <div class="col">
-                        <span class="d-block fw-bold">Status</span>
-                        @if ($user->is_active)
-                        <span class="badge rounded-pill bg-success">Active</span>
-                        @else
-                        <span class="badge rounded-pill bg-danger">Inactive</span>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="card bg-light mt-4">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="small text-muted">Created By</div>
-                            <div>{{ $user->creatorName() }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="small text-muted">Created On</div>
-                            <div>{{ $user->createdAt() }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="small text-muted">Last Updated By</div>
-                            <div>{{ $user->lastUpdaterName() ?? '-' }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="small text-muted">Last Updated</div>
-                            <div>{{ $user->lastUpdate() ?? '-' }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- User Details -->
-    <div class="col-md-8">
-        <!-- Activity Log -->
-        <div class="mb-4">
-            <h4 class="fw-bold">Recent Activity</h4>
-        </div>
-
-        <div class="position-relative ps-4 mt-4">
-            <div class="timeline-line"></div>
-            @foreach ($recentActivities as $activity)
-            <div class="mb-4 d-flex align-items-start gap-3">
-                <div class="timeline-icon {{ $activity->getActionTextColor() }}">
-                    <i class="{{ $activity->getActionIcon() }}"></i>
-                </div>
-                <div>
-                    <strong>{{ $activity->description }}</strong><br>
-
-                    <small class="text-muted">
-                        <i class="{{ clockIcon() }}"></i> {{ $activity->created_at }}
-                    </small>
-                </div>
-            </div>
-            @endforeach
         </div>
     </div>
 </div>
