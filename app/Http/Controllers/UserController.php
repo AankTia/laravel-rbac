@@ -18,11 +18,10 @@ class UserController extends Controller
     {
         $this->middleware('check.permission:user,read')->only('index', 'show');
         $this->middleware('check.permission:user,create')->only('create', 'store');
-        // edit
-        // update
-        // destroy
-        // activate
-        // deactivate
+        $this->middleware('check.permission:user,update')->only('edit', 'update');
+        $this->middleware('check.permission:user,delete')->only('destroy');
+        $this->middleware('check.permission:user,activate')->only('activate');
+        $this->middleware('check.permission:user,deactivate')->only('deactivate');
     }
 
     /**
