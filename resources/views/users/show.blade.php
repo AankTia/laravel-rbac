@@ -148,10 +148,10 @@
 
                 <div class="d-flex align-items-center justify-content-between">
                     @if ($user->createdAt())
-                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($user->created_at) }}</em>
+                    <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($user->created_at) }}</em>
                     @endif
                     @if ($user->creatorName())
-                    <em><i class="{{ userIcon() }}"></i> {{ $user->creatorName() }}</em>
+                    <em><i class="{{ getIcon('user') }}"></i> {{ $user->creatorName() }}</em>
                     @endif
                 </div>
             </div>
@@ -164,8 +164,8 @@
                 <h5 class="card-title m-0 me-2 mb-2">Last Updated</h5>
                 <hr>
                 <div class="d-flex align-items-center justify-content-between">
-                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($user->updated_at) }}</em>
-                    <em><i class="{{ userIcon() }}"></i> {{ $user->lastUpdaterName() }}</em>
+                    <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($user->updated_at) }}</em>
+                    <em><i class="{{ getIcon('user') }}"></i> {{ $user->lastUpdaterName() }}</em>
                 </div>
 
                 @if ($lastActivity)
@@ -176,7 +176,7 @@
                 @include('activity_logs.partials._details', ['activity' => $lastActivity])
 
                 <a href="{{ route("users.activity-logs", $user) }}" class="btn btn-sm btn-outline-primary mt-4">
-                    <i class="{{ historyIcon() }}"></i> Show All Histories
+                    <i class="{{ getIcon('history') }}"></i> Show All Histories
                 </a>
                 @endif
             </div>

@@ -78,13 +78,13 @@
                     <h3 class="h6 text-muted">Created</h3>
                     @if ($role->creatorName())
                     <div class="mb-1">
-                        <i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}
+                        <i class="{{ getIcon('user') }}"></i> {{ $role->creatorName() }}
                     </div>
                     @endif
 
                     @if ($role->createdAt())
                     <div>
-                        <i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}
+                        <i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($role->created_at) }}
                     </div>
                     @endif
                 </div>
@@ -94,10 +94,10 @@
                 <div class="col-md-12 mb-4">
                     <h3 class="h6 text-muted">Last Updated By</h3>
                     <div class="mb-1">
-                        <i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}
+                        <i class="{{ getIcon('user') }}"></i> {{ $role->lastUpdaterName() }}
                     </div>
                     <div>
-                        <i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}
+                        <i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($role->updated_at) }}
                     </div>
                 </div>
                 @endif
@@ -146,11 +146,11 @@
                                         {{ $activity->description }}
                                     </h6>
                                     <small class="text-muted">
-                                        <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($activity->created_at) }}</em>
+                                        <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($activity->created_at) }}</em>
                                     </small>
                                 </div>
                                 <div class="d-flex align-item-center">
-                                    <em><small class="text-muted"><i class="{{ userIcon() }}"></i> {{ $activity->user->name }} </small></em>
+                                    <em><small class="text-muted"><i class="{{ getIcon('user') }}"></i> {{ $activity->user->name }} </small></em>
                                 </div>
                             </div>
                         </div>

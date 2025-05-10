@@ -92,10 +92,10 @@
 
                 <div class="d-flex align-items-center justify-content-between">
                     @if ($role->createdAt())
-                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->created_at) }}</em>
+                    <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($role->created_at) }}</em>
                     @endif
                     @if ($role->creatorName())
-                    <em><i class="{{ userIcon() }}"></i> {{ $role->creatorName() }}</em>
+                    <em><i class="{{ getIcon('user') }}"></i> {{ $role->creatorName() }}</em>
                     @endif
                 </div>
             </div>
@@ -107,8 +107,8 @@
             <div class="card-body">
                 <h5 class="card-title m-0 me-2 mb-2">Last Updated</h5>
                 <div class="d-flex align-items-center justify-content-between">
-                    <em><i class="{{ clockIcon() }}"></i> {{ humanDateTime($role->updated_at) }}</em>
-                    <em><i class="{{ userIcon() }}"></i> {{ $role->lastUpdaterName() }}</em>
+                    <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($role->updated_at) }}</em>
+                    <em><i class="{{ getIcon('user') }}"></i> {{ $role->lastUpdaterName() }}</em>
                 </div>
 
                 <hr />
@@ -120,7 +120,7 @@
                 @include('activity_logs.partials._details', ['activity' => $lastActivity])
 
                 <a href="{{ route("roles.activity-logs", $role) }}" class="btn btn-sm btn-outline-primary mt-4">
-                    <i class="{{ historyIcon() }}"></i> Show All Histories
+                    <i class="{{ getIcon('history') }}"></i> Show All Histories
                 </a>
             </div>
         </div>

@@ -7,7 +7,7 @@ function backButton($route, $permission, $label)
         if ($label == null || trim($label) == '') {
             $label = 'Back';
         }
-        $icon = leftArrowIcon();
+        $icon = getIcon('left-arrow');
 
         return <<<HTML
             <a href="{$route}" class="btn btn-sm btn-outline-secondary me-2">
@@ -32,7 +32,7 @@ function createButton($route, $permission, $label)
 {
     $explodedPermission = explodePermission($permission);
     if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
-        $icon = createIcon();
+        $icon = getIcon('create');
         return <<<HTML
                 <a href='{$route}' class='btn btn-sm btn-primary'>
                     <i class='{$icon}'></i> Create New {$label}
@@ -52,7 +52,7 @@ function submitCreateButton($label = 'Save')
 
 function editButton($route, $label = 'Edit')
 {
-    $icon = updateIcon();
+    $icon = getIcon('edit');
     return <<<HTML
             <a href='{$route}' class='btn btn-sm btn-warning'>
                 <i class='{$icon}'></i> {$label}
@@ -69,7 +69,7 @@ function submitEditButton($label = 'Update')
 
 function deleteButton($route, $label = 'Delete')
 {
-    $deleteIcon = deleteIcon();
+    $deleteIcon = getIcon('delete');
     $csrf = csrf_field();
     $method = method_field('DELETE');
 
@@ -89,7 +89,7 @@ function deleteUserFromRoleButton($route)
     if (isUserCan('delete-user', 'role')) {
         $csrf = csrf_field();
         $method = method_field('DELETE');
-        $deleteIcon = deleteIcon();
+        $deleteIcon = getIcon('delete');
 
         return <<<HTML
             <form action="{$route}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this User from Role?');">
@@ -109,7 +109,7 @@ function buttonIconForShow($route, $permission)
 {
     $explodedPermission = explodePermission($permission);
     if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
-        $icon = getIconFor('show');
+        $icon = getIcon('show');
         return <<<HTML
                 <a href='{$route}' class='btn btn-icon btn-outline-primary mb-2'>
                     <span class="tf-icons {$icon}"></span>
@@ -124,7 +124,7 @@ function buttonIconForEdit($route, $permission)
 {
     $explodedPermission = explodePermission($permission);
     if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
-        $icon = getIconFor('edit');
+        $icon = getIcon('edit');
         return <<<HTML
                 <a href='{$route}' class='btn btn-icon btn-outline-warning mb-2'>
                     <span class="tf-icons {$icon}"></span>
@@ -137,7 +137,7 @@ function buttonIconForEdit($route, $permission)
 
 function submitButtonIconForDelete()
 {
-    $icon = getIconFor('delete');
+    $icon = getIcon('delete');
     return <<<HTML
         <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-icon btn-outline-danger mb-2">
             <span class="tf-icons {$icon}"></span>

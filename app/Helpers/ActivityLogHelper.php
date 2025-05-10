@@ -39,26 +39,26 @@ function actionIcon($action)
 
     switch ($action) {
         case 'created':
-            $result = createIcon();
+            $result = getIcon('create');
             break;
         case 'updated':
-            $result = updateIcon();
+            $result = getIcon('edit');
             break;
         case 'role-permission-updated';
-            $result = lockIcon();
+            $result = getIcon('lock');
             break;
         case 'deleted':
-            $result = deleteIcon();
+            $result = getIcon('delete');
             break;
         case 'activated':
-            $result = activateIcon();
+            $result = getIcon('activate');
             break;
         case 'deactivated':
-            $result = deactivateIcon();
+            $result = getIcon('deactivate');
             break;
 
         case 'delete-user':
-            $result = userMinusIcon();
+            $result = getIcon('delete-user');
             break;
         default:
             $result = '';
