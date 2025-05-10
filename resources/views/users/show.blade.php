@@ -46,7 +46,7 @@
                         @if ($user->is_active && isUserCan('deactivate', 'user'))
                         <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-warning">
+                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-secondary">
                                 <i class="bx bx-user-x me-1"></i> Deactivate
                             </button>
                         </form>

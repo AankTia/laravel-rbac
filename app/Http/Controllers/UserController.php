@@ -207,7 +207,7 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        $user->update(['is_active' => true]);
+        $user->update(['is_active' => 1]);
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User activated successfully.');
@@ -228,7 +228,7 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        $user->update(['is_active' => false]);
+        $user->update(['is_active' => 0]);
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User deactivated successfully.');

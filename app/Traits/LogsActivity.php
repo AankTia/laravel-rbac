@@ -47,25 +47,22 @@ trait LogsActivity
         });
 
         static::updated(function ($model) {
-            // // Check if a status change occurred that indicates activation/deactivation
-            // if ($model->isDirty('status') || $model->isDirty('active') || $model->isDirty('is_active')) {
-            //     $statusField = $model->isDirty('status') ? 'status' : 
-            //                   ($model->isDirty('active') ? 'active' : 'is_active');
+            // Check if a status change occurred that indicates activation/deactivation
+            if ($model->isDirty('is_active')) {
+                $newValue = $model->getAttribute('is_active');
+                $oldValue = $model->getOriginal('is_active');
 
-            //     $newValue = $model->getAttribute($statusField);
-            //     $oldValue = $model->getOriginal($statusField);
-
-            //     // Determine if this is activation or deactivation
-            //     if ($model->isActivationChange($oldValue, $newValue)) {
-            //         if ($model->isActivationValue($newValue)) {
-            //             $model->logActivity('activated');
-            //         } else {
-            //             $model->logActivity('deactivated');
-            //         }
-            //     }
-            // }
-
-            $model->logActivity('updated');
+                // Determine if this is activation or deactivation
+                if ($newValue != $oldValue) {
+                    if($newValue === 1) {
+                        $model->logActivity('activated');
+                    } else {
+                        $model->logActivity('deactivated');
+                    }
+                }
+            } else {
+                $model->logActivity('updated');
+            }
         });
 
         static::deleted(function ($model) {

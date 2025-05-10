@@ -26,8 +26,8 @@
 
 ## Activity Log
 
--   [ ] Activate
--   [ ] Deactivate
+-   [x] Activate
+-   [x] Deactivate
 -   [ ] enhance data structure, different info for user timeline and module timeline
 
 ## User
