@@ -37,7 +37,7 @@
                     </button>
                 </h2>
 
-                <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
+                <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" style="">
                     <div class="accordion-body">
                         <form action="{{ route('users.index') }}" method="GET">
                             <div class="row">
@@ -66,7 +66,6 @@
 
                                 <div class="col-md-2">
                                     <button type="submit" class="btn btn-sm btn-primary mb-3">Search</button>
-                                    <button type="button" class="btn btn-sm btn-secondary mb-3">Reset</button>
                                 </div>
                             </div>
                         </form>
