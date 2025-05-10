@@ -151,15 +151,15 @@
 
                 {{-- <hr /> --}}
 
-                {{-- <div class="mb-4">
+                <div class="mt-4 mb-4">
                     {{ $lastActivity->description }}
-                </div> --}}
+                </div>
 
-                {{-- @include('activity_logs.partials._details', ['activity' => $lastActivity]) --}}
+                @include('activity_logs.partials._details', ['activity' => $lastActivity])
 
-                {{-- <a href="{{ route("users.activity-logs", $user) }}" class="btn btn-sm btn-outline-primary mt-4">
+                <a href="{{ route("users.activity-logs", $user) }}" class="btn btn-sm btn-outline-primary mt-4">
                     <i class="{{ historyIcon() }}"></i> Show All Histories
-                </a> --}}
+                </a>
             </div>
         </div>
         @endif

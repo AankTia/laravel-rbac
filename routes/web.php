@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::post('/users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
     Route::post('/users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    Route::get('/users/{user}/activity-logs', [RoleController::class, 'activityLogs'])->name('users.activity-logs');
 
     // Roles
     Route::resource('/roles', RoleController::class);
