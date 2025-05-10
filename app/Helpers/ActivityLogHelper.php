@@ -2,15 +2,6 @@
 
 function actionTimelinePointColor($action)
 {
-    // timeline-point-primary
-    // timeline-point-secondary
-    // timeline-point-success
-    // timeline-point-info
-    // 
-    // 
-    // timeline-point-dark
-    // timeline-point-gray
-
     $result = '';
 
     switch ($action) {
@@ -42,7 +33,7 @@ function actionTimelinePointColor($action)
     return $result;
 }
 
-function actionIcon($action) // need move to helper
+function actionIcon($action)
 {
     $result = '';
 
