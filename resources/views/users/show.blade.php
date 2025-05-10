@@ -119,6 +119,9 @@
                                 <small class="text-muted">12 min ago</small>
                             </div>
                             <p class="mb-2">
+                                <small class="text-muted">User Name</small>
+                            </p>
+                            <p class="mb-2">
                                 Invoices have been paid to the company
                             </p>
                             <div class="d-flex align-items-center mb-2">
