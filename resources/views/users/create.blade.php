@@ -1,14 +1,25 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', " Create New User| Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('users.index') }}">User</a>
+        </li>
+        <li class="breadcrumb-item active">Create New</li>
+    </ol>
+</nav>
+@endsection
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
+        {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
     </div>
 </div>
 @endsection
@@ -17,6 +28,10 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="pb-1 mb-2">Create New User</h5>
+                <hr>
+            </div>
             <div class="card-body">
                 <form method="post" action="{{ route('users.store') }}">
                     @csrf
@@ -48,9 +63,9 @@
                                 <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
                                     <option value="" {{ old('role_id') === null || old('role_id') === '' ? 'selected' : '' }}>-- Select Role --</option>
                                     @foreach ($roleOptions as $id => $name)
-                                        <option value="{{ $id }}" {{ old('role_id') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
+                                    <option value="{{ $id }}" {{ old('role_id') == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('role_id')
@@ -65,9 +80,9 @@
                                 <select name="is_active" class="form-control @error('is_active') is-invalid @enderror" aria-label="Role select">
                                     <option value="" {{ old('is_active') === null || old('is_active') === '' ? 'selected' : '' }}>-- Select Status --</option>
                                     @foreach (['active' => 'Active', 'inactive' => 'Inactive'] as $id => $name)
-                                        <option value="{{ $id }}" {{ old('is_active') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
+                                    <option value="{{ $id }}" {{ old('is_active') == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('is_active')
@@ -115,10 +130,11 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
 
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                    <div class="mt-4 text-end">
+                        {!! cancelButton(route('users.index')) !!}
+                        {!! submitCreateButton() !!}
                     </div>
                 </form>
             </div>

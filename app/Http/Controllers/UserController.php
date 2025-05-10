@@ -17,8 +17,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('check.permission:user,read')->only('index', 'show');
-        // create
-        // store
+        $this->middleware('check.permission:user,create')->only('create', 'store');
         // edit
         // update
         // destroy
@@ -87,15 +86,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        $viewData = [
-            'title' => "Create New User",
-        ];
-
         $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'id');
 
-        return view('users.create')
-            ->with('viewData', $viewData)
-            ->with('roleOptions', $roleOptions);
+        return view('users.create', compact('roleOptions'));
     }
 
     /**
