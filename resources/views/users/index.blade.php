@@ -106,30 +106,17 @@
                             {!! userStatusBadge($user->is_active) !!}
                         </td>
                         <td>{{ $user->getRoleName() }}</td>
-                        <td>
-                            <div class="text-end">
-                                @if(isUserCan('read', 'user'))
-                                <a href="{{ route('users.show', $user) }}" class="btn btn-icon btn-outline-primary">
-                                    <i class="bx bx-show-alt me-1"></i>
-                                </a>
-                                @endif
+                        <td class="text-end">
+                            {!! buttonIconForShow(route('users.show', $user), 'user.read') !!}
+                            {!! buttonIconForEdit(route('users.edit', $user), 'user.update') !!}
 
-                                @if(isUserCan('update', 'user'))
-                                <a href="{{ route('users.edit', $user) }}" class="btn btn-icon btn-outline-warning">
-                                    <i class="bx bx-edit-alt me-1"></i>
-                                </a>
-                                @endif
-
-                                @if(isUserCan('delete', 'user'))
-                                <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-icon btn-outline-danger">
-                                        <i class="bx bx-trash me-1"></i>
-                                    </button>
-                                </form>
-                                @endif
-                            </div>
+                            @if(isUserCan('delete', 'user'))
+                            <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                {!! submitButtonIconForDelete() !!}
+                            </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

@@ -42,7 +42,7 @@
   display: block !important;
 }
 
-.demo-inline-spacing > * {
+.inline-spacing > * {
   margin: 1rem 0.375rem 0 0 !important;
 }
 

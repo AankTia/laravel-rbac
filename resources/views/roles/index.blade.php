@@ -69,32 +69,18 @@
                         </td>
                         <td>{{ $role->description }}</td>
                         <td class="text-center">{{ $role->getTotalUsers() }}</td>
-                        <td>
-                            <div class="row">
-                                <div class="text-end">
-                                    @if(isUserCan('read', 'role'))
-                                    <a href="{{ route('roles.show', $role) }}" class="btn btn-icon btn-outline-primary mt-2">
-                                        <i class="bx bx-show-alt me-1"></i>
-                                    </a>
-                                    @endif
+                        <td class="text-end">
 
-                                    @if(isUserCan('update', 'role'))
-                                    <a href="{{ route('roles.edit', $role) }}" class="btn btn-icon btn-outline-warning mt-2">
-                                        <i class="bx bx-edit-alt me-1"></i>
-                                    </a>
-                                    @endif
+                            {!! buttonIconForShow(route('roles.show', $role), 'role.read') !!}
+                            {!! buttonIconForEdit(route('roles.edit', $role), 'role.update') !!}
 
-                                    @if(isUserCan('delete', 'role'))
-                                    <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-icon btn-outline-danger mt-2">
-                                            <i class="bx bx-trash me-1"></i>
-                                        </button>
-                                    </form>
-                                    @endif
-                                </div>
-                            </div>
+                            @if(isUserCan('delete', 'role'))
+                            <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                {!! submitButtonIconForDelete() !!}
+                            </form>
+                            @endif
                         </td>
                     </tr>
                     @empty

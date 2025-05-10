@@ -1,5 +1,20 @@
 <?php
 
+function getIconFor($name)
+{
+    $icons = [
+        'show' => 'bx bx-show-alt',
+        'edit' => 'bx bx-edit-alt',
+        'delete' => 'bx bx-trash'
+    ];
+
+    if (isset($icons[$name])) {
+        return $icons[$name];
+    } else {
+        return null;
+    }
+}
+
 if (!function_exists('createIcon')) {
     function createIcon()
     {

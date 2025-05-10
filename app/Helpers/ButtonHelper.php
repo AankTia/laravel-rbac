@@ -104,3 +104,43 @@ function deleteUserFromRoleButton($route)
         return null;
     }
 }
+
+function buttonIconForShow($route, $permission)
+{
+    $explodedPermission = explodePermission($permission);
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+        $icon = getIconFor('show');
+        return <<<HTML
+                <a href='{$route}' class='btn btn-icon btn-outline-primary mb-2'>
+                    <span class="tf-icons {$icon}"></span>
+                </a>
+            HTML;
+    } else {
+        return null;
+    }
+}
+
+function buttonIconForEdit($route, $permission)
+{
+    $explodedPermission = explodePermission($permission);
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+        $icon = getIconFor('edit');
+        return <<<HTML
+                <a href='{$route}' class='btn btn-icon btn-outline-warning mb-2'>
+                    <span class="tf-icons {$icon}"></span>
+                </a>
+            HTML;
+    } else {
+        return null;
+    }
+}
+
+function submitButtonIconForDelete()
+{
+    $icon = getIconFor('delete');
+    return <<<HTML
+        <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-icon btn-outline-danger mb-2">
+            <span class="tf-icons {$icon}"></span>
+        </button>
+    HTML;
+}
