@@ -32,7 +32,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->with('userRole');
         if ($request->has('search_name')) {
             $keyword = $request->search_name;
 
@@ -43,16 +43,29 @@ class UserController extends Controller
         if ($request->has('search_status')) {
             if ($request->search_status === 'active') {
                 $query->where('is_active', true);
-            } elseif($request->search_status === 'inactive') {
+            } elseif ($request->search_status === 'inactive') {
                 $query->where('is_active', false);
             }
         }
+        if ($request->has('search_role')) {
+            $roleId = Role::where('slug', $request->search_role)->pluck('id')->first();
+            if ($roleId) {
+                $query->whereRelation('userRole', 'role_id', $roleId);
+            }
+        }
+
         $users = $query->orderBy('id', 'asc')
             ->paginate(10);
 
         $users->appends($request->all());
 
-        return view('users.index', compact('users'));
+        if (isSuperAdmin()) {
+            $roleOptions = Role::all()->pluck('name', 'slug');
+        } else {
+            $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'slug');
+        }
+
+        return view('users.index', compact('users', 'roleOptions'));
     }
 
     /**

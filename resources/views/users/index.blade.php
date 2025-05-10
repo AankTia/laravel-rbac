@@ -54,11 +54,13 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <select class="form-select form-select-sm mb-3">
-                                        <option selected="">-- Role --</option>
-                                        <option value="1">Super Admin</option>
-                                        <option value="2">Admin</option>
-                                        <option value="3">Viewer</option>
+                                    <select name="search_role" class="form-select form-select-sm mb-3">
+                                        <option value="">-- Role --</option>
+                                        @foreach ($roleOptions as $slug => $name)
+                                        <option value="{{ $slug }}" {{ request('search_status') == $slug ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
@@ -133,7 +135,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td>
+                        <td colspan="4">
                             <div class="text-center">No data to show</div>
                         </td>
                     </tr>

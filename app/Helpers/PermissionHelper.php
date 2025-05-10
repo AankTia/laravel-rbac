@@ -12,6 +12,11 @@ function currentUserId()
     return Auth::id();
 }
 
+function isSuperAdmin()
+{
+    return Auth::user()->isSuperAdmin();
+}
+
 function isUserCan($action, $module)
 {
     if (Auth::user()) {
