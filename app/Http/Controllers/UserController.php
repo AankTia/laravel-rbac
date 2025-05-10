@@ -140,19 +140,13 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $viewData = [
-            'title' => "Edit User"
-        ];
-
-        if (Auth::user()->isSuperAdmin()) {
+        if (isSuperAdmin()) {
             $roleOptions = Role::all()->pluck('name', 'id');
         } else {
             $roleOptions = Role::where('allow_to_be_assigne', true)->pluck('name', 'id');
         }
 
-        return view('users.edit', compact('user'))
-            ->with('viewData', $viewData)
-            ->with('roleOptions', $roleOptions);
+        return view('users.edit', compact('user', 'roleOptions'));
     }
 
     /**
@@ -160,6 +154,26 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $validationRule = [
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email,' . $user->id,
+            'role_id'   => 'required|exists:roles,id',
+            'is_active' => 'required',
+        ];
+        if($request->has('password') && $request->password != null) {
+            $validationRule['password'] = 'required|min:8|confirmed';
+        }
+
+        $validationMessage = [
+            'role_id.required' => 'The role field is required.',
+            'role_id.exists' => 'The selected role is not exists.',
+            'is_active.required' => 'The status field is required.'
+        ];
+        $request->validate(
+            $validationRule,
+            $validationMessage
+        );
+
         $userData = $request->all();
         $userData['is_active'] = ($userData['is_active'] == 'active');
 

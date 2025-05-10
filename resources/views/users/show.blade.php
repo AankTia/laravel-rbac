@@ -38,8 +38,8 @@
                     <h5 class="card-title m-0 me-2">{{ $user->name }} Detail</h5>
 
                     <div class="text-end">
-                        @if(isUserCan('update', 'role'))
-                        {!! editButton(route('roles.edit', ['role' => $user])) !!}
+                        @if(isUserCan('update', 'user'))
+                        {!! editButton(route('users.edit', ['user' => $user])) !!}
                         @endif
 
                         @if (!$user->isSuperAdmin())

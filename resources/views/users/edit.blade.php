@@ -1,12 +1,42 @@
 @extends('layouts.dashboard')
 
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', "Edit ". $user->name ." | Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('users.index') }}">User</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('users.show', $user) }}">{{ $user->name }}</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Edit
+        </li>
+    </ol>
+</nav>
+@endsection
+
+@section('pageAction')
+<div class="row mb-4 align-items-center">
+    <div class="col-md-12 mt-3 mt-md-0">
+        {!! backButton(route('users.show', $user), 'user.read', 'Back to User Detail') !!}
+    </div>
+</div>
+@endsection
 
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Edit {{ $user->name }}</h5>
+                <hr>
+            </div>
             <div class="card-body">
                 <form method="post" action="{{ route('users.update', $user) }}">
                     @csrf
@@ -36,16 +66,16 @@
 
                             <div class="mb-3 col-md-11">
                                 @php
-                                    $selectedRole = old('role_id', $user->getRoleId() ?? '');
+                                $selectedRole = old('role_id', $user->getRoleId() ?? '');
                                 @endphp
 
                                 <label for="role_id" class="form-label">Role</label>
                                 <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
                                     <option value="" {{ $selectedRole === '' ? 'selected' : '' }}>-- Select Role --</option>
                                     @foreach ($roleOptions as $id => $name)
-                                        <option value="{{ $id }}" {{ $selectedRole == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
+                                    <option value="{{ $id }}" {{ $selectedRole == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('role_id')
@@ -65,9 +95,9 @@
                                 <select name="is_active" class="form-control @error('is_active') is-invalid @enderror" aria-label="Role select">
                                     <option value="" {{ $selectedIsActive === '' ? 'selected' : '' }}>-- Select Status --</option>
                                     @foreach (['active' => 'Active', 'inactive' => 'Inactive'] as $id => $name)
-                                        <option value="{{ $id }}" {{ $selectedIsActive == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
+                                    <option value="{{ $id }}" {{ $selectedIsActive == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('is_active')
@@ -115,10 +145,11 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
 
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary me-2">Save</button>
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                    <div class="text-end">
+                        {!! cancelButton(route('users.show', $user)) !!}
+                        {!! submitEditButton() !!}
                     </div>
                 </form>
             </div>
