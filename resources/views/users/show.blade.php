@@ -22,47 +22,107 @@
     <div class="col-md-12 mt-3 mt-md-0">
         {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
         {!! createButton(route('users.create'), 'user.create', 'User') !!}
-
-        @if(isUserCan('update', 'user'))
-        <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-sm btn-primary">
-            <i class="bx bx-pencil me-1"></i> Edit
-        </a>
-        @endif
-
-        @if (!$user->isSuperAdmin())
-        @if ($user->is_active && isUserCan('deactivate', 'user'))
-        <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
-            @csrf
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-warning">
-                <i class="bx bx-user-x me-1"></i> Deactivate
-            </button>
-        </form>
-        @endif
-
-        @if (!$user->is_active && isUserCan('activate', 'user'))
-        <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
-            @csrf
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-info">
-                <i class="bx bx-user-check me-1"></i> Activate
-            </button>
-        </form>
-        @endif
-        @endif
-
-        @if(isUserCan('delete', 'user'))
-        <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">
-                <i class="bx bx-trash me-1"></i> Delete
-            </button>
-        </form>
-        @endif
     </div>
 </div>
 @endsection
 
 @section('content')
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 class="card-title m-0 me-2">{{ $user->name }} Detail</h5>
+
+                    <div class="text-end">
+                        @if(isUserCan('update', 'role'))
+                        {!! editButton(route('roles.edit', ['role' => $user])) !!}
+                        @endif
+
+                        @if (!$user->isSuperAdmin())
+                        @if ($user->is_active && isUserCan('deactivate', 'user'))
+                        <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-warning">
+                                <i class="bx bx-user-x me-1"></i> Deactivate
+                            </button>
+                        </form>
+                        @endif
+
+                        @if (!$user->is_active && isUserCan('activate', 'user'))
+                        <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-info">
+                                <i class="bx bx-user-check me-1"></i> Activate
+                            </button>
+                        </form>
+                        @endif
+                        @endif
+
+                        @if(isUserCan('delete', 'role'))
+                        {!! deleteButton(route('roles.destroy', $user)) !!}
+                        @endif
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h6 text-muted">Name</h3>
+                            <div class="mb-2">{{ $user->name }}</div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h6 text-muted">Email</h3>
+                            <div class="mb-2">{{ $user->email }}</div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h6 text-muted">Status</h3>
+                            <div class="mb-2">{!! userStatusBadge($user->is_active) !!}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Last Login</h5>
+                <hr>
+            </div>
+            <div class="card-body">
+                ...
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Created</h5>
+                <hr>
+            </div>
+            <div class="card-body">
+                ...
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Last Updated</h5>
+                <hr>
+            </div>
+            <div class="card-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <!-- User Profile Card -->
     <div class="col-md-4 mb-4">
