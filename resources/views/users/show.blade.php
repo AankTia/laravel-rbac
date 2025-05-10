@@ -86,27 +86,32 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-2">
-
                         <div class="profile-image">
                             <img src="{{ asset('assets/img/man-avatar.jpg') }}" alt="Profile Photo">
                         </div>
                     </div>
                     <div class="col-md-10">
-                        <div class="col-md-6 mb-4">
-                            <h3 class="h6 text-muted">Name</h3>
-                            <div class="mb-2">{{ $user->name }}</div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <h3 class="h6 text-muted">Email</h3>
-                            <div class="mb-2">{{ $user->email }}</div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <h3 class="h6 text-muted">Role</h3>
-                            <div class="mb-2">{{ $user->getRoleName() }}</div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <h3 class="h6 text-muted">Status</h3>
-                            <div class="mb-2">{!! userStatusBadge($user->is_active) !!}</div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h6 text-muted">Name</h3>
+                                <div class="mb-2">{{ $user->name }}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h6 text-muted">Email</h3>
+                                <div class="mb-2">{{ $user->email }}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h6 text-muted">Role</h3>
+                                <div class="mb-2">{{ $user->getRoleName() }}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h6 text-muted">Status</h3>
+                                <div class="mb-2">{!! userStatusBadge($user->is_active) !!}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <h3 class="h6 text-muted">Last Login</h3>
+                                <div class="mb-2">...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,32 +121,38 @@
 
     <div class="col-md-4">
         <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title m-0 me-2">Last Login</h5>
-                <hr>
-            </div>
             <div class="card-body">
-                ...
-            </div>
-        </div>
+                <small class="card-text text-uppercase text-muted small">Created</small>
+                <ul class="list-unstyled my-3 py-1">
+                    @if ($user->created_at)
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="{{ clockIcon() }}"></i>
+                        <span class="fw-medium mx-2">{{ humanDateTime($user->created_at) }}</span>
+                    </li>
+                    @endif
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title m-0 me-2">Created</h5>
-                <hr>
-            </div>
-            <div class="card-body">
-                ...
-            </div>
-        </div>
+                    @if ($user->creatorName())
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="{{ userIcon() }}"></i>
+                        <span class="fw-medium mx-2">{{ $user->creatorName() }}</span>
+                    </li>
+                    @endif
+                </ul>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title m-0 me-2">Last Updated</h5>
+                @if ($user->lastUpdaterName() || $user->lastUpdate())
                 <hr>
-            </div>
-            <div class="card-body">
-                ...
+                <small class="card-text text-uppercase text-muted small">Last Updated</small>
+                <ul class="list-unstyled mb-0 mt-3 pt-1">
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="{{ clockIcon() }}"></i>
+                        <span class="fw-medium mx-2">{{ humanDateTime($user->updated_at) }}</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="{{ userIcon() }}"></i>
+                        <span class="fw-medium mx-2">{{ $user->lastUpdaterName() }}</span>
+                    </li>
+                </ul>
+                @endif
             </div>
         </div>
     </div>
