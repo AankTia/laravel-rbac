@@ -19,9 +19,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(isUserCan('read', 'role'))
-        {!! backButton(route('roles.index'), 'Back to Roles') !!}
-        @endif
+        {!! backButton(route('roles.index'), 'role.read', 'Back to Roles') !!}
     </div>
 </div>
 @endsection

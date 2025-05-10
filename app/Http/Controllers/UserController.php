@@ -16,8 +16,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('check.permission:user,read')->only('index');
-        // show
+        $this->middleware('check.permission:user,read')->only('index', 'show');
         // create
         // store
         // edit
@@ -73,16 +72,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $viewData = [
-            'title' => "User Details",
-            'subtitle' => $user->name
-        ];
-
         $recentActivities = $user->actitityLogs;
 
-        return view('users.show', compact('user'))
-            ->with('viewData', $viewData)
-            ->with('recentActivities', $recentActivities);
+        return view('users.show', compact('user', 'recentActivities'));
     }
 
     /**

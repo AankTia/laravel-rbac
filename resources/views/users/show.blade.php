@@ -1,15 +1,26 @@
 @extends('layouts.dashboard')
-@section('title', $viewData['title'] . " | Laravel RBAC")
-@section('pageTitle', $viewData['title'])
+@section('title', $user->name . " Detail | Laravel RBAC")
+
+@section('breadcrumb')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0);">User Management</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ route('users.index') }}">User</a>
+        </li>
+        <li class="breadcrumb-item active">
+            {{ $user->name }}
+        </li>
+    </ol>
+</nav>
+@endsection
 
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(isUserCan('read', 'user'))
-        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary me-2">
-            <i class="bx bx-left-arrow-alt me-1"></i> Back to List
-        </a>
-        @endif
+        {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
 
         @if(isUserCan('update', 'user'))
         <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-primary">
@@ -18,7 +29,7 @@
         @endif
 
         @if (!$user->isSuperAdmin())
-        @if ($user->is_active && isUserCan('deactivate', 'use'))
+        @if ($user->is_active && isUserCan('deactivate', 'user'))
         <form action="{{ route('users.deactivate', $user) }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-warning">
@@ -27,7 +38,7 @@
         </form>
         @endif
 
-        @if (!$user->is_active && isUserCan('activate', 'use'))
+        @if (!$user->is_active && isUserCan('activate', 'user'))
         <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-info">

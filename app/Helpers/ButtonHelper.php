@@ -1,13 +1,22 @@
 <?php
 
-function backButton($route, $label = 'Back')
+function backButton($route, $permission, $label)
 {
-    $icon = leftArrowIcon();
-    return <<<HTML
+    $explodedPermission = explodePermission($permission);
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+        if ($label == null || trim($label) == '') {
+            $label = 'Back';
+        }
+        $icon = leftArrowIcon();
+
+        return <<<HTML
             <a href="{$route}" class="btn btn-sm btn-outline-secondary me-2">
                 <i class="{$icon}"></i> {$label}
             </a>
         HTML;
+    } else {
+        return null;
+    }
 }
 
 function cancelButton($route, $label = 'Cancel')
@@ -22,7 +31,6 @@ function cancelButton($route, $label = 'Cancel')
 function createButton($route, $permission, $label)
 {
     $explodedPermission = explodePermission($permission);
-
     if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
         $icon = createIcon();
         return <<<HTML
