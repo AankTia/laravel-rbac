@@ -22,7 +22,7 @@ return new class extends Migration
             // $table->string('user_agent');
             $table->json('properties')->nullable(); // Properties: holds the old and new attributes
 
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

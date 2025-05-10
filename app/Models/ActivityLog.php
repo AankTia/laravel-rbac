@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
 {
+    const UPDATED_AT = null; // disable updated_at
+
     protected $fillable = [
         'log_name',
         'user_id',
