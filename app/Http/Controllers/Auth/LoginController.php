@@ -57,7 +57,11 @@ class LoginController extends Controller
                 'email' => 'Your account is not active.',
             ]);
         } else {
-            $user->customLogActivity('login', 'Loged in');
+            $logProperties = [
+                'ip' => $request->ip(),
+                'user-agent' => $request->header('User-Agent')
+            ];
+            $user->customLogActivity('login', 'Loged in', $logProperties);
         }
     }
 
@@ -70,7 +74,11 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        $user->customLogActivity('logout', 'Loged out');
+        $logProperties = [
+            'ip' => $request->ip(),
+            'user-agent' => $request->header('User-Agent')
+        ];
+        $user->customLogActivity('logout', 'Loged out', $logProperties);
 
         $this->guard()->logout();
 
@@ -81,8 +89,6 @@ class LoginController extends Controller
         if ($response = $this->loggedOut($request)) {
             return $response;
         }
-
-        
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
