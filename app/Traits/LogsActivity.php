@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
 trait LogsActivity
@@ -45,8 +46,12 @@ trait LogsActivity
     public static function bootLogsActivity()
     {
         static::created(function ($model) {
-            // dd();
-            // $model->logActivity('created');
+            if (Auth::user()) {
+                $model->createLogActivity('create', [
+                    'user_description' => 'Created new ' . class_basename($model),
+                    'subject_description' => 'Created new ' . class_basename($model),
+                ]);
+            }
         });
 
         static::updated(function ($model) {
@@ -70,7 +75,7 @@ trait LogsActivity
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
-    public function createLogActivity($action, $params)
+    public function createLogActivity($action, $params = [])
     {
         $params['action'] = $action;
         $newActivityLogAttributes = $this->generateNewActivityLogAttributes($params);
@@ -110,8 +115,7 @@ trait LogsActivity
         if (isset($params['user_id']) && $params['user_id'] !== null) {
             $newActivityLogAttributes['user_id'] = $params['user_id'];
         } else {
-            dd();
-            // $newActivityLogAttributes['user_id'] = ???;
+            $params['user_id'] = Auth::id();
         }
 
         if (isset($params['user_description']) && $params['user_description'] !== null) {
@@ -122,8 +126,7 @@ trait LogsActivity
         }
 
         if (isset($params['subject_description']) && $params['subject_description'] !== null) {
-            dd();
-            // $newActivityLogAttributes['subject_description'] = $params['subject_description'];
+            $newActivityLogAttributes['subject_description'] = $params['subject_description'];
         }
 
         if (isset($params['subject_properties']) && $params['subject_properties'] !== null) {
@@ -141,13 +144,22 @@ trait LogsActivity
                 if (in_array('ip_address', $userPropertiesKeys) && in_array('user_agent', $userPropertiesKeys)) {
                     $newActivityLogAttributes['user_properties'] = $params['user_properties'];
                 } else {
-                    dd($params['user_properties']);
+                    $params['user_properties'] = [
+                        'ip_address' => Request::ip() ?? '',
+                        'user_agent' => Request::userAgent() ?? ''
+                    ];
                 }
             } else {
-                dd($params['user_properties']);
+                $params['user_properties'] = [
+                    'ip_address' => Request::ip() ?? '',
+                    'user_agent' => Request::userAgent() ?? ''
+                ];
             }
         } else {
-            dd($params['user_properties']);
+            $params['user_properties'] = [
+                'ip_address' => Request::ip() ?? '',
+                'user_agent' => Request::userAgent() ?? ''
+            ];
         }
 
         return $newActivityLogAttributes;
