@@ -195,27 +195,49 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->is_active = ($request->is_active == 'active') ? 1 : 0;
 
-        if(!empty($request->password)){
-            dd();
+        if (!empty($request->password)) {
+            $user->password = bcrypt($request->password);
         }
 
-        $changes = !empty($user->getDirty());
-        if ($changes) {
-            $user->save();
+        $userChanges = !empty($user->getDirty());
+        $updatedUser = false;
+        if ($userChanges) {
+            $updatedUser = $user->save();
         }
 
         if ($request->role_id) {
             $userRole = $user->userRole;
             if ($userRole) {
                 if ($request->role_id != $userRole->role_id) {
-                    dd('update role');
+                    $oldRoleName = $userRole->role->name;
+                    $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
+                    if ($updateUserRole) {
+                        if ($updatedUser) {
+                            dd();
+                        } else {
+                            $newRoleName = Role::find($request->role_id)->name;;
+                            $user->createLogActivity('update-user-role', [
+                                'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user with name : ' . $user->name,
+                                'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
+                                'subject_properties' => [
+                                    'attributes' => [
+                                        'role' => [
+                                            'label' => 'Role',
+                                            'old_value' => $oldRoleName,
+                                            'new_value' => $newRoleName
+                                        ]
+                                    ]
+                                ]
+                            ]);
+                        }
+                    }
                 }
             } else {
                 dd('set role');
             };
         }
 
-        
+
         // "role_id" => "2"
         // "password" => null
         // "password_confirmation" => null

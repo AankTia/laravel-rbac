@@ -66,27 +66,6 @@
 
                             <div class="mb-3 col-md-11">
                                 @php
-                                $selectedRole = old('role_id', $user->getRoleId() ?? '');
-                                @endphp
-
-                                <label for="role_id" class="form-label">Role</label>
-                                <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
-                                    <option value="" {{ $selectedRole === '' ? 'selected' : '' }}>-- Select Role --</option>
-                                    @foreach ($roleOptions as $id => $name)
-                                    <option value="{{ $id }}" {{ $selectedRole == $id ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('role_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-11">
-                                @php
                                 $status = $user->is_active ? 'active' : 'inactive';
                                 $selectedIsActive = old('is_active', $status ?? '');
                                 @endphp
@@ -101,6 +80,27 @@
                                     @endforeach
                                 </select>
                                 @error('is_active')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-11">
+                                @php
+                                $selectedRole = old('role_id', $user->getRoleId() ?? '');
+                                @endphp
+
+                                <label for="role_id" class="form-label">Role</label>
+                                <select name="role_id" class="form-control @error('role_id') is-invalid @enderror" aria-label="Role select">
+                                    <option value="" {{ $selectedRole === '' ? 'selected' : '' }}>-- Select Role --</option>
+                                    @foreach ($roleOptions as $id => $name)
+                                    <option value="{{ $id }}" {{ $selectedRole == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error('role_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

@@ -143,7 +143,7 @@
                                                         @include('activity_log_histories._create_details', [
                                                             'attributes' => $log->subject_properties['attributes'],
                                                         ])
-                                                    @elseif ($log->action === 'update')
+                                                    @elseif (in_array($log->action, ['update', 'update-user-role']))
                                                         @include('activity_log_histories._update_details', [
                                                             'attributes' => $log->subject_properties['attributes'],
                                                         ])
