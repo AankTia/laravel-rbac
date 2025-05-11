@@ -30,6 +30,24 @@
 -   [x] Deactivate
 -   [ ] enhance data structure, different info for user timeline and module timeline
 
+## Enhance Log ACtivity
+- [ ] user - Auth\LoginController@login
+- [ ] user - logout › Auth\LoginController@logout
+- [ ] user - Auth\ConfirmPasswordController@confirm
+- [ ] user - password.email › Auth\ForgotPasswordController@sendResetLinkEmail
+- [ ] user - password.update › Auth\ResetPasswordController@reset
+- [ ] user - Auth\RegisterController@register
+- [ ] user - users.store › UserController@store
+- [ ] user - users.update › UserController@update
+- [ ] user - users.destroy › UserController@destroy
+- [ ] user - users.activate › UserController@activate
+- [ ] user - users.deactivate › UserController@deactivate
+- [ ] role - roles.store › RoleController@store
+- [ ] role - roles.update › RoleController@update
+- [ ] role - roles.destroy › RoleController@destroy
+- [ ] role - roles.update-permissions › RoleController@updatePermissions
+- [ ] role - roles.delete-user › RoleController@deleteUser
+
 ## User
 
 -   [ ] Enhance button to use button helper

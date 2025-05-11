@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('log_name');
             $table->string('action');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->text('user_description')->nullable();
             $table->json('user_properties')->nullable();
             $table->nullableMorphs('subject');

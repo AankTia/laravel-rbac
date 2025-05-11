@@ -155,7 +155,7 @@ class User extends Authenticatable
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
-    public function logs()
+    public function logActivities()
     {
         return $this->hasMany(ActivityLog::class);
     }
