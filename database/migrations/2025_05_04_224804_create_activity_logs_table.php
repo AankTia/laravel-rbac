@@ -13,18 +13,21 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('log_name')->nullable();
+            $table->string('log_name');
+            $table->string('action');
             $table->unsignedBigInteger('user_id');
-            $table->string('action')->index();
-            $table->text('description')->nullable();
-            $table->nullableMorphs('subject'); // Polymorphic relation to the affected model / which model was changed
-            // $table->string('ip_address');
-            // $table->string('user_agent');
-            $table->json('properties')->nullable(); // Properties: holds the old and new attributes
-
+            $table->text('user_description')->nullable();
+            $table->json('user_properties')->nullable();
+            $table->nullableMorphs('subject');
+            $table->text('subject_description')->nullable();
+            $table->json('subject_properties')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->index('log_name');
+            $table->index('action');
+            $table->index('created_at');
         });
     }
 
