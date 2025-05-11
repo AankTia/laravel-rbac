@@ -5,13 +5,11 @@ function actionTimelinePointColor($action)
     $default = 'timeline-point-gray';
     $timelinePointColorClass = [
         'login' => 'timeline-point-success',
-        'logout' => 'timeline-point-dark'
+        'logout' => 'timeline-point-dark',
+        'create' => 'timeline-point-primary'
     ];
 
     // switch ($action) {
-    //     case 'created':
-    //         $result = 'timeline-point-primary';
-    //         break;
     //     case 'updated':
     //         $result = 'timeline-point-warning';
     //         break;
@@ -64,7 +62,6 @@ function actionIcon($action)
         case 'deactivated':
             $result = getIcon('deactivate');
             break;
-
         case 'delete-user':
             $result = getIcon('delete-user');
             break;
