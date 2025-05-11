@@ -72,6 +72,17 @@ trait LogsActivity
 
     public function createLogActivity($params)
     {
+        $newActivityLogAttributes = $this->generateNewActivityLogAttributes($params);
+
+        $newActivity = new ActivityLog($newActivityLogAttributes);
+        if (!in_array($newActivityLogAttributes['action'], ['login', 'logout'])) {
+            $newActivity->subject()->associate($this);
+        }
+        $newActivity->save();
+    }
+
+    function generateNewActivityLogAttributes($params)
+    {
         $newActivityLogAttributes = [
             'log_name' => null,
             'action' => null,
@@ -134,16 +145,11 @@ trait LogsActivity
             } else {
                 dd($params['user_properties']);
             }
-            
         } else {
             dd($params['user_properties']);
         }
 
-        $newActivity = new ActivityLog($newActivityLogAttributes);
-        if (!in_array($newActivityLogAttributes['action'], ['login', 'logout'])) {
-            $newActivity->subject()->associate($this);
-        }
-        $newActivity->save();
+        return $newActivityLogAttributes;
     }
 
     // /**
