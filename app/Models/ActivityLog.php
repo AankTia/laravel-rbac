@@ -8,6 +8,10 @@ class ActivityLog extends Model
 {
     const UPDATED_AT = null; // disable updated_at
 
+    /**
+     * log_name => create, update, delete, activate, deactivate
+     */
+
     protected $fillable = [
         'log_name',
         'action',

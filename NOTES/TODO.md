@@ -40,7 +40,7 @@
 -   [ ] user - password.email › Auth\ForgotPasswordController@sendResetLinkEmail
 -   [ ] user - password.update › Auth\ResetPasswordController@reset
 -   [ ] user - Auth\RegisterController@register
--   [ ] user - users.store › UserController@store
+-   [x] user - users.store › UserController@store
 -   [ ] user - users.update › UserController@update
 -   [ ] user - users.destroy › UserController@destroy
 -   [ ] user - users.activate › UserController@activate
