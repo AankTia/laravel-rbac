@@ -144,16 +144,28 @@
                                         <h6 class="mb-0">{{ $log->user_description }}</h6>
                                         <small class="text-muted">{{ humanDateTime($log->created_at) }}</small>
                                     </div>
-                                    {{-- <p class="mb-2">
-                                        Invoices have been paid to the company
-                                    </p> --}}
-                                    {{-- <div class="d-flex align-items-center mb-2">
-                                        <div class="badge bg-lighter rounded d-flex align-items-center">
-                                            <img src="https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template/demo/assets/img/icons/misc/pdf.png"
-                                                alt="img" width="15" class="me-2">
-                                            <span class="h6 mb-0 text-body">invoices.pdf</span>
+
+                                    <div class="card shadow text-dark bg-light mb-3">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <h3 class="h6 text-muted mb-2">IP Address</h3>
+                                                    <div class="mb-2">
+                                                        <small>{{ $log->user_properties['ip_address'] }}</small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <h3 class="h6 text-muted mb-2">User Agent</h3>
+                                                    <div class="mb-2">
+                                                        <small>{{ $log->user_properties['user_agent'] }}</small>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
+                                    <hr>
                                 </div>
                             </li>
                         @empty
