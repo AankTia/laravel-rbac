@@ -90,6 +90,11 @@ trait LogsActivity
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
+    function getLatestHistory()
+    {
+        return $this->histories()->latest()->first();
+    }
+
     public function createLogActivity($action, $params = [])
     {
         $params['action'] = $action;
@@ -190,11 +195,6 @@ trait LogsActivity
         } else {
             return $attribute;
         }
-    }
-
-    function getLatestHistory()
-    {
-        return $this->histories()->latest()->first();
     }
 
     // /**

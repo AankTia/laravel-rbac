@@ -208,10 +208,10 @@
 
                             @if ($lastActivity)
                                 <div class="mt-4 mb-4">
-                                    {{ $lastActivity->description }}
+                                    {{ $lastActivity->subject_description }}
                                 </div>
 
-                                @include('activity_logs.partials._details', ['activity' => $lastActivity])
+                                {{-- @include('activity_logs.partials._details', ['activity' => $lastActivity]) --}}
 
                                 <a href="{{ route('users.activity-logs', $user) }}"
                                     class="btn btn-sm btn-outline-primary mt-4">

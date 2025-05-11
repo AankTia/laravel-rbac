@@ -70,12 +70,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $lastActivity = $user->activityLogs()
-            ->latest()
-            ->limit(1)
-            ->first();
+        $lastActivity = $user->getLatestHistory();
 
-        $userActivityLogs = $user->userActivities;
+        $userActivityLogs = $user->userActivities()
+            ->latest()
+            ->get();
 
         return view('users.show', compact('user', 'lastActivity', 'userActivityLogs'));
     }
