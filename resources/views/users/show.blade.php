@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <h3 class="h6 text-muted">Role</h3>
-                                    <div class="mb-2">{{ $user->getRoleName() }}</div>
+                                    <div class="mb-2">{{ $user->getRoleName() ?? '-'}}</div>
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <h3 class="h6 text-muted">Status</h3>

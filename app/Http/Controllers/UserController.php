@@ -206,14 +206,14 @@ class UserController extends Controller
         }
 
         if ($request->role_id) {
+            $newRoleName = Role::find($request->role_id)->name;
             $userRole = $user->userRole;
+
             if ($userRole) {
                 if ($request->role_id != $userRole->role_id) {
                     $oldRoleName = $userRole->role->name;
                     $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
                     if ($updateUserRole) {
-                        $newRoleName = Role::find($request->role_id)->name;
-
                         if ($updatedUser) {
                             $newestUserHistory = $user->getLatestHistory();
                             if ($newestUserHistory->action == 'update') {
@@ -229,7 +229,7 @@ class UserController extends Controller
                             }
                         } else {
                             $user->createLogActivity('update-user-role', [
-                                'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user with name : ' . $user->name,
+                                'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user : ' . $user->name,
                                 'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
                                 'subject_properties' => [
                                     'attributes' => [
@@ -245,67 +245,12 @@ class UserController extends Controller
                     }
                 }
             } else {
-                dd('set role');
+                $user->createLogActivity('set-user-role', [
+                    'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
+                    'subject_description' => 'Set ' . $newRoleName . ' Role',
+                ]);
             };
         }
-
-
-        // "role_id" => "2"
-        // "password" => null
-        // "password_confirmation" => null
-        // dd($request->all());
-
-        // $userData = $request->all();
-
-        // // $userData['is_active'] = ($userData['is_active'] == 'active') ? 1 : 0;
-
-        // $validated = $user->validate('update', $userData);
-
-        // // Hash password if it was sent
-        // if (!empty($validated['password'])) {
-        //     $validated['password'] = bcrypt($validated['password']);
-        // } else {
-        //     unset($validated['password']); // Don't overwrite if null
-        // }
-
-        // $upadateUser = $user->update($validated);
-
-        // if ($upadateUser && $request->role_id) {
-        //     dd();
-        //     $newRoleName = Role::find($request->role_id)->name;
-
-        //     if ($user->userRole) {
-        //         if ($user->userRole->role_id != $request->role_id) {
-        //             dd();
-        //             // $oldRoleName = $user->getRoleName();
-
-        //             // $updatedUserRole = $user->userRole->update([
-        //             //     'role_id' => $request->role_id,
-        //             //     'assigned_by_id' => Auth::id(),
-        //             //     'assigned_at' => Carbon::now()
-        //             // ]);
-
-        //             // if ($updatedUserRole) {
-        //             //     $historyLogMessage = 'Change User Role from ' . $oldRoleName . ' to ' . $newRoleName;
-        //             //     $user->customLogActivity('change-user-role', $historyLogMessage);
-        //             // }
-        //         }
-        //     } else {
-
-        //         dd();
-        //         $createdUserRole = UserRole::create([
-        //             'user_id' => $user->id,
-        //             'role_id' => $request->role_id,
-        //             'assigned_by_id' => Auth::id(),
-        //             'assigned_at' => Carbon::now()
-        //         ]);
-
-        //         if ($createdUserRole) {
-        //             $historyLogMessage = 'Set User Role to ' . $newRoleName;
-        //             $user->customLogActivity('set-user-role', $historyLogMessage);
-        //         }
-        //     }
-        // }
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User updated successfully.');
