@@ -70,186 +70,262 @@ trait LogsActivity
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
-    /**
-     * Log an activity for this model.
-     *
-     * @param string $event
-     * @return \App\Models\ActivityLog|null
-     */
-    public function logActivity(string $event)
+    public function createLogActivity($params)
     {
-        dd();
-        // if (!Auth::id()) {
-        //     return null;
-        // }
+        $newActivityLogAttributes = [
+            'log_name' => null,
+            'action' => null,
+            'user_id' => null,
+            'user_description' => null,
+            'user_properties' => [],
+            'subject_description' => null,
+            'subject_properties' => []
+        ];
 
-        // $logName = static::$logName ?? class_basename($this);
-        // $properties = [];
+        if (isset($params['log_name']) && $params['log_name'] !== null) {
+            $newActivityLogAttributes['log_name'] = $params['log_name'];
+        } else {
+            $newActivityLogAttributes['log_name'] = static::$logName ?? class_basename($this);
+        }
 
-        // if ($event === 'created') {
-        //     $properties['attributes'] = $this->getActivityAttributes();
-        // } elseif ($event === 'updated') {
-        //     $dirty = $this->getDirty();
-        //     $changedAttributes = $this->getChangedActivityAttributes($dirty);
+        if (isset($params['action']) && $params['action'] !== null) {
+            $newActivityLogAttributes['action'] = $params['action'];
+        } else {
+            dd();
+            // $newActivityLogAttributes['action'] = ???;
+        }
 
-        //     // Only log if there are actual changes to be logged
-        //     if (empty($changedAttributes)) {
-        //         return null;
-        //     }
+        if (isset($params['user_id']) && $params['user_id'] !== null) {
+            $newActivityLogAttributes['user_id'] = $params['user_id'];
+        } else {
+            dd();
+            // $newActivityLogAttributes['user_id'] = ???;
+        }
 
-        //     if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
-        //         if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
-        //             $event = 'activated';
-        //         } else {
-        //             $event = 'deactivated';
-        //         }
-        //     } 
+        if (isset($params['user_description']) && $params['user_description'] !== null) {
+            $newActivityLogAttributes['user_description'] = $params['user_description'];
+        } else {
+            dd();
+            // $newActivityLogAttributes['user_description'] = ???;
+        }
 
-        //     $originalAttributes = $this->getOriginalActivityAttributes($dirty);
+        if (isset($params['subject_description']) && $params['subject_description'] !== null) {
+            dd();
+            // $newActivityLogAttributes['subject_description'] = $params['subject_description'];
+        }
 
-        //     $properties['attributes'] = [];
-        //     foreach ($changedAttributes as $name => $value) {
-        //         $properties['attributes'][$name] = [
-        //             'old' => $originalAttributes[$name],
-        //             'new' => $value
-        //         ];
-        //     }
-        // } elseif ($event === 'deleted') {
-        //     $properties['attributes'] = $this->getActivityAttributes();
-        // }
+        if (isset($params['subject_properties']) && $params['subject_properties'] !== null) {
+            dd();
+            // $newActivityLogAttributes['subject_properties'] = $params['subject_properties'];
+        }
 
+        if (isset($params['user_description']) && $params['user_description'] !== null) {
+            $newActivityLogAttributes['user_description'] = $params['user_description'];
+        }
 
-        // $description = $logName . " " . str_replace('-', ' ', Str::title($event));
+        if (isset($params['user_properties']) && $params['user_properties'] !== null) {
+            if (is_array($params['user_properties'])) {
+                $userPropertiesKeys = array_keys($params['user_properties']);
+                if (in_array('ip_address', $userPropertiesKeys) && in_array('user_agent', $userPropertiesKeys)) {
+                    $newActivityLogAttributes['user_properties'] = $params['user_properties'];
+                } else {
+                    dd($params['user_properties']);
+                }
+            } else {
+                dd($params['user_properties']);
+            }
+            
+        } else {
+            dd($params['user_properties']);
+        }
 
-        // $activity = new ActivityLog([
-        //     'log_name' => $logName,
-        //     'action' => $event,
-        //     'description' => $description,
-        //     'user_id' => Auth::id(),
-        //     'properties' => $properties
-        // ]);
-        // $activity->subject()->associate($this);
-        // return $activity->save();
+        $newActivity = new ActivityLog($newActivityLogAttributes);
+        if (!in_array($newActivityLogAttributes['action'], ['login', 'logout'])) {
+            $newActivity->subject()->associate($this);
+        }
+        $newActivity->save();
     }
 
-    /**
-     * Log a custom activity with additional properties.
-     *
-     * @param string $event
-     * @param array $properties
-     * @return \App\Models\ActivityLog
-     */
-    public function customLogActivity(string $logName)
-    {
-        // $updatedRole = $this->update([
-        //     'last_updated_by_id' => Auth::id(),
-        //     'updated_at' => Carbon::now()
-        // ]);
+    // /**
+    //  * Log an activity for this model.
+    //  *
+    //  * @param string $event
+    //  * @return \App\Models\ActivityLog|null
+    //  */
+    // public function logActivity(string $event)
+    // {
+    //     dd();
+    //     // if (!Auth::id()) {
+    //     //     return null;
+    //     // }
 
-        // if ($updatedRole) {
-        //     $logName = static::$logName ?? class_basename($this);
-        //     if (trim($description) == '') {
-        //         $description = str_replace('-', ' ', Str::title($event));
-        //     }
+    //     // $logName = static::$logName ?? class_basename($this);
+    //     // $properties = [];
 
-        //     $activity = new ActivityLog([
-        //         'log_name' => $logName,
-        //         'action' => $event,
-        //         'description' => $description,
-        //         'user_id' => Auth::id(),
-        //         'properties' => $properties
-        //     ]);
-        //     $activity->subject()->associate($this);
-        //     return $activity->save();
-        // } else {
-        //     return false;
-        // }
-    }
+    //     // if ($event === 'created') {
+    //     //     $properties['attributes'] = $this->getActivityAttributes();
+    //     // } elseif ($event === 'updated') {
+    //     //     $dirty = $this->getDirty();
+    //     //     $changedAttributes = $this->getChangedActivityAttributes($dirty);
 
-    /**
-     * Get the attributes to be logged.
-     *
-     * @return array
-     */
-    protected function getActivityAttributes(): array
-    {
-        dd();
-        // $attributes = $this->getAttributes();
+    //     //     // Only log if there are actual changes to be logged
+    //     //     if (empty($changedAttributes)) {
+    //     //         return null;
+    //     //     }
 
-        // // If specific attributes are set to be logged
-        // if (!empty(static::$logAttributes)) {
-        //     $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
-        // }
+    //     //     if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
+    //     //         if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
+    //     //             $event = 'activated';
+    //     //         } else {
+    //     //             $event = 'deactivated';
+    //     //         }
+    //     //     } 
 
-        // // Remove excluded attributes
-        // if (!empty(static::$logExceptAttributes)) {
-        //     $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
-        // }
+    //     //     $originalAttributes = $this->getOriginalActivityAttributes($dirty);
 
-        // return $attributes;
-    }
+    //     //     $properties['attributes'] = [];
+    //     //     foreach ($changedAttributes as $name => $value) {
+    //     //         $properties['attributes'][$name] = [
+    //     //             'old' => $originalAttributes[$name],
+    //     //             'new' => $value
+    //     //         ];
+    //     //     }
+    //     // } elseif ($event === 'deleted') {
+    //     //     $properties['attributes'] = $this->getActivityAttributes();
+    //     // }
 
-    /**
-     * Get the original attributes for changed attributes.
-     *
-     * @param array $dirty
-     * @return array
-     */
-    protected function getOriginalActivityAttributes(array $dirty): array
-    {
-        dd();
-        // $original = [];
 
-        // foreach (array_keys($dirty) as $key) {
-        //     if (array_key_exists($key, $this->getOriginal())) {
-        //         $original[$key] = $this->getOriginal($key);
-        //     }
-        // }
+    //     // $description = $logName . " " . str_replace('-', ' ', Str::title($event));
 
-        // // If specific attributes are set to be logged
-        // if (!empty(static::$logAttributes)) {
-        //     $original = array_intersect_key($original, array_flip(static::$logAttributes));
-        // }
+    //     // $activity = new ActivityLog([
+    //     //     'log_name' => $logName,
+    //     //     'action' => $event,
+    //     //     'description' => $description,
+    //     //     'user_id' => Auth::id(),
+    //     //     'properties' => $properties
+    //     // ]);
+    //     // $activity->subject()->associate($this);
+    //     // return $activity->save();
+    // }
 
-        // // Remove excluded attributes
-        // if (!empty(static::$logExceptAttributes)) {
-        //     $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
-        // }
+    // /**
+    //  * Log a custom activity with additional properties.
+    //  *
+    //  * @param string $event
+    //  * @param array $properties
+    //  * @return \App\Models\ActivityLog
+    //  */
+    // public function customLogActivity(string $logName)
+    // {
+    //     // $updatedRole = $this->update([
+    //     //     'last_updated_by_id' => Auth::id(),
+    //     //     'updated_at' => Carbon::now()
+    //     // ]);
 
-        // return $original;
-    }
+    //     // if ($updatedRole) {
+    //     //     $logName = static::$logName ?? class_basename($this);
+    //     //     if (trim($description) == '') {
+    //     //         $description = str_replace('-', ' ', Str::title($event));
+    //     //     }
 
-    /**
-     * Get the changed attributes for activity logging.
-     *
-     * @param array $dirty
-     * @return array
-     */
-    protected function getChangedActivityAttributes(array $dirty): array
-    {
-        dd();
-        // $attributes = $dirty;
+    //     //     $activity = new ActivityLog([
+    //     //         'log_name' => $logName,
+    //     //         'action' => $event,
+    //     //         'description' => $description,
+    //     //         'user_id' => Auth::id(),
+    //     //         'properties' => $properties
+    //     //     ]);
+    //     //     $activity->subject()->associate($this);
+    //     //     return $activity->save();
+    //     // } else {
+    //     //     return false;
+    //     // }
+    // }
 
-        // // If specific attributes are set to be logged
-        // if (!empty(static::$logAttributes)) {
-        //     $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
-        // }
+    // /**
+    //  * Get the attributes to be logged.
+    //  *
+    //  * @return array
+    //  */
+    // protected function getActivityAttributes(): array
+    // {
+    //     dd();
+    //     // $attributes = $this->getAttributes();
 
-        // // Remove excluded attributes
-        // if (!empty(static::$logExceptAttributes)) {
-        //     $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
-        // }
+    //     // // If specific attributes are set to be logged
+    //     // if (!empty(static::$logAttributes)) {
+    //     //     $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+    //     // }
 
-        // return $attributes;
-    }
+    //     // // Remove excluded attributes
+    //     // if (!empty(static::$logExceptAttributes)) {
+    //     //     $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+    //     // }
 
-    protected static function getActivityDescription(string $event, $model): string
-    {
-        dd();
-        // if (method_exists($model, 'getCustomActivityDescription')) {
-        //     return $model->getCustomActivityDescription($event);
-        // }
+    //     // return $attributes;
+    // }
 
-        // return ucfirst($event) . " " . class_basename($model);
-    }
+    // /**
+    //  * Get the original attributes for changed attributes.
+    //  *
+    //  * @param array $dirty
+    //  * @return array
+    //  */
+    // protected function getOriginalActivityAttributes(array $dirty): array
+    // {
+    //     dd();
+    //     // $original = [];
+
+    //     // foreach (array_keys($dirty) as $key) {
+    //     //     if (array_key_exists($key, $this->getOriginal())) {
+    //     //         $original[$key] = $this->getOriginal($key);
+    //     //     }
+    //     // }
+
+    //     // // If specific attributes are set to be logged
+    //     // if (!empty(static::$logAttributes)) {
+    //     //     $original = array_intersect_key($original, array_flip(static::$logAttributes));
+    //     // }
+
+    //     // // Remove excluded attributes
+    //     // if (!empty(static::$logExceptAttributes)) {
+    //     //     $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
+    //     // }
+
+    //     // return $original;
+    // }
+
+    // /**
+    //  * Get the changed attributes for activity logging.
+    //  *
+    //  * @param array $dirty
+    //  * @return array
+    //  */
+    // protected function getChangedActivityAttributes(array $dirty): array
+    // {
+    //     dd();
+    //     // $attributes = $dirty;
+
+    //     // // If specific attributes are set to be logged
+    //     // if (!empty(static::$logAttributes)) {
+    //     //     $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+    //     // }
+
+    //     // // Remove excluded attributes
+    //     // if (!empty(static::$logExceptAttributes)) {
+    //     //     $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+    //     // }
+
+    //     // return $attributes;
+    // }
+
+    // protected static function getActivityDescription(string $event, $model): string
+    // {
+    //     dd();
+    //     // if (method_exists($model, 'getCustomActivityDescription')) {
+    //     //     return $model->getCustomActivityDescription($event);
+    //     // }
+
+    //     // return ucfirst($event) . " " . class_basename($model);
+    // }
 }
