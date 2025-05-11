@@ -45,17 +45,17 @@ trait LogsActivity
     public static function bootLogsActivity()
     {
         static::created(function ($model) {
-            dd();
+            // dd();
             // $model->logActivity('created');
         });
 
         static::updated(function ($model) {
-            dd();
+            // dd();
             // $model->logActivity('updated');
         });
 
         static::deleted(function ($model) {
-            dd();
+            // dd();
             // $model->logActivity('deleted');
         });
     }
@@ -96,7 +96,7 @@ trait LogsActivity
         //     if (empty($changedAttributes)) {
         //         return null;
         //     }
-            
+
         //     if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
         //         if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
         //             $event = 'activated';
@@ -104,7 +104,7 @@ trait LogsActivity
         //             $event = 'deactivated';
         //         }
         //     } 
-            
+
         //     $originalAttributes = $this->getOriginalActivityAttributes($dirty);
 
         //     $properties['attributes'] = [];
@@ -139,9 +139,8 @@ trait LogsActivity
      * @param array $properties
      * @return \App\Models\ActivityLog
      */
-    public function customLogActivity(string $event, string $description, array $properties = [])
+    public function customLogActivity(string $logName)
     {
-        dd();
         // $updatedRole = $this->update([
         //     'last_updated_by_id' => Auth::id(),
         //     'updated_at' => Carbon::now()
@@ -152,7 +151,7 @@ trait LogsActivity
         //     if (trim($description) == '') {
         //         $description = str_replace('-', ' ', Str::title($event));
         //     }
-            
+
         //     $activity = new ActivityLog([
         //         'log_name' => $logName,
         //         'action' => $event,

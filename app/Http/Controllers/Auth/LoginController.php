@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -57,11 +58,20 @@ class LoginController extends Controller
                 'email' => 'Your account is not active.',
             ]);
         } else {
-            $logProperties = [
-                'ip' => $request->ip(),
-                'user-agent' => $request->header('User-Agent')
-            ];
-            $user->customLogActivity('login', 'Loged in', $logProperties);
+            $activity = new ActivityLog([
+                'log_name' => 'Auth',
+                'action' => 'login',
+                'user_id' => Auth::id(),
+                'user_description' => 'Loged In',
+                'user_properties' => [
+                    'ip_address' => $request->ip(),
+                    'user-agent' => $request->header('User-Agent')
+                ],
+                'subject_description' => null,
+                'subject_properties' => null
+            ]);
+            $activity->subject()->associate($this);
+            $activity->save();
         }
     }
 
@@ -74,11 +84,20 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        $logProperties = [
-            'ip' => $request->ip(),
-            'user-agent' => $request->header('User-Agent')
-        ];
-        $user->customLogActivity('logout', 'Loged out', $logProperties);
+        $activity = new ActivityLog([
+            'log_name' => 'Auth',
+            'action' => 'logout',
+            'user_id' => $user->id,
+            'user_description' => 'Loged Out',
+            'user_properties' => [
+                'ip_address' => $request->ip(),
+                'user-agent' => $request->header('User-Agent')
+            ],
+            'subject_description' => null,
+            'subject_properties' => null
+        ]);
+        $activity->subject()->associate($this);
+        $activity->save();
 
         $this->guard()->logout();
 
