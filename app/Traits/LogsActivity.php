@@ -145,8 +145,7 @@ trait LogsActivity
         }
 
         if (isset($params['subject_properties']) && $params['subject_properties'] !== null) {
-            dd();
-            // $newActivityLogAttributes['subject_properties'] = $params['subject_properties'];
+            $newActivityLogAttributes['subject_properties'] = $params['subject_properties'];
         }
 
         if (isset($params['user_description']) && $params['user_description'] !== null) {
@@ -159,19 +158,19 @@ trait LogsActivity
                 if (in_array('ip_address', $userPropertiesKeys) && in_array('user_agent', $userPropertiesKeys)) {
                     $newActivityLogAttributes['user_properties'] = $params['user_properties'];
                 } else {
-                    $params['user_properties'] = [
+                    $newActivityLogAttributes['user_properties'] = [
                         'ip_address' => Request::ip() ?? '',
                         'user_agent' => Request::userAgent() ?? ''
                     ];
                 }
             } else {
-                $params['user_properties'] = [
+                $newActivityLogAttributes['user_properties'] = [
                     'ip_address' => Request::ip() ?? '',
                     'user_agent' => Request::userAgent() ?? ''
                 ];
             }
         } else {
-            $params['user_properties'] = [
+            $newActivityLogAttributes['user_properties'] = [
                 'ip_address' => Request::ip() ?? '',
                 'user_agent' => Request::userAgent() ?? ''
             ];
