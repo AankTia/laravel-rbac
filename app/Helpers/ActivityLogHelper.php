@@ -7,13 +7,11 @@ function actionTimelinePointColor($action)
         'login' => 'timeline-point-success',
         'logout' => 'timeline-point-dark',
         'create' => 'timeline-point-primary',
-        'set-user-role' => 'timeline-point-primary'
+        'set-user-role' => 'timeline-point-primary',
+        'update' => 'timeline-point-warning'
     ];
 
     // switch ($action) {
-    //     case 'updated':
-    //         $result = 'timeline-point-warning';
-    //         break;
     //     case 'role-permission-updated';
     //         $result = 'timeline-point-warning';
     //         break;
