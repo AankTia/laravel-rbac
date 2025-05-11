@@ -122,12 +122,22 @@ class UserController extends Controller
         $user->fill($validated)->save();
 
         if ($request->role_id) {
-            UserRole::create([
+            $createdUserRole = UserRole::create([
                 'user_id' => $user->id,
                 'role_id' => $request->role_id,
                 'assigned_by_id' => Auth::id(),
                 'assigned_at' => Carbon::now()
             ]);
+
+            if ($createdUserRole) {
+                $newRoleName = Role::find($request->role_id)->name;
+
+                $logDescription = 'Set ' . $newRoleName . ' Role for ' . $user->name;
+                $user->createLogActivity('set-user-role', [
+                    'user_description' => $logDescription,
+                    'subject_description' => $logDescription,
+                ]);
+            }
         }
 
         return redirect()->route('users.show', ['user' => $user])

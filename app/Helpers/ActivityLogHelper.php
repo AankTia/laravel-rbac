@@ -6,7 +6,8 @@ function actionTimelinePointColor($action)
     $timelinePointColorClass = [
         'login' => 'timeline-point-success',
         'logout' => 'timeline-point-dark',
-        'create' => 'timeline-point-primary'
+        'create' => 'timeline-point-primary',
+        'set-user-role' => 'timeline-point-primary'
     ];
 
     // switch ($action) {
