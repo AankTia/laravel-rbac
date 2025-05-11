@@ -58,9 +58,8 @@ class LoginController extends Controller
                 'email' => 'Your account is not active.',
             ]);
         } else {
-            $user->createLogActivity([
+            $user->createLogActivity('login', [
                 'log_name' => 'Auth',
-                'action' => 'login',
                 'user_id' => Auth::id(),
                 'user_description' => 'Loged In',
                 'user_properties' => [
@@ -80,9 +79,8 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        $user->createLogActivity([
+        $user->createLogActivity('logout', [
             'log_name' => 'Auth',
-            'action' => 'logout',
             'user_id' => Auth::id(),
             'user_description' => 'Loged Out',
             'user_properties' => [

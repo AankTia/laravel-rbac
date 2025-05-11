@@ -70,8 +70,9 @@ trait LogsActivity
         return $this->morphMany(ActivityLog::class, 'subject');
     }
 
-    public function createLogActivity($params)
+    public function createLogActivity($action, $params)
     {
+        $params['action'] = $action;
         $newActivityLogAttributes = $this->generateNewActivityLogAttributes($params);
 
         $newActivity = new ActivityLog($newActivityLogAttributes);
