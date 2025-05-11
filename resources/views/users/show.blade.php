@@ -126,6 +126,32 @@
 
                                     <div class="card shadow text-dark bg-light mb-3">
                                         <div class="card-body">
+
+                                            <div class="table-responsive mb-5">
+                                                <table class="table table-bordered">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th class="text-center">Attribute Name</th>
+                                                            <th class="text-center">Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($log->subject_properties['attributes'] as $attribute => $data)
+                                                            <tr>
+                                                                <td>{{ $data['label'] }}</td>
+                                                                <td>
+                                                                    @if ($attribute === 'is_active')
+                                                                        {!! activeInactiveStatusBadgeFor($data['value']) !!}  
+                                                                    @else
+                                                                        {{ $data['value'] }}
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <h3 class="h6 text-muted mb-2">IP Address</h3>
@@ -140,7 +166,7 @@
                                                         <small>{{ $log->user_properties['user_agent'] }}</small>
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
