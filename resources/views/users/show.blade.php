@@ -141,13 +141,19 @@
                                 <span class="timeline-point {{ actionTimelinePointColor($log->action) }}"></span>
                                 <div class="timeline-event">
                                     <div class="timeline-header mb-3">
-                                        <h6 class="mb-0">
-                                            {{ $log->user_description }}
-                                        </h6>
+                                        <h6 class="mb-0">{{ $log->user_description }}</h6>
                                         <small class="text-muted">{{ humanDateTime($log->created_at) }}</small>
                                     </div>
-
-                                    {{-- @include('activity_logs.partials._details', ['activity' => $log]) --}}
+                                    {{-- <p class="mb-2">
+                                        Invoices have been paid to the company
+                                    </p> --}}
+                                    {{-- <div class="d-flex align-items-center mb-2">
+                                        <div class="badge bg-lighter rounded d-flex align-items-center">
+                                            <img src="https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template/demo/assets/img/icons/misc/pdf.png"
+                                                alt="img" width="15" class="me-2">
+                                            <span class="h6 mb-0 text-body">invoices.pdf</span>
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </li>
                         @empty
