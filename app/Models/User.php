@@ -28,7 +28,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // 'role_id',
         'is_active',
         'created_by_id',
         'last_updated_by_id'
@@ -38,7 +37,6 @@ class User extends Authenticatable
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:8',
-        // 'role_id' => 'required|exists:roles,id',
         'is_active' => 'required|boolean'
     ];
 
@@ -50,6 +48,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    public static $attributeLabels = [
+        'name' => 'Name',
+        'email' => 'Email',
+        'password' => 'Password',
+        'is_active' => 'Status'
     ];
 
     /**

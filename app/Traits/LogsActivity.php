@@ -47,9 +47,24 @@ trait LogsActivity
     {
         static::created(function ($model) {
             if (Auth::user()) {
+                $klass = get_class($model);
+                $activityAttributes = $model->getActivityAttributes();
+
+                $subjectProperties = [
+                    'attributes' => []
+                ];
+
+                foreach ($activityAttributes as $attribute => $value) {
+                    $subjectProperties['attributes'][$attribute] = [
+                        'label' => $model->getAttributeLabelFor($klass, $attribute),
+                        'value' => $value
+                    ];
+                }
+
                 $model->createLogActivity('create', [
                     'user_description' => 'Created new ' . class_basename($model),
                     'subject_description' => 'Created new ' . class_basename($model),
+                    'subject_properties' => $subjectProperties
                 ]);
             }
         });
@@ -165,6 +180,19 @@ trait LogsActivity
         return $newActivityLogAttributes;
     }
 
+    function getAttributeLabelFor($klass, $attribute)
+    {
+        if (property_exists($klass, 'attributeLabels')) {
+            if (array_key_exists($attribute, $klass::$attributeLabels)) {
+                return $klass::$attributeLabels[$attribute];
+            } else {
+                return $attribute;
+            }
+        } else {
+            return $attribute;
+        }
+    }
+
     // /**
     //  * Log an activity for this model.
     //  *
@@ -261,28 +289,27 @@ trait LogsActivity
     //     // }
     // }
 
-    // /**
-    //  * Get the attributes to be logged.
-    //  *
-    //  * @return array
-    //  */
-    // protected function getActivityAttributes(): array
-    // {
-    //     dd();
-    //     // $attributes = $this->getAttributes();
+    /**
+     * Get the attributes to be logged.
+     *
+     * @return array
+     */
+    protected function getActivityAttributes(): array
+    {
+        $attributes = $this->getAttributes();
 
-    //     // // If specific attributes are set to be logged
-    //     // if (!empty(static::$logAttributes)) {
-    //     //     $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
-    //     // }
+        // If specific attributes are set to be logged
+        if (!empty(static::$logAttributes)) {
+            $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+        }
 
-    //     // // Remove excluded attributes
-    //     // if (!empty(static::$logExceptAttributes)) {
-    //     //     $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
-    //     // }
+        // Remove excluded attributes
+        if (!empty(static::$logExceptAttributes)) {
+            $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+        }
 
-    //     // return $attributes;
-    // }
+        return $attributes;
+    }
 
     // /**
     //  * Get the original attributes for changed attributes.
