@@ -119,29 +119,38 @@ class UserController extends Controller
         // Hash password before saving
         $validated['password'] = bcrypt($validated['password']);
 
-        $user->fill($validated)->save();
+        $savenewUser = $user->fill($validated)->save();
 
-        if ($request->role_id) {
-            $createdUserRole = UserRole::create([
-                'user_id' => $user->id,
-                'role_id' => $request->role_id,
-                'assigned_by_id' => Auth::id(),
-                'assigned_at' => Carbon::now()
-            ]);
-
-            if ($createdUserRole) {
-                $newRoleName = Role::find($request->role_id)->name;
-
-                $logDescription = 'Set ' . $newRoleName . ' Role for ' . $user->name;
-                $user->createLogActivity('set-user-role', [
-                    'user_description' => $logDescription,
-                    'subject_description' => $logDescription,
+        if ($savenewUser) {
+            if ($request->role_id) {
+                $createdUserRole = UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => $request->role_id,
+                    'assigned_by_id' => Auth::id(),
+                    'assigned_at' => Carbon::now()
                 ]);
-            }
-        }
 
-        return redirect()->route('users.show', ['user' => $user])
-            ->with('success', 'User created successfully.');
+                if ($createdUserRole) {
+                    $newestUserHistory = $user->histories()->latest()->first();
+                    if ($newestUserHistory->action == 'create') {
+                        $subjectProperties = $newestUserHistory->subject_properties;
+                        $subjectProperties['attributes']['role'] = [
+                            'label' => User::$attributeLabels['role'],
+                            'value' => $user->getRoleName()
+                        ];
+                        $newestUserHistory->update([
+                            'subject_properties' => $subjectProperties
+                        ]);
+                    }
+                }
+            }
+
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('success', 'User created successfully.');
+        } else {
+            return redirect()->route('users.show', ['user' => $user])
+                ->with('error', 'Create new user failed.');
+        }
     }
 
     /**

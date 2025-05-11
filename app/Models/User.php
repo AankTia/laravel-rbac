@@ -54,7 +54,8 @@ class User extends Authenticatable
         'name' => 'Name',
         'email' => 'Email',
         'password' => 'Password',
-        'is_active' => 'Status'
+        'is_active' => 'Status',
+        'role' => 'Role'
     ];
 
     /**
