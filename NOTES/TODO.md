@@ -32,8 +32,10 @@
 
 ## Enhance Log activity
 
--   [ ] user - Auth\LoginController@login
--   [ ] user - logout › Auth\LoginController@logout
+### user
+
+-   [x] user - Auth\LoginController@login
+-   [x] user - logout › Auth\LoginController@logout
 -   [ ] user - Auth\ConfirmPasswordController@confirm
 -   [ ] user - password.email › Auth\ForgotPasswordController@sendResetLinkEmail
 -   [ ] user - password.update › Auth\ResetPasswordController@reset
@@ -43,6 +45,9 @@
 -   [ ] user - users.destroy › UserController@destroy
 -   [ ] user - users.activate › UserController@activate
 -   [ ] user - users.deactivate › UserController@deactivate
+
+### role
+
 -   [ ] role - roles.store › RoleController@store
 -   [ ] role - roles.update › RoleController@update
 -   [ ] role - roles.destroy › RoleController@destroy
