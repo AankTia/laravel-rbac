@@ -75,9 +75,9 @@ class UserController extends Controller
             ->limit(1)
             ->first();
 
-        $userLogs = $user->logs;
+        $userActivityLogs = $user->userActivities;
 
-        return view('users.show', compact('user', 'lastActivity', 'userLogs'));
+        return view('users.show', compact('user', 'lastActivity', 'userActivityLogs'));
     }
 
     /**

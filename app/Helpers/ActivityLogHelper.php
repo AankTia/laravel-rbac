@@ -2,35 +2,43 @@
 
 function actionTimelinePointColor($action)
 {
-    $result = '';
+    $default = 'timeline-point-gray';
+    $timelinePointColorClass = [
+        'login' => 'timeline-point-success',
+        'logout' => 'timeline-point-dark'
+    ];
 
-    switch ($action) {
-        case 'created':
-            $result = 'timeline-point-primary';
-            break;
-        case 'updated':
-            $result = 'timeline-point-warning';
-            break;
-        case 'role-permission-updated';
-            $result = 'timeline-point-warning';
-            break;
-        case 'deleted':
-            $result = 'timeline-point-danger';
-            break;
-        case 'activated':
-            $result = 'timeline-point-success';
-            break;
-        case 'deactivated':
-            $result = 'timeline-point-gray';
-            break;
-        case 'delete-user':
-            $result = 'timeline-point-danger';
-            break;
-        default:
-            $result = 'timeline-point-info';
+    // switch ($action) {
+    //     case 'created':
+    //         $result = 'timeline-point-primary';
+    //         break;
+    //     case 'updated':
+    //         $result = 'timeline-point-warning';
+    //         break;
+    //     case 'role-permission-updated';
+    //         $result = 'timeline-point-warning';
+    //         break;
+    //     case 'deleted':
+    //         $result = 'timeline-point-danger';
+    //         break;
+    //     case 'activated':
+    //         $result = 'timeline-point-success';
+    //         break;
+    //     case 'deactivated':
+    //         $result = 'timeline-point-gray';
+    //         break;
+    //     case 'delete-user':
+    //         $result = 'timeline-point-danger';
+    //         break;
+    //     default:
+    //         $result = 'timeline-point-info';
+
+
+    if (array_key_exists($action, $timelinePointColorClass)) {
+        return $timelinePointColorClass[$action];
+    } else {
+        return $default;
     }
-
-    return $result;
 }
 
 function actionIcon($action)
