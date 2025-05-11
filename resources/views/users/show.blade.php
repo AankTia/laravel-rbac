@@ -115,27 +115,6 @@
                 </div>
                 <div class="card-body pt-0">
                     <ul class="timeline mb-0">
-                        {{-- <li class="timeline-item timeline-item-transparent">
-                            <span class="timeline-point timeline-point-primary"></span>
-                            <div class="timeline-event">
-                                <div class="timeline-header mb-3">
-                                    <h6 class="mb-0">12 Invoices have been paid</h6>
-                                    <small class="text-muted">12 min ago</small>
-                                </div>
-                                <p class="mb-2">
-                                    Invoices have been paid to the company
-                                </p>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="badge bg-lighter rounded d-flex align-items-center">
-                                        <img src="https://demos.themeselection.com/sneat-bootstrap-html-laravel-admin-template/demo/assets/img/icons/misc/pdf.png"
-                                            alt="img" width="15" class="me-2">
-                                        <span class="h6 mb-0 text-body">invoices.pdf</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li> --}}
-
-                        {{-- <hr> --}}
                         @forelse ($userActivityLogs as $log)
                             <li class="timeline-item timeline-item-transparent">
                                 <span class="timeline-point {{ actionTimelinePointColor($log->action) }}"></span>
