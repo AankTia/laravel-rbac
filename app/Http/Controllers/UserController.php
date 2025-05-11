@@ -212,17 +212,29 @@ class UserController extends Controller
                     $oldRoleName = $userRole->role->name;
                     $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
                     if ($updateUserRole) {
+                        $newRoleName = Role::find($request->role_id)->name;
+
                         if ($updatedUser) {
-                            dd();
+                            $newestUserHistory = $user->getLatestHistory();
+                            if ($newestUserHistory->action == 'update') {
+                                $subjectProperties = $newestUserHistory->subject_properties;
+                                $subjectProperties['attributes']['role'] = [
+                                    'label' => User::$attributeLabels['role'],
+                                    'old_value' => $oldRoleName,
+                                    'new_value' => $newRoleName
+                                ];
+                                $newestUserHistory->update([
+                                    'subject_properties' => $subjectProperties
+                                ]);
+                            }
                         } else {
-                            $newRoleName = Role::find($request->role_id)->name;;
                             $user->createLogActivity('update-user-role', [
                                 'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user with name : ' . $user->name,
                                 'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
                                 'subject_properties' => [
                                     'attributes' => [
                                         'role' => [
-                                            'label' => 'Role',
+                                            'label' => User::$attributeLabels['role'],
                                             'old_value' => $oldRoleName,
                                             'new_value' => $newRoleName
                                         ]
