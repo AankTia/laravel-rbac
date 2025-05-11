@@ -130,7 +130,7 @@ trait LogsActivity
         if (isset($params['user_id']) && $params['user_id'] !== null) {
             $newActivityLogAttributes['user_id'] = $params['user_id'];
         } else {
-            $params['user_id'] = Auth::id();
+            $newActivityLogAttributes['user_id'] = Auth::id();
         }
 
         if (isset($params['user_description']) && $params['user_description'] !== null) {
