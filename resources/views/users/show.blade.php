@@ -124,30 +124,45 @@
                                         <small class="text-muted">{{ humanDateTime($log->created_at) }}</small>
                                     </div>
 
-                                    <div class="card shadow text-dark bg-light mb-3">
-                                        <div class="card-body">
+                                    <div class="accordion mt-3 mb-3" id="detailHistoryAccordion{{ $log->id }}">
+                                        <div class="card accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button type="button" class="accordion-button collapsed"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#accordion{{ $log->id }}" aria-expanded="false"
+                                                    aria-controls="accordion{{ $log->id }}">
+                                                    Details
+                                                </button>
+                                            </h2>
 
-                                            @if ($log->action === 'create')
-                                                @include('activity_log_histories._create_details', [
-                                                    'attributes' => $log->subject_properties['attributes'],
-                                                ])
-                                            @endif
+                                            <div id="accordion{{ $log->id }}" class="accordion-collapse collapse"
+                                                data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
+                                                <div class="accordion-body">
+                                                    <div class="row">
+                                                    @if ($log->action === 'create')
+                                                        @include('activity_log_histories._create_details', [
+                                                            'attributes' => $log->subject_properties['attributes'],
+                                                        ])
+                                                    @endif
+                                                    </row>
 
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <h3 class="h6 text-muted mb-2">IP Address</h3>
-                                                    <div class="mb-2">
-                                                        <small>{{ $log->user_properties['ip_address'] }}</small>
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <h3 class="h6 text-muted mb-2">IP Address</h3>
+                                                            <div class="mb-2">
+                                                                <small>{{ $log->user_properties['ip_address'] }}</small>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <h3 class="h6 text-muted mb-2">User Agent</h3>
+                                                            <div class="mb-2">
+                                                                <small>{{ $log->user_properties['user_agent'] }}</small>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-6">
-                                                    <h3 class="h6 text-muted mb-2">User Agent</h3>
-                                                    <div class="mb-2">
-                                                        <small>{{ $log->user_properties['user_agent'] }}</small>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
