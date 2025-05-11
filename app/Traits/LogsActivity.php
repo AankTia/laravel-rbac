@@ -192,6 +192,11 @@ trait LogsActivity
         }
     }
 
+    function getLatestHistory()
+    {
+        return $this->histories()->latest()->first();
+    }
+
     // /**
     //  * Log an activity for this model.
     //  *

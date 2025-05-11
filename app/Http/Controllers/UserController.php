@@ -131,7 +131,7 @@ class UserController extends Controller
                 ]);
 
                 if ($createdUserRole) {
-                    $newestUserHistory = $user->histories()->latest()->first();
+                    $newestUserHistory = $user->getLatestHistory();
                     if ($newestUserHistory->action == 'create') {
                         $subjectProperties = $newestUserHistory->subject_properties;
                         $subjectProperties['attributes']['role'] = [
