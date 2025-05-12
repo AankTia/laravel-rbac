@@ -134,7 +134,7 @@ class UserController extends Controller
                     if ($newestUserHistory->action == 'create') {
                         $subjectProperties = $newestUserHistory->subject_properties;
                         $subjectProperties['attributes']['role'] = [
-                            'label' => User::$attributeLabels['role'],
+                            'label' =>  $user->getAttributeLabel('role'),
                             'value' => $user->getRoleName()
                         ];
                         $newestUserHistory->update([
@@ -283,13 +283,18 @@ class UserController extends Controller
         ];
 
         // $user->delete(); // This is a soft delete
+        if ($user->delete()) {
+            $user->createLogActivity('delete', $logActivityData);
 
+            return redirect()
+                ->route('users.index')
+                ->with('success', 'User: ' . $userName . ' deleted successfully.');
+        } else {
 
-        $user->createLogActivity('delete', $logActivityData);
-
-        return redirect()
-            ->route('users.index')
-            ->with('success', 'User: ' . $userName . ' deleted successfully.');
+            return redirect()
+                ->route('users.show', $user)
+                ->with('error', 'Failed delete User');
+        }
     }
 
     /**
