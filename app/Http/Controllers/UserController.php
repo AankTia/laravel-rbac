@@ -245,10 +245,19 @@ class UserController extends Controller
                     }
                 }
             } else {
-                $user->createLogActivity('set-user-role', [
-                    'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
-                    'subject_description' => 'Set ' . $newRoleName . ' Role',
+                $createdUserRole = UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => $request->role_id,
+                    'assigned_by_id' => Auth::id(),
+                    'assigned_at' => Carbon::now()
                 ]);
+
+                if ($createdUserRole) {
+                    $user->createLogActivity('set-user-role', [
+                        'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
+                        'subject_description' => 'Set ' . $newRoleName . ' Role',
+                    ]);
+                }
             };
         }
 
