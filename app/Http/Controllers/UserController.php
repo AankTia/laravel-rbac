@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -119,39 +120,34 @@ class UserController extends Controller
         // Hash password before saving
         $validated['password'] = bcrypt($validated['password']);
 
+        DB::beginTransaction();
         try {
             $user->fill($validated)->save();
-            // if ($request->role_id) {
-            //     $createdUserRole = UserRole::create([
-            //         'user_id' => $user->id,
-            //         'role_id' => $request->role_id,
-            //         'assigned_by_id' => Auth::id(),
-            //         'assigned_at' => Carbon::now()
-            //     ]);
 
-            //     if ($createdUserRole) {
-            //         $newestUserHistory = $user->getLatestHistory();
-            //         if ($newestUserHistory->action == 'create') {
-            //             $subjectProperties = $newestUserHistory->subject_properties;
-            //             $subjectProperties['attributes']['role'] = [
-            //                 'label' =>  $user->getAttributeLabel('role'),
-            //                 'value' => $user->getRoleName()
-            //             ];
-            //             $newestUserHistory->update([
-            //                 'subject_properties' => $subjectProperties
-            //             ]);
-            //         }
-            //     }
-            // }
+            $logSubjectProperties = $user->getOriginalSubjectProperties();
+            if ($request->role_id) {
+                $user->setRole($request->role_id, Auth::id());
 
-            $user->createStoredDataLog([
+                $logSubjectProperties['attributes']['role'] = [
+                    'label' => $user->getAttributeLabel('role'),
+                    'value' => $user->getRoleName()
+                ];
+            }
+
+            $logData  = [
                 'user_description' => 'Created a new user : ' . $user->name,
-                'subject_description' => 'Created user'
-            ]);
+                'subject_properties' => $logSubjectProperties
+            ];
+
+            $user->createStoredDataLog($logData);
+
+            DB::commit();
 
             return redirect()->route('users.show', ['user' => $user])
                 ->with('success', 'User created successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
+
             $message = $e->getMessage();
 
             return redirect()

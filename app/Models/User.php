@@ -7,6 +7,7 @@ namespace App\Models;
 use App\TimestampAndUserTrackingTrait;
 use App\Traits\LogsActivity;
 use App\Traits\TracksChanges;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -99,6 +100,16 @@ class User extends Authenticatable
     public function userRole()
     {
         return $this->hasOne(UserRole::class);
+    }
+
+    public function setRole($roleId, $assignById = null)
+    {
+        return UserRole::create([
+            'user_id' => $this->id,
+            'role_id' => $roleId,
+            'assigned_by_id' => $assignById,
+            'assigned_at' => Carbon::now()
+        ]);
     }
 
     public function unsetRole()

@@ -176,7 +176,8 @@ trait LogsActivity
         $activityLogData['action'] = $action;
 
         $classBaseName = class_basename($this);
-        
+        $defaultDecsription = 'Created a new ' . $classBaseName;
+
         if (!array_key_exists('log_name', $params)) {
             $activityLogData['log_name'] = $classBaseName;
         }
@@ -185,7 +186,6 @@ trait LogsActivity
             $activityLogData['user_id'] = Auth::id();
         }
 
-        $defaultDecsription = 'Created a new ' . $classBaseName;
         if (!array_key_exists('user_description', $params)) {
             $activityLogData['user_description'] = $defaultDecsription;
         }
@@ -194,10 +194,11 @@ trait LogsActivity
             $activityLogData['subject_description'] = $defaultDecsription;
         }
 
+        if (!array_key_exists('subject_properties', $params)) {
+            $activityLogData['subject_properties'] = $this->getOriginalSubjectProperties();
+        }
+
         $activityLogData['user_properties'] = $this->generateUserProperties($params['user_properties'] ?? []);
-        $activityLogData['subject_properties'] = [
-            'attributes' => $this->getOriginalLogAttributes()
-        ];
 
         $newActivity = new ActivityLog($activityLogData);
         if (!in_array($action, ['login', 'logout'])) {
@@ -221,6 +222,12 @@ trait LogsActivity
         }
 
         return $userProperties;
+    }
+
+    public function getOriginalSubjectProperties() {
+        return [
+            'attributes' => $this->getOriginalLogAttributes()
+        ];
     }
 
 
