@@ -282,8 +282,8 @@ class UserController extends Controller
             ]
         ];
 
-        // $user->delete(); // This is a soft delete
         if ($user->delete()) {
+            // This is a soft delete
             $user->createLogActivity('delete', $logActivityData);
 
             return redirect()
@@ -307,7 +307,12 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        $user->update(['is_active' => 1]);
+        if ($user->update(['is_active' => 1])) {
+            $user->createLogActivity('activate', [
+                'user_description' => 'Activated user : ' . $user->name,
+                'subject_description' => 'Activated'
+            ]);
+        }
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User activated successfully.');
@@ -320,7 +325,7 @@ class UserController extends Controller
     {
         if ($user->isSuperAdmin()) {
             return redirect()->route('users.show', ['user' => $user])
-                ->with('info', 'Cannot diactivate User with Super Admin Role.');
+                ->with('info', 'Cannot diactivate This User with Super Admin Role.');
         }
 
         if (!$user->is_active) {
@@ -328,7 +333,12 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        $user->update(['is_active' => 0]);
+        if ($user->update(['is_active' => 0])) {
+            $user->createLogActivity('deactivate', [
+                'user_description' => 'Desctivated user : ' . $user->name,
+                'subject_description' => 'Deactivated'
+            ]);
+        }
 
         return redirect()->route('users.show', ['user' => $user])
             ->with('success', 'User deactivated successfully.');

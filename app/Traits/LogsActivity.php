@@ -84,13 +84,13 @@ trait LogsActivity
             }
 
             if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
-                if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
-                    dd();
-                    // $event = 'activated';
-                } else {
-                    dd();
-                    // $event = 'deactivated';
-                }
+                // if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
+                //     dd();
+                //     // $event = 'activated';
+                // } else {
+                //     dd();
+                //     // $event = 'deactivated';
+                // }
             } else {
                 $klass = get_class($model);
 
