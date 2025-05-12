@@ -135,7 +135,7 @@ class UserController extends Controller
             }
 
             $logData  = [
-                'user_description' => 'Created a new user : ' . $user->name,
+                'user_description' => 'Created a new User : ' . $user->name,
                 'subject_properties' => $logSubjectProperties
             ];
 
@@ -276,28 +276,38 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $userName = $user->name;
-        $originalAttributes = $user->getOriginalActivityAttributes();
 
-        $logActivityData = [
-            'user_description' => 'Deleted User : ' . $userName,
-            'subject_description' => 'Deleted User',
-            'subject_properties' => [
-                'attributes' => $originalAttributes
-            ]
+        $logSubjectProperties = $user->getOriginalSubjectProperties();
+        $logSubjectProperties['attributes']['role'] = [
+            'label' => $user->getAttributeLabel('role'),
+            'value' => $user->getRoleName()
         ];
 
-        if ($user->delete()) {
+        $logData  = [
+            'user_description' => 'Deleted User : ' . $user->name,
+            'subject_properties' => $logSubjectProperties
+        ];
+
+        DB::beginTransaction();
+        try {
             // This is a soft delete
-            $user->createLogActivity('delete', $logActivityData);
+            $user->delete();
+            $user->createDeletedDataLog($logData);
+
+            DB::commit();
 
             return redirect()
                 ->route('users.index')
-                ->with('success', 'User: ' . $userName . ' deleted successfully.');
-        } else {
+                ->with('success', 'Successfully delete User : ' . $userName);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $message = $e->getMessage();
 
             return redirect()
-                ->route('users.show', $user)
-                ->with('error', 'Failed delete User');
+                ->route('users.index')
+                ->with('error', 'Failed to delete User:  ' . $userName . '. ' . $message);
         }
     }
 

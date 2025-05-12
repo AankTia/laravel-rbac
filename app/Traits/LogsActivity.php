@@ -157,7 +157,7 @@ trait LogsActivity
 
     public function createDeletedDataLog($params = [])
     {
-        dd();
+        return $this->createLog('delete', $params);
     }
 
     public function createActivateDataLog($params = [])
