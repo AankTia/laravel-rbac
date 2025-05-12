@@ -151,7 +151,7 @@ trait LogsActivity
 
     public function createUpdatedDataLog($params = [])
     {
-        dd();
+        return $this->createLog('update', $params);
     }
 
     public function createDeletedDataLog($params = [])
@@ -223,12 +223,12 @@ trait LogsActivity
         return $userProperties;
     }
 
-    public function getOriginalSubjectProperties() {
+    public function getOriginalSubjectProperties()
+    {
         return [
             'attributes' => $this->getOriginalLogAttributes()
         ];
     }
-
 
     /**
      * Get the original attributes for changed attributes to log.
@@ -266,6 +266,47 @@ trait LogsActivity
                 $result[$attribute] = [
                     'label' => $this->getAttributeLabel($attribute),
                     'value' => $value
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    public function getChangedSubjectProperties()
+    {
+        return [
+            'attributes' => $this->getChangedLogAttributes()
+        ];
+    }
+
+    public function getChangedLogAttributes()
+    {
+        $result = [];
+
+        if (empty($dirty)) {
+            $dirty = $this->getDirty();
+        }
+
+        $attributes = $dirty;
+
+        // If specific attributes are set to be logged
+        if (!empty(static::$logAttributes)) {
+            $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+        }
+
+        // Remove excluded attributes
+        if (!empty(static::$logExceptAttributes)) {
+            $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+        }
+
+        if (!empty($attributes)) {
+            $originalAttributes = $this->getOriginal();
+            foreach ($attributes as $attribute => $value) {
+                $result[$attribute] = [
+                    'label' => $this->getAttributeLabel($attribute),
+                    'new_value' => $value,
+                    'old_value' => $originalAttributes[$attribute],
                 ];
             }
         }
@@ -488,71 +529,70 @@ trait LogsActivity
     //     // }
     // }
 
-    /**
-     * Get the attributes to be logged.
-     *
-     * @return array
-     */
-    protected function getActivityAttributes(): array
-    {
-        $attributes = $this->getAttributes();
+    // /**
+    //  * Get the attributes to be logged.
+    //  *
+    //  * @return array
+    //  */
+    // protected function getActivityAttributes(): array
+    // {
+    //     $attributes = $this->getAttributes();
 
-        // If specific attributes are set to be logged
-        if (!empty(static::$logAttributes)) {
-            $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
-        }
+    //     // If specific attributes are set to be logged
+    //     if (!empty(static::$logAttributes)) {
+    //         $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+    //     }
 
-        // Remove excluded attributes
-        if (!empty(static::$logExceptAttributes)) {
-            $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
-        }
+    //     // Remove excluded attributes
+    //     if (!empty(static::$logExceptAttributes)) {
+    //         $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+    //     }
 
-        return $attributes;
-    }
+    //     return $attributes;
+    // }
 
-    /**
-     * Get the original attributes for changed attributes.
-     *
-     * @param array $dirty
-     * @return array
-     */
-    public function getOriginalActivityAttributes(array $dirty = []): array
-    {
-        $result = [];
+    // /**
+    //  * Get the original attributes for changed attributes.
+    //  *
+    //  * @param array $dirty
+    //  * @return array
+    //  */
+    // public function getOriginalActivityAttributes(array $dirty = []): array
+    // {
+    //     $result = [];
 
-        if (empty($dirty)) {
-            $dirty = $this->getOriginal();
-        }
+    //     if (empty($dirty)) {
+    //         $dirty = $this->getOriginal();
+    //     }
 
-        $original = [];
-        foreach (array_keys($dirty) as $key) {
-            if (array_key_exists($key, $this->getOriginal())) {
-                $original[$key] = $this->getOriginal($key);
-            }
-        }
+    //     $original = [];
+    //     foreach (array_keys($dirty) as $key) {
+    //         if (array_key_exists($key, $this->getOriginal())) {
+    //             $original[$key] = $this->getOriginal($key);
+    //         }
+    //     }
 
-        // If specific attributes are set to be logged
-        if (!empty(static::$logAttributes)) {
-            $original = array_intersect_key($original, array_flip(static::$logAttributes));
-        }
+    //     // If specific attributes are set to be logged
+    //     if (!empty(static::$logAttributes)) {
+    //         $original = array_intersect_key($original, array_flip(static::$logAttributes));
+    //     }
 
-        // Remove excluded attributes
-        if (!empty(static::$logExceptAttributes)) {
-            $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
-        }
+    //     // Remove excluded attributes
+    //     if (!empty(static::$logExceptAttributes)) {
+    //         $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
+    //     }
 
-        if (!empty($original)) {
-            foreach ($original as $attribute => $value) {
-                $result[$attribute] = [
-                    'label' => $this->getAttributeLabel($attribute),
-                    'value' => $value
-                ];
-                // dd($attribute, $value);
-            }
-        }
+    //     if (!empty($original)) {
+    //         foreach ($original as $attribute => $value) {
+    //             $result[$attribute] = [
+    //                 'label' => $this->getAttributeLabel($attribute),
+    //                 'value' => $value
+    //             ];
+    //         }
+    //     }
 
-        return $result;
-    }
+    //     return $result;
+    // }
 
     // /**
     //  * Get the changed attributes for activity logging.
@@ -560,22 +600,22 @@ trait LogsActivity
     //  * @param array $dirty
     //  * @return array
     //  */
-    protected function getChangedActivityAttributes(array $dirty): array
-    {
-        $attributes = $dirty;
+    // protected function getChangedActivityAttributes(array $dirty = []): array
+    // {
+    //     $attributes = $dirty;
 
-        // If specific attributes are set to be logged
-        if (!empty(static::$logAttributes)) {
-            $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
-        }
+    //     // If specific attributes are set to be logged
+    //     if (!empty(static::$logAttributes)) {
+    //         $attributes = array_intersect_key($attributes, array_flip(static::$logAttributes));
+    //     }
 
-        // Remove excluded attributes
-        if (!empty(static::$logExceptAttributes)) {
-            $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
-        }
+    //     // Remove excluded attributes
+    //     if (!empty(static::$logExceptAttributes)) {
+    //         $attributes = array_diff_key($attributes, array_flip(static::$logExceptAttributes));
+    //     }
 
-        return $attributes;
-    }
+    //     return $attributes;
+    // }
 
     // protected static function getActivityDescription(string $event, $model): string
     // {

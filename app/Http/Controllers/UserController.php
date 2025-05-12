@@ -143,7 +143,8 @@ class UserController extends Controller
 
             DB::commit();
 
-            return redirect()->route('users.show', ['user' => $user])
+            return redirect()
+                ->route('users.show', $user)
                 ->with('success', 'User created successfully.');
         } catch (Exception $e) {
             DB::rollBack();
@@ -203,71 +204,119 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
         }
 
-        $userChanges = !empty($user->getDirty());
-        $updatedUser = false;
-        if ($userChanges) {
-            $updatedUser = $user->save();
-        }
+        DB::beginTransaction();
+        try {
+            $userChanges = !empty($user->getDirty());
+            $updatedUser = false;
 
-        if ($request->role_id) {
-            $newRoleName = Role::find($request->role_id)->name;
-            $userRole = $user->userRole;
+            $logSubjectProperties = [];
+            if ($userChanges) {
+                $logSubjectProperties = $user->getChangedSubjectProperties();
 
-            if ($userRole) {
-                if ($request->role_id != $userRole->role_id) {
-                    $oldRoleName = $userRole->role->name;
-                    $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
-                    if ($updateUserRole) {
-                        if ($updatedUser) {
-                            $newestUserHistory = $user->getLatestHistory();
-                            if ($newestUserHistory->action == 'update') {
-                                $subjectProperties = $newestUserHistory->subject_properties;
-                                $subjectProperties['attributes']['role'] = [
-                                    'label' => $user->getAttributeLabel('role'),
-                                    'old_value' => $oldRoleName,
-                                    'new_value' => $newRoleName
-                                ];
-                                $newestUserHistory->update([
-                                    'subject_properties' => $subjectProperties
-                                ]);
-                            }
-                        } else {
-                            $user->createLogActivity('update-user-role', [
-                                'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user : ' . $user->name,
-                                'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
-                                'subject_properties' => [
-                                    'attributes' => [
-                                        'role' => [
-                                            'label' => $user->getAttributeLabel('role'),
-                                            'old_value' => $oldRoleName,
-                                            'new_value' => $newRoleName
-                                        ]
-                                    ]
-                                ]
-                            ]);
-                        }
-                    }
-                }
+                // check is user data changes, 
+                // this for handle if onlu change role
+                $updatedUser = $user->save();
             } else {
-                $createdUserRole = UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => $request->role_id,
-                    'assigned_by_id' => Auth::id(),
-                    'assigned_at' => Carbon::now()
-                ]);
+                $logSubjectProperties['attributes'] = [];
+            }
 
-                if ($createdUserRole) {
-                    $user->createLogActivity('set-user-role', [
-                        'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
-                        'subject_description' => 'Set ' . $newRoleName . ' Role',
-                    ]);
-                }
-            };
+            // $user->fill($validated)->save();
+
+            // $logSubjectProperties = $user->getOriginalSubjectProperties();
+            // if ($request->role_id) {
+            //     $user->setRole($request->role_id, Auth::id());
+
+            //     $logSubjectProperties['attributes']['role'] = [
+            //         'label' => $user->getAttributeLabel('role'),
+            //         'value' => $user->getRoleName()
+            //     ];
+            // }
+
+            $user->createUpdatedDataLog([
+                'user_description' => 'Updated User : ' . $user->name,
+                'subject_properties' => $logSubjectProperties
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('success', 'User updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $message = $e->getMessage();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('error', 'Failed to update User. ' . $message);
         }
 
-        return redirect()
-            ->route('users.show', ['user' => $user])
-            ->with('success', 'User updated successfully.');
+        // $userChanges = !empty($user->getDirty());
+        // $updatedUser = false;
+        // if ($userChanges) {
+        //     $updatedUser = $user->save();
+        // }
+
+        // if ($request->role_id) {
+        //     $newRoleName = Role::find($request->role_id)->name;
+        //     $userRole = $user->userRole;
+
+        //     if ($userRole) {
+        //         if ($request->role_id != $userRole->role_id) {
+        //             $oldRoleName = $userRole->role->name;
+        //             $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
+        //             if ($updateUserRole) {
+        //                 if ($updatedUser) {
+        //                     $newestUserHistory = $user->getLatestHistory();
+        //                     if ($newestUserHistory->action == 'update') {
+        //                         $subjectProperties = $newestUserHistory->subject_properties;
+        //                         $subjectProperties['attributes']['role'] = [
+        //                             'label' => $user->getAttributeLabel('role'),
+        //                             'old_value' => $oldRoleName,
+        //                             'new_value' => $newRoleName
+        //                         ];
+        //                         $newestUserHistory->update([
+        //                             'subject_properties' => $subjectProperties
+        //                         ]);
+        //                     }
+        //                 } else {
+        //                     $user->createLogActivity('update-user-role', [
+        //                         'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user : ' . $user->name,
+        //                         'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
+        //                         'subject_properties' => [
+        //                             'attributes' => [
+        //                                 'role' => [
+        //                                     'label' => $user->getAttributeLabel('role'),
+        //                                     'old_value' => $oldRoleName,
+        //                                     'new_value' => $newRoleName
+        //                                 ]
+        //                             ]
+        //                         ]
+        //                     ]);
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         $createdUserRole = UserRole::create([
+        //             'user_id' => $user->id,
+        //             'role_id' => $request->role_id,
+        //             'assigned_by_id' => Auth::id(),
+        //             'assigned_at' => Carbon::now()
+        //         ]);
+
+        //         if ($createdUserRole) {
+        //             $user->createLogActivity('set-user-role', [
+        //                 'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
+        //                 'subject_description' => 'Set ' . $newRoleName . ' Role',
+        //             ]);
+        //         }
+        //     };
+        // }
+
+        // return redirect()
+        //     ->route('users.show', ['user' => $user])
+        //     ->with('success', 'User updated successfully.');
     }
 
     /**
