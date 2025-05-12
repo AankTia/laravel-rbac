@@ -27,12 +27,12 @@ class Role extends Model
         'updated_at'
     ];
 
-    public static $attributeLabels = [
-        'name' => 'Role Name',
-        'slug' => 'Role Identifier',
-        'description' => 'Role Description',
-        'allow_to_be_assigne' => 'Available for Assignment'
-    ];
+    // public static $attributeLabels = [
+    //     'name' => 'Role Name',
+    //     'slug' => 'Role Identifier',
+    //     'description' => 'Role Description',
+    //     'allow_to_be_assigne' => 'Available for Assignment'
+    // ];
 
     protected static $rules = [
         'name' => 'required|string|max:255|unique:roles,name',

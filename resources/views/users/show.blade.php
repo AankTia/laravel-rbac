@@ -66,8 +66,8 @@
                                 @endif
                             @endif
 
-                            @if (isUserCan('delete', 'role'))
-                                {!! deleteButton(route('roles.destroy', $user)) !!}
+                            @if (isUserCan('delete', 'user'))
+                                {!! deleteButton(route('users.destroy', $user)) !!}
                             @endif
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                                                 data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
                                                 <div class="accordion-body">
                                                     <div class="row">
-                                                    @if ($log->action === 'create')
+                                                    @if (in_array($log->action, ['create', 'delete']))
                                                         @include('activity_log_histories._create_details', [
                                                             'attributes' => $log->subject_properties['attributes'],
                                                         ])

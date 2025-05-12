@@ -219,7 +219,7 @@ class UserController extends Controller
                             if ($newestUserHistory->action == 'update') {
                                 $subjectProperties = $newestUserHistory->subject_properties;
                                 $subjectProperties['attributes']['role'] = [
-                                    'label' => User::$attributeLabels['role'],
+                                    'label' => $user->getAttributeLabel('role'),
                                     'old_value' => $oldRoleName,
                                     'new_value' => $newRoleName
                                 ];
@@ -234,7 +234,7 @@ class UserController extends Controller
                                 'subject_properties' => [
                                     'attributes' => [
                                         'role' => [
-                                            'label' => User::$attributeLabels['role'],
+                                            'label' => $user->getAttributeLabel('role'),
                                             'old_value' => $oldRoleName,
                                             'new_value' => $newRoleName
                                         ]
@@ -261,7 +261,8 @@ class UserController extends Controller
             };
         }
 
-        return redirect()->route('users.show', ['user' => $user])
+        return redirect()
+            ->route('users.show', ['user' => $user])
             ->with('success', 'User updated successfully.');
     }
 
@@ -270,9 +271,25 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $name = $user->name;
-        $user->delete(); // This is a soft delete
-        return redirect()->route('users.index')->with('success', 'User: ' . $name . ' deleted successfully.');
+        $userName = $user->name;
+        $originalAttributes = $user->getOriginalActivityAttributes();
+
+        $logActivityData = [
+            'user_description' => 'Deleted User : ' . $userName,
+            'subject_description' => 'Deleted User',
+            'subject_properties' => [
+                'attributes' => $originalAttributes
+            ]
+        ];
+
+        // $user->delete(); // This is a soft delete
+
+
+        $user->createLogActivity('delete', $logActivityData);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User: ' . $userName . ' deleted successfully.');
     }
 
     /**

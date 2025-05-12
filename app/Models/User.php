@@ -50,14 +50,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public static $attributeLabels = [
-        'name' => 'Name',
-        'email' => 'Email',
-        'password' => 'Password',
-        'is_active' => 'Status',
-        'role' => 'Role'
-    ];
-
     /**
      * Get the attributes that should be cast.
      *
@@ -68,6 +60,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+        ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::$attributeLabels = [
+            'name' => 'Name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'is_active' => 'Status',
+            'role' => 'Role'
         ];
     }
 
@@ -96,7 +101,8 @@ class User extends Authenticatable
         return $this->hasOne(UserRole::class);
     }
 
-    public function unsetRole() {
+    public function unsetRole()
+    {
         return $this->userRole()->delete();
     }
 

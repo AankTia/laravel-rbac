@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
+
 trait LogsActivity
 {
     /**
@@ -19,6 +21,8 @@ trait LogsActivity
      * @var array
      */
     protected static $logAttributes = [];
+
+    protected static $attributeLabels = [];
 
     /**
      * The array of attributes to be excluded from logging.
@@ -33,7 +37,8 @@ trait LogsActivity
         'created_by_id',
         'last_updated_by_id',
         'password',
-        'remember_token'
+        'remember_token',
+        'email_verified_at'
     ];
 
     /**
@@ -110,10 +115,9 @@ trait LogsActivity
             }
         });
 
-        static::deleted(function ($model) {
-            // dd();
-            // $model->logActivity('deleted');
-        });
+        // static::deleted(function ($model) {
+        //     // dd();
+        // });
     }
 
     /**
@@ -225,6 +229,21 @@ trait LogsActivity
         if (property_exists($klass, 'attributeLabels')) {
             if (array_key_exists($attribute, $klass::$attributeLabels)) {
                 return $klass::$attributeLabels[$attribute];
+            } else {
+                return $attribute;
+            }
+        } else {
+            return $attribute;
+        }
+    }
+
+    function getAttributeLabel($attribute)
+    {
+        // dd(static::$attributeLabels);
+        $klass = get_class($this);
+        if (property_exists($klass, 'attributeLabels')) {
+            if (array_key_exists($attribute, static::$attributeLabels)) {
+                return static::$attributeLabels[$attribute];
             } else {
                 return $attribute;
             }
@@ -357,10 +376,15 @@ trait LogsActivity
      * @param array $dirty
      * @return array
      */
-    protected function getOriginalActivityAttributes(array $dirty): array
+    public function getOriginalActivityAttributes(array $dirty = []): array
     {
-        $original = [];
+        $result = [];
 
+        if (isEmpty($dirty)) {
+            $dirty = $this->getOriginal();
+        }
+
+        $original = [];
         foreach (array_keys($dirty) as $key) {
             if (array_key_exists($key, $this->getOriginal())) {
                 $original[$key] = $this->getOriginal($key);
@@ -377,7 +401,17 @@ trait LogsActivity
             $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
         }
 
-        return $original;
+        if (!empty($original)) {
+            foreach ($original as $attribute => $value) {
+                $result[$attribute] = [
+                    'label' => $this->getAttributeLabel($attribute),
+                    'value' => $value
+                ];
+                // dd($attribute, $value);
+            }
+        }
+
+        return $result;
     }
 
     // /**
