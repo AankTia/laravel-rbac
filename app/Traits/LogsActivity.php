@@ -280,6 +280,21 @@ trait LogsActivity
         ];
     }
 
+    public function getChangeDataDescription()
+    {
+        $changedAttributeLabels = [];
+        $changedLogAttributes = $this->getChangedLogAttributes();
+        foreach ($changedLogAttributes as $attribute => $data) {
+            $changedAttributeLabels[] = $data['label'];
+        }
+
+        if (!empty($changedAttributeLabels)) {
+            return 'Change ' . implode(', ', $changedAttributeLabels) . '.';
+        } else {
+            return null;
+        }
+    }
+
     public function getChangedLogAttributes()
     {
         $result = [];

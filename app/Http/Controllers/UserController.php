@@ -213,7 +213,7 @@ class UserController extends Controller
             $logDescription = [];
             if ($isUserChange) {
                 $logSubjectProperties = $user->getChangedSubjectProperties();
-                $logDescription[] = 'Update Data';
+                $logDescription[] = $user->getChangeDataDescription();
 
                 // check is user data changes, 
                 // this for handle if onlu change role
@@ -254,8 +254,8 @@ class UserController extends Controller
             $logUserDescription[] = 'for User : ' . $userName;
 
             $user->createUpdatedDataLog([
-                'user_description' => implode(', ', $logUserDescription),
-                'subject_description' => implode(', ', $logDescription),
+                'user_description' => implode(' ', $logUserDescription),
+                'subject_description' => implode(' ', $logDescription),
                 'subject_properties' => $logSubjectProperties
             ]);
 
