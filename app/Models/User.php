@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\TimestampAndUserTrackingTrait;
+use App\Traits\ActiveInactive;
 use App\Traits\LogsActivity;
 use App\Traits\TracksChanges;
 use Carbon\Carbon;
@@ -18,7 +19,13 @@ use Illuminate\Validation\ValidationException;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, TimestampAndUserTrackingTrait, LogsActivity, TracksChanges;
+    use HasFactory,
+        Notifiable,
+        SoftDeletes,
+        TimestampAndUserTrackingTrait,
+        LogsActivity,
+        TracksChanges,
+        ActiveInactive;
 
     /**
      * The attributes that are mass assignable.

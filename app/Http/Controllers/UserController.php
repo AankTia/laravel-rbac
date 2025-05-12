@@ -322,9 +322,7 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            $user->update([
-                'is_active' => 1
-            ]);
+            $user->activate();
 
             $user->createActivateDataLog([
                 'user_description' => 'Activated User : ' . $user->name,
@@ -363,9 +361,7 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            $user->update([
-                'is_active' => 0
-            ]);
+            $user->deactivate();
 
             $user->createDeactivateDataLog([
                 'user_description' => 'Deactivated User : ' . $user->name,

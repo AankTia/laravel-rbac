@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
-use function PHPUnit\Framework\isEmpty;
 
 trait LogsActivity
 {
@@ -241,7 +240,7 @@ trait LogsActivity
     {
         $result = [];
 
-        if (isEmpty($dirty)) {
+        if (empty($dirty)) {
             $dirty = $this->getOriginal();
         }
 
@@ -521,7 +520,7 @@ trait LogsActivity
     {
         $result = [];
 
-        if (isEmpty($dirty)) {
+        if (empty($dirty)) {
             $dirty = $this->getOriginal();
         }
 
