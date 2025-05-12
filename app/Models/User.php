@@ -119,6 +119,15 @@ class User extends Authenticatable
         ]);
     }
 
+    public function changeRole($roleId, $assignById = null)
+    {
+        return $this->userRole()->update([
+            'role_id' => $roleId,
+            'assigned_by_id' => $assignById,
+            'assigned_at' => Carbon::now()
+        ]);
+    }
+
     public function unsetRole()
     {
         return $this->userRole()->delete();

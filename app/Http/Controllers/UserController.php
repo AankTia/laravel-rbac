@@ -206,34 +206,56 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
-            $userChanges = !empty($user->getDirty());
-            $updatedUser = false;
+            $userName = $user->name;
+            $isUserChange = !empty($user->getDirty());
 
             $logSubjectProperties = [];
-            if ($userChanges) {
+            $logDescription = [];
+            if ($isUserChange) {
                 $logSubjectProperties = $user->getChangedSubjectProperties();
+                $logDescription[] = 'Update Data';
 
                 // check is user data changes, 
                 // this for handle if onlu change role
-                $updatedUser = $user->save();
+                $user->save();
             } else {
                 $logSubjectProperties['attributes'] = [];
             }
+            
+            $userRole = $user->userRole;
+            $newRoleName = Role::find($request->role_id)->name;
+            if ($userRole) {
+                if ($request->role_id != $userRole->role_id) {
+                    $currentRoleName = $user->getRoleName();
 
-            // $user->fill($validated)->save();
+                    $logDescription[] = 'Change Role from ' . $currentRoleName . ' to ' . $newRoleName;
+                    $logSubjectProperties['attributes']['role'] = [
+                        'label' => $user->getAttributeLabel('role'),
+                        'new_value' => $newRoleName,
+                        'old_value' => $currentRoleName,
+                    ];
 
-            // $logSubjectProperties = $user->getOriginalSubjectProperties();
-            // if ($request->role_id) {
-            //     $user->setRole($request->role_id, Auth::id());
+                    $user->changeRole($request->role_id, Auth::id());
+                }
+            } else {
+                if ($request->role_id) {
+                    $logDescription[] = 'Set Role';
+                    $logSubjectProperties['attributes']['role'] = [
+                        'label' => $user->getAttributeLabel('role'),
+                        'new_value' => $newRoleName,
+                        'old_value' => null,
+                    ];
 
-            //     $logSubjectProperties['attributes']['role'] = [
-            //         'label' => $user->getAttributeLabel('role'),
-            //         'value' => $user->getRoleName()
-            //     ];
-            // }
+                    $user->setRole($request->role_id, Auth::id());
+                }
+            }
+
+            $logUserDescription = $logDescription;
+            $logUserDescription[] = 'for User : ' . $userName;
 
             $user->createUpdatedDataLog([
-                'user_description' => 'Updated User : ' . $user->name,
+                'user_description' => implode(', ', $logUserDescription),
+                'subject_description' => implode(', ', $logDescription),
                 'subject_properties' => $logSubjectProperties
             ]);
 
@@ -251,72 +273,6 @@ class UserController extends Controller
                 ->route('users.show', $user)
                 ->with('error', 'Failed to update User. ' . $message);
         }
-
-        // $userChanges = !empty($user->getDirty());
-        // $updatedUser = false;
-        // if ($userChanges) {
-        //     $updatedUser = $user->save();
-        // }
-
-        // if ($request->role_id) {
-        //     $newRoleName = Role::find($request->role_id)->name;
-        //     $userRole = $user->userRole;
-
-        //     if ($userRole) {
-        //         if ($request->role_id != $userRole->role_id) {
-        //             $oldRoleName = $userRole->role->name;
-        //             $updateUserRole = $userRole->update(['role_id' => $request->role_id]);
-        //             if ($updateUserRole) {
-        //                 if ($updatedUser) {
-        //                     $newestUserHistory = $user->getLatestHistory();
-        //                     if ($newestUserHistory->action == 'update') {
-        //                         $subjectProperties = $newestUserHistory->subject_properties;
-        //                         $subjectProperties['attributes']['role'] = [
-        //                             'label' => $user->getAttributeLabel('role'),
-        //                             'old_value' => $oldRoleName,
-        //                             'new_value' => $newRoleName
-        //                         ];
-        //                         $newestUserHistory->update([
-        //                             'subject_properties' => $subjectProperties
-        //                         ]);
-        //                     }
-        //                 } else {
-        //                     $user->createLogActivity('update-user-role', [
-        //                         'user_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName . ' for user : ' . $user->name,
-        //                         'subject_description' => 'Updated Role from ' . $oldRoleName . ' to ' . $newRoleName,
-        //                         'subject_properties' => [
-        //                             'attributes' => [
-        //                                 'role' => [
-        //                                     'label' => $user->getAttributeLabel('role'),
-        //                                     'old_value' => $oldRoleName,
-        //                                     'new_value' => $newRoleName
-        //                                 ]
-        //                             ]
-        //                         ]
-        //                     ]);
-        //                 }
-        //             }
-        //         }
-        //     } else {
-        //         $createdUserRole = UserRole::create([
-        //             'user_id' => $user->id,
-        //             'role_id' => $request->role_id,
-        //             'assigned_by_id' => Auth::id(),
-        //             'assigned_at' => Carbon::now()
-        //         ]);
-
-        //         if ($createdUserRole) {
-        //             $user->createLogActivity('set-user-role', [
-        //                 'user_description' => 'Set ' . $newRoleName . ' Role for user : ' . $user->name,
-        //                 'subject_description' => 'Set ' . $newRoleName . ' Role',
-        //             ]);
-        //         }
-        //     };
-        // }
-
-        // return redirect()
-        //     ->route('users.show', ['user' => $user])
-        //     ->with('success', 'User updated successfully.');
     }
 
     /**

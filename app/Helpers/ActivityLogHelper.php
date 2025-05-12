@@ -10,6 +10,7 @@ function actionTimelinePointColor($action)
         'update' => 'timeline-point-warning',
         'set-user-role' => 'timeline-point-primary',
         'update-user-role' => 'timeline-point-warning',
+        'unset-user-role' => 'timeline-point-danger',
         'delete' => 'timeline-point-danger',
         'activate' => 'timeline-point-success',
         'deactivate' => 'timeline-point-gray'
