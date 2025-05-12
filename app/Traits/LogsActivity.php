@@ -136,12 +136,20 @@ trait LogsActivity
 
     public function createLoginLog()
     {
-        dd();
+        $params = [
+            'log_name' => 'Auth',
+            'user_description' => 'Loged in'
+        ];
+        return $this->createLog('login', $params);
     }
 
     public function createLogoutLog()
     {
-        dd();
+        $params = [
+            'log_name' => 'Auth',
+            'user_description' => 'Loged out'
+        ];
+        return $this->createLog('logout', $params);
     }
 
     public function createStoredDataLog($params = [])
