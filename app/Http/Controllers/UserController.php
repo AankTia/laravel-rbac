@@ -361,14 +361,29 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        if ($user->update(['is_active' => 0])) {
-            $user->createLogActivity('deactivate', [
-                'user_description' => 'Desctivated user : ' . $user->name,
-                'subject_description' => 'Deactivated'
+        DB::beginTransaction();
+        try {
+            $user->update([
+                'is_active' => 0
             ]);
-        }
 
-        return redirect()->route('users.show', ['user' => $user])
-            ->with('success', 'User deactivated successfully.');
+            $user->createDeactivateDataLog([
+                'user_description' => 'Deactivated User : ' . $user->name,
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('success', 'User deactivated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $message = $e->getMessage();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('error', 'Failed to Deactivate User:  ' . $message);
+        }
     }
 }

@@ -167,7 +167,7 @@ trait LogsActivity
 
     public function createDeactivateDataLog($params = [])
     {
-        dd();
+        return $this->createLog('deactivate', $params);
     }
 
     public function createLog($action, $params = [])
