@@ -162,7 +162,7 @@ trait LogsActivity
 
     public function createActivateDataLog($params = [])
     {
-        dd();
+        return $this->createLog('activate', $params);
     }
 
     public function createDeactivateDataLog($params = [])
@@ -176,7 +176,7 @@ trait LogsActivity
         $activityLogData['action'] = $action;
 
         $classBaseName = class_basename($this);
-        $defaultDecsription = 'Created a new ' . $classBaseName;
+        $defaultDecsription = ucwords($action) . ' ' . $classBaseName;
 
         if (!array_key_exists('log_name', $params)) {
             $activityLogData['log_name'] = $classBaseName;

@@ -299,7 +299,6 @@ class UserController extends Controller
             return redirect()
                 ->route('users.index')
                 ->with('success', 'Successfully delete User : ' . $userName);
-
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -321,15 +320,30 @@ class UserController extends Controller
                 ->with('info', 'User in inactive status.');
         }
 
-        if ($user->update(['is_active' => 1])) {
-            $user->createLogActivity('activate', [
-                'user_description' => 'Activated user : ' . $user->name,
-                'subject_description' => 'Activated'
+        DB::beginTransaction();
+        try {
+            $user->update([
+                'is_active' => 1
             ]);
-        }
 
-        return redirect()->route('users.show', ['user' => $user])
-            ->with('success', 'User activated successfully.');
+            $user->createActivateDataLog([
+                'user_description' => 'Activated User : ' . $user->name,
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('success', 'User activated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $message = $e->getMessage();
+
+            return redirect()
+                ->route('users.show', $user)
+                ->with('error', 'Failed to Activate User:  ' . $message);
+        }
     }
 
     /**
