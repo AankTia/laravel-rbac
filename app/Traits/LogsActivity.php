@@ -50,70 +50,70 @@ trait LogsActivity
 
     public static function bootLogsActivity()
     {
-        static::created(function ($model) {
-            if (Auth::user()) {
-                $klass = get_class($model);
-                $activityAttributes = $model->getActivityAttributes();
+        // static::created(function ($model) {
+        //     if (Auth::user()) {
+        //         $klass = get_class($model);
+        //         $activityAttributes = $model->getActivityAttributes();
 
-                $subjectProperties = [
-                    'attributes' => []
-                ];
+        //         $subjectProperties = [
+        //             'attributes' => []
+        //         ];
 
-                foreach ($activityAttributes as $attribute => $value) {
-                    $subjectProperties['attributes'][$attribute] = [
-                        'label' => $model->getAttributeLabelFor($klass, $attribute),
-                        'value' => $value
-                    ];
-                }
+        //         foreach ($activityAttributes as $attribute => $value) {
+        //             $subjectProperties['attributes'][$attribute] = [
+        //                 'label' => $model->getAttributeLabelFor($klass, $attribute),
+        //                 'value' => $value
+        //             ];
+        //         }
 
-                $model->createLogActivity('create', [
-                    'user_description' => 'Created new ' . class_basename($model),
-                    'subject_description' => 'Created new ' . class_basename($model),
-                    'subject_properties' => $subjectProperties
-                ]);
-            }
-        });
+        //         $model->createLogActivity('create', [
+        //             'user_description' => 'Created new ' . class_basename($model),
+        //             'subject_description' => 'Created new ' . class_basename($model),
+        //             'subject_properties' => $subjectProperties
+        //         ]);
+        //     }
+        // });
 
-        static::updated(function ($model) {
-            $dirty = $model->getDirty();
-            $changedAttributes = $model->getChangedActivityAttributes($dirty);
+        // static::updated(function ($model) {
+        //     $dirty = $model->getDirty();
+        //     $changedAttributes = $model->getChangedActivityAttributes($dirty);
 
-            // Only log if there are actual changes to be logged
-            if (empty($changedAttributes)) {
-                return null;
-            }
+        //     // Only log if there are actual changes to be logged
+        //     if (empty($changedAttributes)) {
+        //         return null;
+        //     }
 
-            if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
-                // if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
-                //     dd();
-                //     // $event = 'activated';
-                // } else {
-                //     dd();
-                //     // $event = 'deactivated';
-                // }
-            } else {
-                $klass = get_class($model);
+        //     if (in_array('is_active', array_keys($changedAttributes)) && count($changedAttributes) === 1) {
+        //         // if ($changedAttributes['is_active'] === 1 || $changedAttributes['is_active'] === true) {
+        //         //     dd();
+        //         //     // $event = 'activated';
+        //         // } else {
+        //         //     dd();
+        //         //     // $event = 'deactivated';
+        //         // }
+        //     } else {
+        //         $klass = get_class($model);
 
-                $subjectProperties = [
-                    'attributes' => []
-                ];
+        //         $subjectProperties = [
+        //             'attributes' => []
+        //         ];
 
-                $originalAttributes = $model->getOriginalActivityAttributes($dirty);
-                foreach ($changedAttributes as $attribute => $value) {
-                    $subjectProperties['attributes'][$attribute] = [
-                        'label' => $model->getAttributeLabelFor($klass, $attribute),
-                        'new_value' => $value,
-                        'old_value' => $originalAttributes[$attribute]
-                    ];
-                }
+        //         $originalAttributes = $model->getOriginalActivityAttributes($dirty);
+        //         foreach ($changedAttributes as $attribute => $value) {
+        //             $subjectProperties['attributes'][$attribute] = [
+        //                 'label' => $model->getAttributeLabelFor($klass, $attribute),
+        //                 'new_value' => $value,
+        //                 'old_value' => $originalAttributes[$attribute]
+        //             ];
+        //         }
 
-                $model->createLogActivity('update', [
-                    'user_description' => 'Updated ' . class_basename($model),
-                    'subject_description' => 'Updated ' . class_basename($model),
-                    'subject_properties' => $subjectProperties
-                ]);
-            }
-        });
+        //         $model->createLogActivity('update', [
+        //             'user_description' => 'Updated ' . class_basename($model),
+        //             'subject_description' => 'Updated ' . class_basename($model),
+        //             'subject_properties' => $subjectProperties
+        //         ]);
+        //     }
+        // });
 
         // static::deleted(function ($model) {
         //     // dd();
@@ -135,13 +135,162 @@ trait LogsActivity
         return $this->histories()->latest()->first();
     }
 
+    public function createLoginLog()
+    {
+        dd();
+    }
+
+    public function createLogoutLog()
+    {
+        dd();
+    }
+
+    public function createStoredDataLog($params = [])
+    {
+        return $this->createLog('create', $params);
+    }
+
+    public function createUpdatedDataLog($params = [])
+    {
+        dd();
+    }
+
+    public function createDeletedDataLog($params = [])
+    {
+        dd();
+    }
+
+    public function createActivateDataLog($params = [])
+    {
+        dd();
+    }
+
+    public function createDeactivateDataLog($params = [])
+    {
+        dd();
+    }
+
+    public function createLog($action, $params = [])
+    {
+        $activityLogData = $params;
+        $activityLogData['action'] = $action;
+
+        $classBaseName = class_basename($this);
+        
+        if (!array_key_exists('log_name', $params)) {
+            $activityLogData['log_name'] = $classBaseName;
+        }
+
+        if (!array_key_exists('user_id', $params)) {
+            $activityLogData['user_id'] = Auth::id();
+        }
+
+        $defaultDecsription = 'Created a new ' . $classBaseName;
+        if (!array_key_exists('user_description', $params)) {
+            $activityLogData['user_description'] = $defaultDecsription;
+        }
+
+        if (!array_key_exists('subject_description', $params)) {
+            $activityLogData['subject_description'] = $defaultDecsription;
+        }
+
+        $activityLogData['user_properties'] = $this->generateUserProperties($params['user_properties'] ?? []);
+        $activityLogData['subject_properties'] = [
+            'attributes' => $this->getOriginalLogAttributes()
+        ];
+
+        $newActivity = new ActivityLog($activityLogData);
+        if (!in_array($action, ['login', 'logout'])) {
+            $newActivity->subject()->associate($this);
+        }
+
+        return $newActivity->save();
+    }
+
+    public function generateUserProperties($properties = [])
+    {
+        $userProperties = [
+            'ip_address' => Request::ip() ?? '',
+            'user_agent' => Request::userAgent() ?? ''
+        ];
+
+        if (!empty($properties)) {
+            if (in_array('ip_address', $properties) && in_array('user_agent', $properties)) {
+                $userProperties = $properties;
+            }
+        }
+
+        return $userProperties;
+    }
+
+
+    /**
+     * Get the original attributes for changed attributes to log.
+     *
+     * @param array $dirty
+     * @return array
+     */
+    public function getOriginalLogAttributes(array $dirty = []): array
+    {
+        $result = [];
+
+        if (isEmpty($dirty)) {
+            $dirty = $this->getOriginal();
+        }
+
+        $original = [];
+        foreach (array_keys($dirty) as $key) {
+            if (array_key_exists($key, $this->getOriginal())) {
+                $original[$key] = $this->getOriginal($key);
+            }
+        }
+
+        // If specific attributes are set to be logged
+        if (!empty(static::$logAttributes)) {
+            $original = array_intersect_key($original, array_flip(static::$logAttributes));
+        }
+
+        // Remove excluded attributes
+        if (!empty(static::$logExceptAttributes)) {
+            $original = array_diff_key($original, array_flip(static::$logExceptAttributes));
+        }
+
+        if (!empty($original)) {
+            foreach ($original as $attribute => $value) {
+                $result[$attribute] = [
+                    'label' => $this->getAttributeLabel($attribute),
+                    'value' => $value
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    function getAttributeLabel($attribute)
+    {
+        $klass = get_class($this);
+        if (!property_exists($klass, 'attributeLabels')) {
+            return $attribute;
+        }
+
+        if (array_key_exists($attribute, static::$attributeLabels)) {
+            return static::$attributeLabels[$attribute];
+        } else {
+            return $attribute;
+        }
+    }
+
+
+    //======
+
     public function createLogActivity($action, $params = [])
     {
         $params['action'] = $action;
         $newActivityLogAttributes = $this->generateNewActivityLogAttributes($params);
 
         $newActivity = new ActivityLog($newActivityLogAttributes);
-        if (!in_array($newActivityLogAttributes['action'], ['login', 'logout'])) {
+        if (!in_array($action, ['login', 'logout'])) {
             $newActivity->subject()->associate($this);
         }
         $newActivity->save();
@@ -229,21 +378,6 @@ trait LogsActivity
         if (property_exists($klass, 'attributeLabels')) {
             if (array_key_exists($attribute, $klass::$attributeLabels)) {
                 return $klass::$attributeLabels[$attribute];
-            } else {
-                return $attribute;
-            }
-        } else {
-            return $attribute;
-        }
-    }
-
-    function getAttributeLabel($attribute)
-    {
-        // dd(static::$attributeLabels);
-        $klass = get_class($this);
-        if (property_exists($klass, 'attributeLabels')) {
-            if (array_key_exists($attribute, static::$attributeLabels)) {
-                return static::$attributeLabels[$attribute];
             } else {
                 return $attribute;
             }

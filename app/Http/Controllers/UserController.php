@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -118,37 +119,44 @@ class UserController extends Controller
         // Hash password before saving
         $validated['password'] = bcrypt($validated['password']);
 
-        $saveNewUser = $user->fill($validated)->save();
+        try {
+            $user->fill($validated)->save();
+            // if ($request->role_id) {
+            //     $createdUserRole = UserRole::create([
+            //         'user_id' => $user->id,
+            //         'role_id' => $request->role_id,
+            //         'assigned_by_id' => Auth::id(),
+            //         'assigned_at' => Carbon::now()
+            //     ]);
 
-        if ($saveNewUser) {
-            if ($request->role_id) {
-                $createdUserRole = UserRole::create([
-                    'user_id' => $user->id,
-                    'role_id' => $request->role_id,
-                    'assigned_by_id' => Auth::id(),
-                    'assigned_at' => Carbon::now()
-                ]);
+            //     if ($createdUserRole) {
+            //         $newestUserHistory = $user->getLatestHistory();
+            //         if ($newestUserHistory->action == 'create') {
+            //             $subjectProperties = $newestUserHistory->subject_properties;
+            //             $subjectProperties['attributes']['role'] = [
+            //                 'label' =>  $user->getAttributeLabel('role'),
+            //                 'value' => $user->getRoleName()
+            //             ];
+            //             $newestUserHistory->update([
+            //                 'subject_properties' => $subjectProperties
+            //             ]);
+            //         }
+            //     }
+            // }
 
-                if ($createdUserRole) {
-                    $newestUserHistory = $user->getLatestHistory();
-                    if ($newestUserHistory->action == 'create') {
-                        $subjectProperties = $newestUserHistory->subject_properties;
-                        $subjectProperties['attributes']['role'] = [
-                            'label' =>  $user->getAttributeLabel('role'),
-                            'value' => $user->getRoleName()
-                        ];
-                        $newestUserHistory->update([
-                            'subject_properties' => $subjectProperties
-                        ]);
-                    }
-                }
-            }
+            $user->createStoredDataLog([
+                'user_description' => 'Created a new user : ' . $user->name,
+                'subject_description' => 'Created user'
+            ]);
 
             return redirect()->route('users.show', ['user' => $user])
                 ->with('success', 'User created successfully.');
-        } else {
-            return redirect()->route('users.show', ['user' => $user])
-                ->with('error', 'Create new user failed.');
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'Failed to create a new User. ' . $message);
         }
     }
 
