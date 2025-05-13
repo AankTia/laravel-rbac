@@ -204,9 +204,26 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $name = $role->name;
-        $role->delete(); // This is a soft delete
-        return redirect()->route('roles.index')->with('success', 'Role: ' . $name . ' deleted successfully.');
+        DB::beginTransaction();
+        try {
+            $name = $role->name;
+            $role->delete(); // This is a soft delete
+            $role->createDeletedDataLog([
+                'user_description' => 'Deleted ' . $role->name . ' Role.'
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('roles.index')
+                ->with('success', 'Role: ' . $name . ' deleted successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('error', 'Failed to delete Role. ' . $e->getMessage());
+        }
     }
 
     /**

@@ -58,9 +58,9 @@ trait LogsActivity
             static::$logActivityAttributes = $model->generateUpdateLogActivityAttributes();
         });
 
-        // static::deleted(function ($model) {
-        //     // dd();
-        // });
+        static::deleting(function ($model) {
+            static::$logActivityAttributes = $model->generateDeleteLogActivityAttributes();
+        });
     }
 
     /**
@@ -117,17 +117,6 @@ trait LogsActivity
         ];
     }
 
-    public function createStoredDataLog($params = [])
-    {
-        if (!empty($params)) {
-            if (array_key_exists('user_description', $params)) {
-                static::$logActivityAttributes['user_description'] = $params['user_description'];
-            }
-        }
-
-        return $this->createLog('create', $params);
-    }
-
     public function generateUpdateLogActivityAttributes()
     {
         $classBaseName = $this->getClassBaseName();
@@ -144,6 +133,33 @@ trait LogsActivity
         ];
     }
 
+    public function generateDeleteLogActivityAttributes()
+    {
+        $classBaseName = $this->getClassBaseName();
+        $message = 'Deleted ' . $classBaseName;
+
+        return [
+            'log_name' => $classBaseName,
+            'action' => 'deleete',
+            'user_id' => Auth::id(),
+            'user_properties' => $this->generateUserProperties(),
+            'user_description' => $message,
+            'subject_description' => $message,
+            'subject_properties' => $this->getOriginalSubjectProperties()
+        ];
+    }
+
+    public function createStoredDataLog($params = [])
+    {
+        if (!empty($params)) {
+            if (array_key_exists('user_description', $params)) {
+                static::$logActivityAttributes['user_description'] = $params['user_description'];
+            }
+        }
+
+        return $this->createLog('create', $params);
+    }
+
     public function createUpdatedDataLog($params = [])
     {
         if (!empty($params)) {
@@ -157,6 +173,12 @@ trait LogsActivity
 
     public function createDeletedDataLog($params = [])
     {
+        if (!empty($params)) {
+            if (array_key_exists('user_description', $params)) {
+                static::$logActivityAttributes['user_description'] = $params['user_description'];
+            }
+        }
+
         return $this->createLog('delete', $params);
     }
 
