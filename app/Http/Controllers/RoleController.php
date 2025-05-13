@@ -7,7 +7,9 @@ use App\Models\Permission;
 use App\Models\PermissionRoleModule;
 use App\Models\Role;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -60,17 +62,32 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $roleData = $request->all();
-        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
+        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne ? 1 : 0;
 
         $role = new Role();
         $validated = $role->validate('create', $roleData);
 
-        $role->fill($validated)->save();
-        $this->logActivity($request, 'create');
+        DB::beginTransaction();
+        try {
+            $role->fill($validated)->save();
 
-        return redirect()->route('roles.show', ['role' => $role])
-            ->with('success', 'Role created successfully.');
+            $role->createStoredDataLog([
+                'user_description' => 'Created a new Role : ' . $role->name,
+                'subject_properties' => $role->getOriginalSubjectProperties()
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('roles.show', ['role' => $role])
+                ->with('success', 'Role created successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('roles.index')
+                ->with('error', 'Failed to create a new Role. ' . $e->getMessage());
+        }
     }
 
     /**

@@ -13,6 +13,8 @@
                     <td>
                         @if ($attribute === 'is_active')
                             {!! activeInactiveStatusBadgeFor($data['value']) !!}
+                        @elseif ($log_name === 'Role' && $attribute === 'allow_to_be_assigne')
+                            {!! roleAllowToBeAssigneBadge($data['value']) !!}
                         @else
                             {{ $data['value'] }}
                         @endif

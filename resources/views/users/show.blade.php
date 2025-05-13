@@ -143,6 +143,7 @@
                                                             @include(
                                                                 'activity_log_histories._create_details',
                                                                 [
+                                                                    'log_name' => $log->log_name,
                                                                     'attributes' =>
                                                                         $log->subject_properties['attributes'],
                                                                 ]
@@ -151,6 +152,7 @@
                                                             @include(
                                                                 'activity_log_histories._update_details',
                                                                 [
+                                                                    'log_name' => $log->log_name,
                                                                     'attributes' =>
                                                                         $log->subject_properties['attributes'],
                                                                 ]
@@ -186,8 +188,8 @@
                         @endforelse
                     </ul>
 
-                {{-- Pagination --}}
-                {{ $userActivityLogs->links('vendor.pagination.custom') }}
+                    {{-- Pagination --}}
+                    {{ $userActivityLogs->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </div>
