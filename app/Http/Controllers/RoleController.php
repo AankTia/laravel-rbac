@@ -151,7 +151,12 @@ class RoleController extends Controller
             ->limit(1)
             ->first();
 
-        return view('roles.show', compact('role', 'attributeLabels', 'modulePermissions', 'lastActivity'));
+        return view('roles.show', compact(
+            'role',
+            'attributeLabels',
+            'modulePermissions',
+            'lastActivity'
+        ));
     }
 
     /**
@@ -169,15 +174,30 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $roleData = $request->all();
-        $allowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
-        $roleData['allow_to_be_assigne'] = $allowToBeAssigne ? 1 : 0;
+        $isAllowToBeAssigne = (isset($roleData['allow_to_be_assigne']) && $roleData['allow_to_be_assigne'] == 'on');
+        $roleData['allow_to_be_assigne'] = $isAllowToBeAssigne ? 1 : 0;
 
         $validated = $role->validate('update', $roleData);
 
-        $role->update($validated);
+        DB::beginTransaction();
+        try {
+            $role->update($validated);
+            $role->createUpdatedDataLog([
+                'user_description' => 'Updated ' . $role->name . ' Role.'
+            ]);
 
-        return redirect()->route('roles.show', ['role' => $role])
-            ->with('success', 'Role updated successfully.');
+            DB::commit();
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('success', 'Role updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('error', 'Failed to update Role. ' . $e->getMessage());
+        }
     }
 
     /**

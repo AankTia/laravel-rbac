@@ -213,7 +213,7 @@ class UserController extends Controller
             $logDescription = [];
             if ($isUserChange) {
                 $logSubjectProperties = $user->getChangedSubjectProperties();
-                $logDescription[] = $user->getChangeDataDescription();
+                $logDescription[] = $user->getChangeDataMessage();
 
                 // check is user data changes, 
                 // this for handle if onlu change role
@@ -221,7 +221,7 @@ class UserController extends Controller
             } else {
                 $logSubjectProperties['attributes'] = [];
             }
-            
+
             $userRole = $user->userRole;
             $newRoleName = Role::find($request->role_id)->name;
             if ($userRole) {

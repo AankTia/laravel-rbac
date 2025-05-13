@@ -11,20 +11,16 @@
             @foreach ($attributes as $attribute => $data)
                 <tr>
                     <td>{{ $data['label'] }}</td>
-                    <td>
-                        @if ($attribute === 'is_active')
-                            {!! activeInactiveStatusBadgeFor($data['old_value']) !!}
-                        @else
-                            {{ $data['old_value'] }}
-                        @endif
-                    </td>
-                    <td>
-                        @if ($attribute === 'is_active')
-                            {!! activeInactiveStatusBadgeFor($data['new_value']) !!}
-                        @else
-                            {{ $data['new_value'] }}
-                        @endif
-                    </td>
+                    @if ($attribute === 'is_active')
+                        <td>{!! activeInactiveStatusBadgeFor($data['old_value']) !!}</td>
+                        <td>{!! activeInactiveStatusBadgeFor($data['new_value']) !!}</td>
+                    @elseif ($log_name === 'Role' && $attribute === 'allow_to_be_assigne')
+                        <td>{!! roleAllowToBeAssigneBadge($data['old_value']) !!}</td>
+                        <td>{!! roleAllowToBeAssigneBadge($data['new_value']) !!}</td>
+                    @else
+                        <td>{{ $data['old_value'] }}</td>
+                        <td>{{ $data['new_value'] }}</td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

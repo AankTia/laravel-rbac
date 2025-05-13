@@ -53,9 +53,9 @@ class Role extends Model
         });
 
         static::$attributeLabels = [
-            'name' => 'Role Name',
-            'slug' => 'Role Identifier',
-            'description' => 'Role Description',
+            'name' => 'Name',
+            'slug' => 'Identifier',
+            'description' => 'Description',
             'allow_to_be_assigne' => 'Available for Assignment'
         ];
     }

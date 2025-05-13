@@ -20,8 +20,8 @@ trait LogsActivity
      * @var array
      */
     protected static $logAttributes = [];
-
     protected static $attributeLabels = [];
+    protected static $logActivityAttributes = [];
 
     /**
      * The array of attributes to be excluded from logging.
@@ -37,7 +37,8 @@ trait LogsActivity
         'last_updated_by_id',
         'password',
         'remember_token',
-        'email_verified_at'
+        'email_verified_at',
+        'slug'
     ];
 
     /**
@@ -52,8 +53,9 @@ trait LogsActivity
         // static::created(function ($model) {
         // });
 
-        // static::updated(function ($model) {
-        // });
+        static::updating(function ($model) {
+            static::$logActivityAttributes = $model->generateUpdateLogActivityAttributes();
+        });
 
         // static::deleted(function ($model) {
         //     // dd();
@@ -73,6 +75,11 @@ trait LogsActivity
     function getLatestHistory()
     {
         return $this->histories()->latest()->first();
+    }
+
+    public function getClassBaseName()
+    {
+        return class_basename($this);
     }
 
     public function createLoginLog()
@@ -98,9 +105,31 @@ trait LogsActivity
         return $this->createLog('create', $params);
     }
 
+    public function generateUpdateLogActivityAttributes()
+    {
+        $classBaseName = $this->getClassBaseName();
+        $message = $this->getChangeDataMessage();
+
+        return [
+            'log_name' => $classBaseName,
+            'action' => 'update',
+            'user_id' => Auth::id(),
+            'user_properties' => $this->generateUserProperties(),
+            'user_description' => $message,
+            'subject_description' => $message,
+            'subject_properties' => $this->getChangedSubjectProperties()
+        ];
+    }
+
     public function createUpdatedDataLog($params = [])
     {
-        return $this->createLog('update', $params);
+        if (!empty($params)) {
+            if (array_key_exists('user_description', $params)) {
+                static::$logActivityAttributes['user_description'] = $params['user_description'] . ' ' . static::$logActivityAttributes['user_description'];
+            }
+        }
+
+        return $this->createLog('update', static::$logActivityAttributes);
     }
 
     public function createDeletedDataLog($params = [])
@@ -229,7 +258,7 @@ trait LogsActivity
         ];
     }
 
-    public function getChangeDataDescription()
+    public function getChangeDataMessage()
     {
         $changedAttributeLabels = [];
         $changedLogAttributes = $this->getChangedLogAttributes();
@@ -238,7 +267,7 @@ trait LogsActivity
         }
 
         if (!empty($changedAttributeLabels)) {
-            return 'Change ' . implode(', ', $changedAttributeLabels) . '.';
+            return 'Changed ' . implode(', ', $changedAttributeLabels) . '.';
         } else {
             return null;
         }
@@ -292,7 +321,8 @@ trait LogsActivity
         }
     }
 
-    static function getAttributesLabel(){
+    static function getAttributesLabel()
+    {
         return static::$attributeLabels;
     }
 }
