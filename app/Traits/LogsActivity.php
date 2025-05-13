@@ -50,8 +50,9 @@ trait LogsActivity
 
     public static function bootLogsActivity()
     {
-        // static::created(function ($model) {
-        // });
+        static::creating(function ($model) {
+            static::$logActivityAttributes = $model->generateCreateLogActivityAttributes();
+        });
 
         static::updating(function ($model) {
             static::$logActivityAttributes = $model->generateUpdateLogActivityAttributes();
@@ -100,8 +101,30 @@ trait LogsActivity
         return $this->createLog('logout', $params);
     }
 
+    public function generateCreateLogActivityAttributes()
+    {
+        $classBaseName = $this->getClassBaseName();
+        $message = 'Ceated a new ' . $classBaseName;
+
+        return [
+            'log_name' => $classBaseName,
+            'action' => 'create',
+            'user_id' => Auth::id(),
+            'user_properties' => $this->generateUserProperties(),
+            'user_description' => $message,
+            'subject_description' => $message,
+            'subject_properties' => $this->getOriginalSubjectProperties()
+        ];
+    }
+
     public function createStoredDataLog($params = [])
     {
+        if (!empty($params)) {
+            if (array_key_exists('user_description', $params)) {
+                static::$logActivityAttributes['user_description'] = $params['user_description'];
+            }
+        }
+
         return $this->createLog('create', $params);
     }
 

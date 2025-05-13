@@ -74,7 +74,6 @@ class RoleController extends Controller
 
             $role->createStoredDataLog([
                 'user_description' => 'Created a new Role : ' . $role->name,
-                'subject_properties' => $role->getOriginalSubjectProperties()
             ]);
 
             DB::commit();
