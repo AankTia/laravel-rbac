@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $userActivityLogs = $user->userActivities()
             ->latest()
-            ->get();
+            ->paginate(5);
 
         return view('users.show', compact('user', 'lastActivity', 'userActivityLogs'));
     }

@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <h3 class="h6 text-muted">Role</h3>
-                                    <div class="mb-2">{{ $user->getRoleName() ?? '-'}}</div>
+                                    <div class="mb-2">{{ $user->getRoleName() ?? '-' }}</div>
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <h3 class="h6 text-muted">Status</h3>
@@ -139,44 +139,55 @@
                                                 data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
                                                 <div class="accordion-body">
                                                     <div class="row">
-                                                    @if (in_array($log->action, ['create', 'delete']))
-                                                        @include('activity_log_histories._create_details', [
-                                                            'attributes' => $log->subject_properties['attributes'],
-                                                        ])
-                                                    @elseif (in_array($log->action, ['update', 'update-user-role']))
-                                                        @include('activity_log_histories._update_details', [
-                                                            'attributes' => $log->subject_properties['attributes'],
-                                                        ])
-                                                    @endif
-                                                    </row>
+                                                        @if (in_array($log->action, ['create', 'delete']))
+                                                            @include(
+                                                                'activity_log_histories._create_details',
+                                                                [
+                                                                    'attributes' =>
+                                                                        $log->subject_properties['attributes'],
+                                                                ]
+                                                            )
+                                                        @elseif (in_array($log->action, ['update', 'update-user-role']))
+                                                            @include(
+                                                                'activity_log_histories._update_details',
+                                                                [
+                                                                    'attributes' =>
+                                                                        $log->subject_properties['attributes'],
+                                                                ]
+                                                            )
+                                                        @endif
+                                                        </row>
 
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <h3 class="h6 text-muted mb-2">IP Address</h3>
-                                                            <div class="mb-2">
-                                                                <small>{{ $log->user_properties['ip_address'] }}</small>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <h3 class="h6 text-muted mb-2">IP Address</h3>
+                                                                <div class="mb-2">
+                                                                    <small>{{ $log->user_properties['ip_address'] }}</small>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-6">
-                                                            <h3 class="h6 text-muted mb-2">User Agent</h3>
-                                                            <div class="mb-2">
-                                                                <small>{{ $log->user_properties['user_agent'] }}</small>
+                                                            <div class="col-md-6">
+                                                                <h3 class="h6 text-muted mb-2">User Agent</h3>
+                                                                <div class="mb-2">
+                                                                    <small>{{ $log->user_properties['user_agent'] }}</small>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <hr>
                                     </div>
-                                    <hr>
-                                </div>
                             </li>
                         @empty
                             No Activity History
                         @endforelse
                     </ul>
+
+                {{-- Pagination --}}
+                {{ $userActivityLogs->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </div>
