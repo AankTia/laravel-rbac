@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -75,6 +76,21 @@ class User extends Authenticatable
     {
         parent::boot();
 
+        // Before create
+        static::creating(function ($model) {
+            if ($model->slug == null || trim($model->slug) == '') {
+                $model->slug = Str::slug($model->name);
+            }
+        });
+
+        // Before update
+        static::updating(function ($model) {
+            // update slug if name changed
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->name);
+            }
+        });
+
         static::$attributeLabels = [
             'name' => 'Name',
             'email' => 'Email',
@@ -82,6 +98,12 @@ class User extends Authenticatable
             'is_active' => 'Status',
             'role' => 'Role'
         ];
+    }
+
+    // Define route key name to use slug instead of ID
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function validate($action, $data)
