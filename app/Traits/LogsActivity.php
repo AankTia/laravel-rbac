@@ -351,6 +351,10 @@ trait LogsActivity
         }
     }
 
+    static function getAttributesLabel(){
+        return static::$attributeLabels;
+    }
+
 
     //======
 

@@ -27,7 +27,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $attributeLabels = Role::$attributeLabels;
+        $attributeLabels = Role::getAttributesLabel();
 
         $query = Role::query();
         if ($request->has('search_keyword')) {
@@ -49,7 +49,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $attributeLabels = Role::$attributeLabels;
+        $attributeLabels = Role::getAttributesLabel();
 
         return view('roles.create', compact('attributeLabels'));
     }
@@ -78,7 +78,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $attributeLabels = Role::$attributeLabels;
+        $attributeLabels = Role::getAttributesLabel();
         $roleModulePermissions = [];
         foreach ($role->modulePermissions as $roleModulePermission) {
             $moduleSlug = $roleModulePermission->module->slug;
@@ -142,7 +142,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $attributeLabels = Role::$attributeLabels;
+        $attributeLabels = Role::getAttributesLabel();
         return view('roles.edit', compact('role', 'attributeLabels'));
     }
 
@@ -353,7 +353,7 @@ class RoleController extends Controller
         return view('roles.activity_logs', compact('role'))
             ->with('title', $role->name . ' Activity Histories')
             ->with('activityLogs', $activityLogs)
-            ->with('attributeLabels', Role::$attributeLabels)
+            ->with('attributeLabels', Role::getAttributesLabel())
             ->with('orderBy', $orderBy);
     }
 
