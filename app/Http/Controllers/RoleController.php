@@ -387,10 +387,14 @@ class RoleController extends Controller
                 }
             }
 
-            $logActivityAttributes = $role->generateUpdateLogActivityAttributes();
-            $logActivityAttributes['user_description'] = 'Update Role permissions for : ' . $role->name;
-            $logActivityAttributes['subject_description'] = 'Update Role permissions';
-            $logActivityAttributes['subject_properties'] = $logProperties;
+            $logActivityAttributes = array_merge(
+                $role->generateUpdateLogActivityAttributes(),
+                [
+                    'user_description' => 'Update Role permissions for : ' . $role->name,
+                    'subject_description' => 'Update Role permissions',
+                    'subject_properties' => $logProperties,
+                ]
+            );
 
             $role->createLog('update-role-permission', $logActivityAttributes);
 
