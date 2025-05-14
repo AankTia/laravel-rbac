@@ -234,7 +234,7 @@ class User extends Authenticatable
             ->first();
 
         if ($lastLogin) {
-            return $lastLogin->created_at;
+            return humanDateTime($lastLogin->created_at);
         } else {
             return null;
         }

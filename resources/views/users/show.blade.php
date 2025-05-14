@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <h3 class="h6 text-muted">Last Login</h3>
-                                    <div class="mb-2">{{ humanDateTime($lastLogin) }}</div>
+                                    <div class="mb-2">{{ $lastLogin ?? '-' }}</div>
                                 </div>
                             </div>
                         </div>
