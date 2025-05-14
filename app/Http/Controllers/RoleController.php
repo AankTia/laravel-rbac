@@ -324,10 +324,11 @@ class RoleController extends Controller
                     $oldPermissions = [];
 
                     if ($newPermissions != $oldPermissions) {
+                        dd($oldPermissions);
                         $logProperties['attributes'][$moduleSlug] = [
                             'label' => $moduleNameBySlug[$moduleSlug],
-                            'old_value' => $oldPermissions,
-                            'new_value' => $newPermissions
+                            'old_value' => implode(', ', $oldPermissions),
+                            'new_value' => implode(', ', $newPermissions)
                         ];
                     }
                 }
@@ -343,8 +344,8 @@ class RoleController extends Controller
                     if ($newPermissions != $oldPermissions) {
                         $logProperties['attributes'][$moduleSlug] = [
                             'label' => $moduleNameBySlug[$moduleSlug],
-                            'old_value' => $oldPermissions,
-                            'new_value' => $newPermissions
+                            'old_value' => implode(', ', $oldPermissions),
+                            'new_value' => implode(', ', $newPermissions)
                         ];
                     }
                 }
@@ -359,10 +360,11 @@ class RoleController extends Controller
                     $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
 
                     if ($newPermissions != $oldPermissions) {
+                        dd();
                         $logProperties['attributes'][$moduleSlug] = [
                             'label' => $moduleNameBySlug[$moduleSlug],
-                            'old_value' => $oldPermissions,
-                            'new_value' => $newPermissions
+                            'old_value' => implode(', ', $oldPermissions),
+                            'new_value' => implode(', ', $newPermissions)
                         ];
                     }
                 }
