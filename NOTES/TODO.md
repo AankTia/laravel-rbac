@@ -6,6 +6,7 @@
 
 ## Controller
 
+-   [ ] create helper for generate message, error file and line number
 -   [x] Refactor auth()->user()->hasPermission, use helper
 
 ## Helper

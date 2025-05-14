@@ -148,7 +148,7 @@
                                                                         $log->subject_properties['attributes'],
                                                                 ]
                                                             )
-                                                        @elseif (in_array($log->action, ['update', 'update-user-role']))
+                                                        @elseif (in_array($log->action, ['update', 'update-user-role', 'update-role-permission']))
                                                             @include(
                                                                 'activity_log_histories._update_details',
                                                                 [

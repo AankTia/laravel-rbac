@@ -324,10 +324,10 @@ class RoleController extends Controller
                     $oldPermissions = [];
 
                     if ($newPermissions != $oldPermissions) {
-                        $modulName = $moduleNameBySlug[$moduleSlug];
-                        $logProperties['attributes'][$modulName] = [
-                            'old' => $oldPermissions,
-                            'new' => $newPermissions
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'label' => $moduleNameBySlug[$moduleSlug],
+                            'old_value' => $oldPermissions,
+                            'new_value' => $newPermissions
                         ];
                     }
                 }
@@ -341,10 +341,10 @@ class RoleController extends Controller
                     $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
 
                     if ($newPermissions != $oldPermissions) {
-                        $modulName = $moduleNameBySlug[$moduleSlug];
-                        $logProperties['attributes'][$modulName] = [
-                            'old' => $oldPermissions,
-                            'new' => $newPermissions
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'label' => $moduleNameBySlug[$moduleSlug],
+                            'old_value' => $oldPermissions,
+                            'new_value' => $newPermissions
                         ];
                     }
                 }
@@ -359,10 +359,10 @@ class RoleController extends Controller
                     $oldPermissions = isset($currentPermissionData[$moduleSlug]) ? $currentPermissionData[$moduleSlug] : [];
 
                     if ($newPermissions != $oldPermissions) {
-                        $modulName = $moduleNameBySlug[$moduleSlug];
-                        $logProperties['attributes'][$modulName] = [
-                            'old' => $oldPermissions,
-                            'new' => $newPermissions
+                        $logProperties['attributes'][$moduleSlug] = [
+                            'label' => $moduleNameBySlug[$moduleSlug],
+                            'old_value' => $oldPermissions,
+                            'new_value' => $newPermissions
                         ];
                     }
                 }
@@ -385,7 +385,12 @@ class RoleController extends Controller
                 }
             }
 
-            $role->customLogActivity('role-permission-updated', 'Updated Role Permissions', $logProperties);
+            $logActivityAttributes = $role->generateUpdateLogActivityAttributes();
+            $logActivityAttributes['user_description'] = 'Update Role permissions for : ' . $role->name;
+            $logActivityAttributes['subject_description'] = 'Update Role permissions';
+            $logActivityAttributes['subject_properties'] = $logProperties;
+
+            $role->createLog('update-role-permission', $logActivityAttributes);
 
             DB::commit();
 
@@ -393,11 +398,14 @@ class RoleController extends Controller
                 ->route('roles.show', $role)
                 ->with('success', 'Role Permissions updated successfully.');
         } catch (Exception $e) {
+            $errFullPath = $e->getFile();
+            $errRelativePath = str_replace(base_path() . '/', '', $errFullPath);
+
             DB::rollBack();
 
             return redirect()
                 ->route('roles.show', $role)
-                ->with('error', 'Failed to update permissions. ' . $e->getMessage());
+                ->with('error', 'Failed to update permissions. ' . $e->getMessage() . '(' . $errRelativePath . ':' . $e->getLine() . ')');
         }
     }
 

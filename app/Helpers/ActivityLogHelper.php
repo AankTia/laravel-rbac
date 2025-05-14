@@ -13,13 +13,11 @@ function actionTimelinePointColor($action)
         'unset-user-role' => 'timeline-point-danger',
         'delete' => 'timeline-point-danger',
         'activate' => 'timeline-point-success',
-        'deactivate' => 'timeline-point-gray'
+        'deactivate' => 'timeline-point-gray',
+        'update-role-permission' => 'timeline-point-warning',
     ];
 
     // switch ($action) {
-    //     case 'role-permission-updated';
-    //         $result = 'timeline-point-warning';
-    //         break;
     //     case 'delete-user':
     //         $result = 'timeline-point-danger';
     //         break;

@@ -83,24 +83,6 @@ trait LogsActivity
         return class_basename($this);
     }
 
-    public function createLoginLog()
-    {
-        $params = [
-            'log_name' => 'Auth',
-            'user_description' => 'Loged in'
-        ];
-        return $this->createLog('login', $params);
-    }
-
-    public function createLogoutLog()
-    {
-        $params = [
-            'log_name' => 'Auth',
-            'user_description' => 'Loged out'
-        ];
-        return $this->createLog('logout', $params);
-    }
-
     public function generateCreateLogActivityAttributes()
     {
         $classBaseName = $this->getClassBaseName();
@@ -149,6 +131,24 @@ trait LogsActivity
         ];
     }
 
+    public function createLoginLog()
+    {
+        $params = [
+            'log_name' => 'Auth',
+            'user_description' => 'Loged in'
+        ];
+        return $this->createLog('login', $params);
+    }
+
+    public function createLogoutLog()
+    {
+        $params = [
+            'log_name' => 'Auth',
+            'user_description' => 'Loged out'
+        ];
+        return $this->createLog('logout', $params);
+    }
+
     public function createStoredDataLog($params = [])
     {
         if (!empty($params)) {
@@ -164,7 +164,11 @@ trait LogsActivity
     {
         if (!empty($params)) {
             if (array_key_exists('user_description', $params)) {
-                static::$logActivityAttributes['user_description'] = $params['user_description'] . ' ' . static::$logActivityAttributes['user_description'];
+                if (array_key_exists('user_description', static::$logActivityAttributes)) {
+                    static::$logActivityAttributes['user_description'] = $params['user_description'] . ' ' . static::$logActivityAttributes['user_description'];
+                } else {
+                    static::$logActivityAttributes['user_description'] = $params['user_description'];
+                }
             }
         }
 
