@@ -396,7 +396,7 @@ class RoleController extends Controller
                 ]
             );
 
-            $role->createLog('update-role-permission', $logActivityAttributes);
+            $role->createUpdateRolePermissionHistoryLog($logActivityAttributes);
 
             DB::commit();
 

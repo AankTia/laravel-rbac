@@ -175,4 +175,8 @@ class Role extends Model
     {
         return $this->modulePermissions()->delete();
     }
+
+    public function createUpdateRolePermissionHistoryLog($params) {
+        return $this->createLog('update-role-permission', $params);
+    }
 }
