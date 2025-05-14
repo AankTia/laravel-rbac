@@ -7,6 +7,7 @@
 ## Controller
 
 -   [ ] create helper for generate message, error file and line number
+-   [ ] refactor string interpolation
 -   [x] Refactor auth()->user()->hasPermission, use helper
 
 ## Helper
