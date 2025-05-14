@@ -179,4 +179,8 @@ class Role extends Model
     public function createUpdateRolePermissionHistoryLog($params) {
         return $this->createLog('update-role-permission', $params);
     }
+
+    public function createUnsetUserRoleHistoryLog($params) {
+        return $this->createLog('unset-user-role', $params);
+    }
 }

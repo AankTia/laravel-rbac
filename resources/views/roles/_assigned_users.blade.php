@@ -7,7 +7,8 @@
         <hr class="mt-0">
         <div class="row">
             <div class="mb-2">
-                <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.</p>
+                <p>This role is currently assigned to <strong>{{ $role->getTotalUsers() }} users</strong> in the system.
+                </p>
             </div>
 
             <div class="table-responsive">
@@ -23,33 +24,35 @@
                     </thead>
                     <tbody>
                         @forelse ($role->roleUsers as $roleUser)
-                        <tr>
-                            <td class="fw-medium">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        {{ $roleUser->user->initialName() }}
+                            <tr>
+                                <td class="fw-medium">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            {{ $roleUser->user->initialName() }}
+                                        </div>
+                                        <div class="user-details">
+                                            <p class="user-name"><a
+                                                    href="{{ route('users.show', $roleUser->user) }}">{{ $roleUser->user->name }}</a>
+                                            </p>
+                                            <p class="user-email">{{ $roleUser->user->email }}</p>
+                                        </div>
                                     </div>
-                                    <div class="user-details">
-                                        <p class="user-name"><a href="{{ route('users.show', $roleUser->user) }}">{{ $roleUser->user->name }}</a></p>
-                                        <p class="user-email">{{ $roleUser->user->email }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="fw-medium text-center" nowrap>
-                                {!! userStatusBadge($roleUser->user->is_active) !!}
-                            </td>
-                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
-                            <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
-                            <td class="fw-medium text-center">
-                                @if (currentUserId() != $roleUser->id)
-                                {!! deleteUserFromRoleButton(route('roles.delete-user', ['role' => $role, 'user' => $roleUser])) !!}
-                                @endif
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="fw-medium text-center" nowrap>
+                                    {!! userStatusBadge($roleUser->user->is_active) !!}
+                                </td>
+                                <td class="fw-medium text-center" nowrap>{{ $roleUser->getFormatedAssignedAt() }}</td>
+                                <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
+                                <td class="fw-medium text-center">
+                                    @if (currentUserId() != $roleUser->id)
+                                        {!! deleteUserFromRoleButton(route('roles.delete-user', ['role' => $role, 'user' => $roleUser->user])) !!}
+                                    @endif
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" class="text-center"> No data to show</td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="text-center"> No data to show</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

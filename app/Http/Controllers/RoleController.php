@@ -442,20 +442,34 @@ class RoleController extends Controller
      */
     public function deleteUser(Role $role, User $user)
     {
-        $message = 'Unset ' . $role->name . ' Role from ' . $user->name;
+        DB::beginTransaction();
+        try {
+            $user->unsetRole();
 
-        $unsetRole = $user->unsetRole();
-        if ($unsetRole) {
-            $role->customLogActivity('unset-user-role', $message);
-            $user->customLogActivity('unset-user-role', $message);
+            $logActivityAttributes = array_merge(
+                $role->generateUpdateLogActivityAttributes(),
+                [
+                    'user_description' =>  "Unset {$role->name} Role for {$user->name}",
+                    'subject_description' => "Unset User : {$user->name}",
+                ]
+            );
+
+            $role->createUnsetUserRoleHistoryLog($logActivityAttributes);
+
+            DB::commit();
 
             return redirect()
                 ->route('roles.show', $role)
-                ->with('success', ' Successfully ' . $message);
-        } else {
+                ->with('success', ' Successfully unset User : ' . $user->name);
+        } catch (Exception $e) {
+            $errFullPath = $e->getFile();
+            $errRelativePath = str_replace(base_path() . '/', '', $errFullPath);
+
+            DB::rollBack();
+
             return redirect()
                 ->route('roles.show', $role)
-                ->with('error', ' Failed to ' . $message);
+                ->with('error', 'Failed to delete unset User . ' . $user->name . '.' . $e->getMessage() . '(' . $errRelativePath . ':' . $e->getLine() . ')');
         }
     }
 }
