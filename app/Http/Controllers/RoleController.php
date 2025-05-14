@@ -372,20 +372,33 @@ class RoleController extends Controller
         $moduleIdBySlug = Module::pluck('id', 'slug')->toArray();
         $permissionIdBySlug = Permission::pluck('id', 'slug')->toArray();
 
-        $role->clearPermissions();
+        DB::beginTransaction();
+        try {
 
-        foreach ($requestPermissions as $requestModule => $reqPermissions) {
-            $moduleId = $moduleIdBySlug[$requestModule];
-            foreach ($reqPermissions as $reqPermission) {
-                $permissionId = $permissionIdBySlug[$reqPermission];
-                $role->assignPermission($moduleId, $permissionId);
+            $role->clearPermissions();
+
+            foreach ($requestPermissions as $requestModule => $reqPermissions) {
+                $moduleId = $moduleIdBySlug[$requestModule];
+                foreach ($reqPermissions as $reqPermission) {
+                    $permissionId = $permissionIdBySlug[$reqPermission];
+                    $role->assignPermission($moduleId, $permissionId);
+                }
             }
+
+            $role->customLogActivity('role-permission-updated', 'Updated Role Permissions', $logProperties);
+
+            DB::commit();
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('success', 'Role Permissions updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('roles.show', $role)
+                ->with('error', 'Failed to update permissions. ' . $e->getMessage());
         }
-
-        $role->customLogActivity('role-permission-updated', 'Updated Role Permissions', $logProperties);
-
-        return redirect()->route('roles.show', $role)
-            ->with('success', 'Role Permissions updated successfully.');
     }
 
     public function activityLogs(Request $request, Role $role)
