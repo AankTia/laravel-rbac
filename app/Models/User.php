@@ -225,4 +225,18 @@ class User extends Authenticatable
     {
         return ucfirst($event) . " Role: {$this->name}";
     }
+
+    public function getLastLogin()
+    {
+        $lastLogin = $this->userActivities()
+            ->where('action', 'login')
+            ->latest()
+            ->first();
+
+        if ($lastLogin) {
+            return $lastLogin->created_at;
+        } else {
+            return null;
+        }
+    }
 }

@@ -73,12 +73,17 @@ class UserController extends Controller
     public function show(User $user)
     {
         $lastActivity = $user->getLatestHistory();
-
+        $lastLogin = $user->getLastLogin();
         $userActivityLogs = $user->userActivities()
             ->latest()
             ->paginate(5);
 
-        return view('users.show', compact('user', 'lastActivity', 'userActivityLogs'));
+        return view('users.show', compact(
+            'user',
+            'lastActivity',
+            'userActivityLogs',
+            'lastLogin'
+        ));
     }
 
     /**
