@@ -7,6 +7,13 @@ function submitCreateButton($label = 'Save')
         HTML;
 }
 
+function submitEditButton($label = 'Update')
+{
+    return <<< HTML
+            <button type="submit" class="btn btn-sm btn-warning">{$label}</button>
+        HTML;
+}
+
 // function backButton($route, $permission, $label)
 // {
 //     $explodedPermission = explodePermission($permission);
@@ -64,13 +71,6 @@ function submitCreateButton($label = 'Save')
 //     } else {
 //         return null;
 //     }
-// }
-
-// function submitEditButton($label = 'Update')
-// {
-//     return <<< HTML
-//             <button type="submit" class="btn btn-sm btn-warning">{$label}</button>
-//         HTML;
 // }
 
 // function deleteButton($route, $permission, $label = 'Delete')
