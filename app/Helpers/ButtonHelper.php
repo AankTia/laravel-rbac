@@ -50,14 +50,20 @@ function submitCreateButton($label = 'Save')
         HTML;
 }
 
-function editButton($route, $label = 'Edit')
+function editButton($route, $permission, $label = 'Edit')
 {
-    $icon = getIcon('edit');
-    return <<<HTML
+    $explodedPermission = explodePermission($permission);
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+
+        $icon = getIcon('edit');
+        return <<<HTML
             <a href='{$route}' class='btn btn-sm btn-warning'>
                 <i class='{$icon}'></i> {$label}
             </a>
         HTML;
+    } else {
+        return null;
+    }
 }
 
 function submitEditButton($label = 'Update')
@@ -67,13 +73,15 @@ function submitEditButton($label = 'Update')
         HTML;
 }
 
-function deleteButton($route, $label = 'Delete')
+function deleteButton($route, $permission, $label = 'Delete')
 {
-    $deleteIcon = getIcon('delete');
-    $csrf = csrf_field();
-    $method = method_field('DELETE');
+    $explodedPermission = explodePermission($permission);
+    if (isUserCan($explodedPermission['permission'], $explodedPermission['module'])) {
+        $deleteIcon = getIcon('delete');
+        $csrf = csrf_field();
+        $method = method_field('DELETE');
 
-    return <<<HTML
+        return <<<HTML
             <form action="{$route}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
                 {$csrf}
                 {$method}
@@ -82,6 +90,9 @@ function deleteButton($route, $label = 'Delete')
                 </button>
             </form>
         HTML;
+    } else {
+        return null;
+    }
 }
 
 function deleteUserFromRoleButton($route)

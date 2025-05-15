@@ -36,9 +36,7 @@
                 <div class="card-header align-items-center flex-wrap gap-2">
                     <h5 class="card-action-title mb-0">{{ $user->name }} Detail</h5>
                     <div class="card-action-element">
-                        @if (isUserCan('update', 'user'))
-                            {!! editButton(route('users.edit', ['user' => $user])) !!}
-                        @endif
+                        {!! editButton(route('users.edit', $user), 'user.update') !!}
 
                         @if (!$user->isSuperAdmin())
                             @if ($user->is_active && isUserCan('deactivate', 'user'))
@@ -63,9 +61,7 @@
                             @endif
                         @endif
 
-                        @if (isUserCan('delete', 'user'))
-                            {!! deleteButton(route('users.destroy', $user)) !!}
-                        @endif
+                        {!! deleteButton(route('users.destroy', $user), 'user.delete') !!}
                     </div>
                 </div>
                 <div class="card-body">
@@ -127,8 +123,7 @@
                                             </h2>
 
                                             <div id="accordion{{ $log->id }}" class="accordion-collapse collapse"
-                                                data-bs-parent="#detailHistoryAccordion{{ $log->id }}"
-                                                style="">
+                                                data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
                                                 <div class="accordion-body">
                                                     <hr>
                                                     <div class="row">
