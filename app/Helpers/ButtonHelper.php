@@ -1,5 +1,12 @@
 <?php
 
+function submitCreateButton($label = 'Save')
+{
+    return <<< HTML
+            <button type="submit" class="btn btn-sm btn-primary">{$label}</button>
+        HTML;
+}
+
 // function backButton($route, $permission, $label)
 // {
 //     $explodedPermission = explodePermission($permission);
@@ -41,13 +48,6 @@
 //     } else {
 //         return null;
 //     }
-// }
-
-// function submitCreateButton($label = 'Save')
-// {
-//     return <<< HTML
-//             <button type="submit" class="btn btn-sm btn-primary">{$label}</button>
-//         HTML;
 // }
 
 // function editButton($route, $permission, $label = 'Edit')

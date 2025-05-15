@@ -19,7 +19,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
+        {!! permittedBackButton(route('users.index'), 'read', 'user', 'Back to Users') !!}
     </div>
 </div>
 @endsection
@@ -30,7 +30,6 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header">
                 <h5 class="pb-1 mb-2">Create New User</h5>
-                <hr>
             </div>
             <div class="card-body">
                 <form method="post" action="{{ route('users.store') }}">
@@ -133,7 +132,7 @@
                     <hr>
 
                     <div class="mt-4 text-end">
-                        {!! cancelButton(route('users.index')) !!}
+                        {!! permittedBackButton(route('users.index'), 'read', 'user', 'Cancel') !!}
                         {!! submitCreateButton() !!}
                     </div>
                 </form>
