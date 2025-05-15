@@ -24,7 +24,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        {!! backButton(route('roles.show', $role), 'role.read', 'Back to Role Detail') !!}
+        {!! permittedBackButton(route('roles.show', $role), 'read', 'role', 'Back to Role Detail') !!}
     </div>
 </div>
 @endsection
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="text-end">
-                    {!! cancelButton(route('roles.show', $role)) !!}
+                    {!! permittedBackButton(route('roles.show', $role), 'read', 'role') !!}
                     {!! submitEditButton() !!}
                 </div>
             </form>

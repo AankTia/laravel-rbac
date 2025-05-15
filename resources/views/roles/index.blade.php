@@ -18,9 +18,7 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(isUserCan('create', 'role'))
-        {!! createButton(route('roles.create'), 'role.create', 'Role') !!}
-        @endif
+        {!! permittedCreateButton(route('roles.create'), 'create', 'role', 'Role') !!}
     </div>
 </div>
 @endsection
@@ -70,17 +68,9 @@
                         <td>{{ $role->description }}</td>
                         <td class="text-center">{{ $role->getTotalUsers() }}</td>
                         <td class="text-end">
-
-                            {!! buttonIconForShow(route('roles.show', $role), 'role.read') !!}
-                            {!! buttonIconForEdit(route('roles.edit', $role), 'role.update') !!}
-
-                            @if(isUserCan('delete', 'role'))
-                            <form action="{{ route('roles.destroy', $role) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                {!! submitButtonIconForDelete() !!}
-                            </form>
-                            @endif
+                            {!! permittedShowButtonIcon(route('roles.show', $role), 'read', 'role') !!}
+                            {!! permittedEditButtonIcon(route('roles.edit', $role), 'update', 'role') !!}
+                            {!! permittedDeleteButtonIcon(route('roles.destroy', $role), 'delete', 'role') !!}
                         </td>
                     </tr>
                     @empty

@@ -20,7 +20,7 @@ class RoleController extends Controller
         $this->middleware('check.permission:role,update')->only('edit', 'update');
         $this->middleware('check.permission:role,delete')->only('destroy');
         $this->middleware('check.permission:role,update-role-permissions')->only('editPermissions', 'updatePermissions');
-        $this->middleware('check.permission:role,read-activity-log')->only('editPermissions', 'activityLogs');
+        // $this->middleware('check.permission:role,read-activity-log')->only('editPermissions', 'activityLogs');
         $this->middleware('check.permission:role,delete-user')->only('deleteUser');
     }
 

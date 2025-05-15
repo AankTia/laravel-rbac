@@ -45,7 +45,7 @@
                                 <td class="fw-medium text-center" nowrap>{{ $roleUser->getAssignedByName() }}</td>
                                 <td class="fw-medium text-center">
                                     @if (currentUserId() != $roleUser->id)
-                                        {!! deleteUserFromRoleButton(route('roles.delete-user', ['role' => $role, 'user' => $roleUser->user])) !!}
+                                        {!! permittedDeleteButtonIcon(route('roles.delete-user', ['role' => $role, 'user' => $roleUser->user]), 'delete-user', 'role') !!}
                                     @endif
                                 </td>
                             </tr>

@@ -21,13 +21,8 @@
 @section('pageAction')
 <div class="row mb-4 align-items-center">
     <div class="col-md-12 mt-3 mt-md-0">
-        @if(isUserCan('read', 'role'))
-        {!! backButton(route('roles.index'), 'role.read', 'Back to Roles') !!}
-        @endif
-
-        @if(isUserCan('create', 'role'))
-        {!! createButton(route('roles.create'), 'role.create', 'Role') !!}
-        @endif
+        {!! permittedBackButton(route('roles.index'), 'read', 'role', 'Back to Roles') !!}
+        {!! permittedCreateButton(route('roles.create'), 'create', 'role', 'Role') !!}
     </div>
 </div>
 @endsection
@@ -41,13 +36,8 @@
                     <h5 class="card-title m-0 me-2">{{ $role->name }} Detail</h5>
 
                     <div class="text-end">
-                        @if(isUserCan('update', 'role'))
-                        {!! editButton(route('roles.edit', ['role' => $role])) !!}
-                        @endif
-
-                        @if(isUserCan('delete', 'role'))
-                        {!! deleteButton(route('roles.destroy', $role)) !!}
-                        @endif
+                        {!! permittedEditButton(route('roles.edit', $role), 'edit', 'role') !!}
+                        {!! permittedDeleteButton(route('roles.destroy', $role), 'delete', 'role') !!}
                     </div>
                 </div>
                 <hr>

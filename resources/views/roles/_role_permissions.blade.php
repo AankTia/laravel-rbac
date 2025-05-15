@@ -1,9 +1,12 @@
 <div class="card shadow-sm mb-4">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="card-title m-0 me-2">Allowed Permissions</h5>
-        @if(isUserCan('update-role-permissions', 'role'))
-        {!! editButton(route('roles.edit-permissions', $role), 'Update Permissions') !!}
-        @endif
+        {!! permittedEditButton(
+            route('roles.edit-permissions', $role),
+            'update-role-permissions',
+            'role',
+            'Update Permissions',
+        ) !!}
     </div>
 
     <div class="card-body">
@@ -23,37 +26,37 @@
                     </thead>
                     <tbody>
                         @foreach ($modulePermissions as $moduleName => $permissions)
-                        <tr>
-                            <td class="fw-medium">{{ $moduleName }}</td>
-                            <td class="text-center">
-                                @if ($permissions['read'])
-                                <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                @if ($permissions['create'])
-                                <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                @if ($permissions['update'])
-                                <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </td>
+                            <tr>
+                                <td class="fw-medium">{{ $moduleName }}</td>
+                                <td class="text-center">
+                                    @if ($permissions['read'])
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($permissions['create'])
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($permissions['update'])
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </td>
 
-                            <td class="text-center">
-                                @if ($permissions['delete'])
-                                <i class="bx bxs-check-circle text-success"></i>
-                                @endif
-                            </td>
-                            <td nowrap>
-                                @foreach ($permissions['others'] as $otherPermission)
-                                <div>
-                                    <i class="bx bxs-check-circle text-success"></i> {{ $otherPermission }}
-                                </div>
-                                @endforeach
-                            </td>
-                        </tr>
+                                <td class="text-center">
+                                    @if ($permissions['delete'])
+                                        <i class="bx bxs-check-circle text-success"></i>
+                                    @endif
+                                </td>
+                                <td nowrap>
+                                    @foreach ($permissions['others'] as $otherPermission)
+                                        <div>
+                                            <i class="bx bxs-check-circle text-success"></i> {{ $otherPermission }}
+                                        </div>
+                                    @endforeach
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
