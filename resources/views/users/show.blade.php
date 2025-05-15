@@ -120,18 +120,17 @@
                                 <span class="timeline-point {{ actionTimelinePointColor($log->action) }}"></span>
                                 <div class="timeline-event">
                                     <div class="timeline-header mb-3">
-                                        <h6 class="mb-0">{{ $log->user_description }}</h6>
                                         <small class="text-muted">{{ humanDateTime($log->created_at) }}</small>
                                     </div>
 
-                                    <div class="accordion mt-3 mb-3" id="detailHistoryAccordion{{ $log->id }}">
+                                    <div class="accordion mt-0 mb-3" id="detailHistoryAccordion{{ $log->id }}">
                                         <div class="card accordion-item">
                                             <h2 class="accordion-header" id="headingOne">
                                                 <button type="button" class="accordion-button collapsed"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#accordion{{ $log->id }}" aria-expanded="false"
                                                     aria-controls="accordion{{ $log->id }}">
-                                                    Details
+                                                    {{ $log->user_description }}
                                                 </button>
                                             </h2>
 
@@ -180,7 +179,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
                                     </div>
                             </li>
                         @empty
