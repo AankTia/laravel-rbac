@@ -181,10 +181,7 @@
                     <div class="card-header align-items-center flex-wrap gap-2">
                         <h5 class="card-action-title">Latest History</h5>
                         <div class="card-action-element">
-                            <button class="btn btn-primary btn-sm" type="button">
-                                <i class="{{ getIcon('history') }}"></i>
-                                Show All Histories
-                            </button>
+                            {!! permittedReadHistoriesButton('#', 'read-log-history', 'user') !!}
                         </div>
                     </div>
                     <div class="card-body">

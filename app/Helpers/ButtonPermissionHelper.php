@@ -4,7 +4,6 @@ function permittedBackButton($route, $permissionName, $modue, $label = 'Back')
 {
     if (isUserCan($permissionName, $modue)) {
         $icon = getIcon('left-arrow');
-
         return <<<HTML
              <a href="{$route}" class="btn btn-sm btn-outline-secondary me-2">
                  <i class="{$icon}"></i> {$label}
@@ -65,6 +64,18 @@ function permittedActivateButton($route, $permissionName, $modue, $label = 'Acti
 function permittedDeactivateButton($route, $permissionName, $modue, $label = 'Deactivate')
 {
     dd();
+}
+
+function permittedReadHistoriesButton($route, $permissionName, $modue, $label = 'Show Histories')
+{
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('history');
+        return <<<HTML
+             <button class="btn btn-primary btn-sm" type="button">
+                 <i class="{$icon}"></i> {$label}
+             </button>
+         HTML;
+    }
 }
 
 function permittedShowButtonIcon($route, $permissionName, $modue)
