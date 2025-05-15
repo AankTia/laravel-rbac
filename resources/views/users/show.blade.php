@@ -187,31 +187,31 @@
             </div>
         </div>
 
-
         <div class="col-md-3">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header pb-0">
-                    <h5 class="card-title m-0 me-2 mb-2">Latest History</h5>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <em><i class="{{ getIcon('clock') }}"></i>
-                            {{ humanDateTime($lastActivity->crated_at) }}</em>
-                        <em><i class="{{ getIcon('user') }}"></i> {{ $lastActivity->user->name }}</em>
-                    </div>
-                    <hr>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="mb-2">
-                        <div class="alert alert-warning mt-0" role="alert">
-                            <h5 class="alert-heading mb-1">We need your attention!</h5>
-                            <span>{!! $lastActivity->subject_description !!}</span>
+            @if ($lastActivity)
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header pb-0">
+                        <h5 class="card-title m-0 me-2 mb-2">Latest History</h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <em><i class="{{ getIcon('clock') }}"></i>
+                                {{ humanDateTime($lastActivity->crated_at) }}</em>
+                            <em><i class="{{ getIcon('user') }}"></i> {{ $lastActivity->user->name }}</em>
                         </div>
+                        <hr>
                     </div>
+                    <div class="card-body pt-0">
+                        <div class="mb-2">
+                            <div class="alert alert-warning mt-0" role="alert">
+                                <span>{!! $lastActivity->subject_description !!}</span>
+                            </div>
+                        </div>
 
-                    <a href="#">
-                        <i class="{{ getIcon('history') }}"></i> Show All Histories
-                    </a>
+                        <a href="#">
+                            <i class="{{ getIcon('history') }}"></i> Show All Histories
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 @endsection
