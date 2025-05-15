@@ -26,7 +26,6 @@ function permittedCreateButton($route, $permissionName, $modue, $label = '')
 
 function permittedEditButton($route, $permissionName, $modue, $label = 'Edit')
 {
-
     if (isUserCan($permissionName, $modue)) {
         $icon = getIcon('edit');
         return <<<HTML
@@ -58,12 +57,36 @@ function permittedDeleteButton($route, $permissionName, $modue, $label = 'Delete
 
 function permittedActivateButton($route, $permissionName, $modue, $label = 'Activate')
 {
-    dd();
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('activate');
+        $csrf = csrf_field();
+
+        return <<<HTML
+            <form action="{$route}" method="POST" style="display:inline;">
+                {$csrf}
+                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-info">
+                    <i class="{$icon}"></i> {$label}
+                </button>
+            </form>
+        HTML;
+    }
 }
 
 function permittedDeactivateButton($route, $permissionName, $modue, $label = 'Deactivate')
 {
-    dd();
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('deactivate');
+        $csrf = csrf_field();
+
+        return <<<HTML
+            <form action="{$route}" method="POST" style="display:inline;">
+                {$csrf}
+                <button type="submit" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-secondary">
+                    <i class="{$icon}"></i> {$label}
+                </button>
+            </form>
+        HTML;
+    }
 }
 
 function permittedReadHistoriesButton($route, $permissionName, $modue, $label = 'Show Histories')
@@ -126,12 +149,16 @@ function permittedDeleteButtonIcon($route, $permissionName, $modue)
     }
 }
 
-function permittedActivateButtonIcon($route, $mododule, $permissionName)
+function permittedActivateButtonIcon($route, $modue, $permissionName)
 {
-    dd();
+    if (isUserCan($permissionName, $modue)) {
+        dd();
+    }
 }
 
-function permittedDeactivateButtonIcon($route, $mododule, $permissionName)
+function permittedDeactivateButtonIcon($route, $modue, $permissionName)
 {
-    dd();
+    if (isUserCan($permissionName, $modue)) {
+        dd();
+    }
 }

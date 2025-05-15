@@ -35,7 +35,7 @@ function getActionColor($action) {
         // 'update-user-role' => 'timeline-point-warning',
         // 'unset-user-role' => 'timeline-point-danger',
         // 'delete' => 'timeline-point-danger',
-        // 'activate' => 'timeline-point-success',
+        'activate' => 'info',
         // 'deactivate' => 'timeline-point-gray',
         // 'update-role-permission' => 'timeline-point-warning',
     ];

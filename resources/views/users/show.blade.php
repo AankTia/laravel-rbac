@@ -39,25 +39,12 @@
                         {!! permittedEditButton(route('users.edit', $user), 'update', 'user') !!}
 
                         @if (!$user->isSuperAdmin())
-                            @if ($user->is_active && isUserCan('deactivate', 'user'))
-                                <form action="{{ route('users.deactivate', $user) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    <button type="submit" onclick="return confirm('Are you sure?')"
-                                        class="btn btn-sm btn-secondary">
-                                        <i class="bx bx-user-x me-1"></i> Deactivate
-                                    </button>
-                                </form>
+                            @if (!$user->is_active)
+                                {!! permittedActivateButton(route('users.activate', $user), 'activate', 'user') !!}
                             @endif
 
-                            @if (!$user->is_active && isUserCan('activate', 'user'))
-                                <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <button type="submit" onclick="return confirm('Are you sure?')"
-                                        class="btn btn-sm btn-info">
-                                        <i class="bx bx-user-check me-1"></i> Activate
-                                    </button>
-                                </form>
+                            @if ($user->is_active)
+                                {!! permittedDeactivateButton(route('users.deactivate', $user), 'deactivate', 'user') !!}
                             @endif
                         @endif
 

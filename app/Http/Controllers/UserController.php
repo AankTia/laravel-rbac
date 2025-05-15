@@ -346,11 +346,11 @@ class UserController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            $message = $e->getMessage();
+            $errMessage = $e->getMessage();
 
             return redirect()
                 ->route('users.show', $user)
-                ->with('error', 'Failed to Activate User:  ' . $message);
+                ->with('error', "Failed to Activate User. {$errMessage}");
         }
     }
 
