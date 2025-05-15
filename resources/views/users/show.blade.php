@@ -20,8 +20,8 @@
 @section('pageAction')
     <div class="row mb-4 align-items-center">
         <div class="col-md-12 mt-3 mt-md-0">
-            {!! permittedBackButton(route('users.index'), 'user.read', 'Back to Users') !!}
-            {!! permittedCreateButton(route('users.create'), 'user.create', 'User') !!}
+            {!! permittedBackButton(route('users.index'), 'read', 'user', 'Back to Users') !!}
+            {!! permittedCreateButton(route('users.create'), 'create', 'user', 'User') !!}
         </div>
     </div>
 @endsection
