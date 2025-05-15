@@ -20,8 +20,8 @@
 @section('pageAction')
     <div class="row mb-4 align-items-center">
         <div class="col-md-12 mt-3 mt-md-0">
-            {!! backButton(route('users.index'), 'user.read', 'Back to Users') !!}
-            {!! createButton(route('users.create'), 'user.create', 'User') !!}
+            {!! permittedBackButton(route('users.index'), 'user.read', 'Back to Users') !!}
+            {!! permittedCreateButton(route('users.create'), 'user.create', 'User') !!}
         </div>
     </div>
 @endsection
@@ -36,7 +36,7 @@
                 <div class="card-header align-items-center flex-wrap gap-2">
                     <h5 class="card-action-title mb-0">{{ $user->name }} Detail</h5>
                     <div class="card-action-element">
-                        {!! editButton(route('users.edit', $user), 'user.update') !!}
+                        {!! permittedEditButton(route('users.edit', $user), 'update', 'user') !!}
 
                         @if (!$user->isSuperAdmin())
                             @if ($user->is_active && isUserCan('deactivate', 'user'))
@@ -61,7 +61,7 @@
                             @endif
                         @endif
 
-                        {!! deleteButton(route('users.destroy', $user), 'user.delete') !!}
+                        {!! permittedDeleteButton(route('users.destroy', $user), 'delete', 'user') !!}
                     </div>
                 </div>
                 <div class="card-body">
