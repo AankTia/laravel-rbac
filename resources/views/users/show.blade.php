@@ -32,46 +32,41 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h5 class="card-title m-0 me-2">{{ $user->name }} Detail</h5>
+            <div class="card card-action shadow-sm mb-4">
+                <div class="card-header align-items-center flex-wrap gap-2">
+                    <h5 class="card-action-title mb-0">{{ $user->name }} Detail</h5>
+                    <div class="card-action-element">
+                        @if (isUserCan('update', 'user'))
+                            {!! editButton(route('users.edit', ['user' => $user])) !!}
+                        @endif
 
-                        <div class="text-end">
-                            @if (isUserCan('update', 'user'))
-                                {!! editButton(route('users.edit', ['user' => $user])) !!}
+                        @if (!$user->isSuperAdmin())
+                            @if ($user->is_active && isUserCan('deactivate', 'user'))
+                                <form action="{{ route('users.deactivate', $user) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    <button type="submit" onclick="return confirm('Are you sure?')"
+                                        class="btn btn-sm btn-secondary">
+                                        <i class="bx bx-user-x me-1"></i> Deactivate
+                                    </button>
+                                </form>
                             @endif
 
-                            @if (!$user->isSuperAdmin())
-                                @if ($user->is_active && isUserCan('deactivate', 'user'))
-                                    <form action="{{ route('users.deactivate', $user) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                            class="btn btn-sm btn-secondary">
-                                            <i class="bx bx-user-x me-1"></i> Deactivate
-                                        </button>
-                                    </form>
-                                @endif
-
-                                @if (!$user->is_active && isUserCan('activate', 'user'))
-                                    <form action="{{ route('users.activate', $user) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                            class="btn btn-sm btn-info">
-                                            <i class="bx bx-user-check me-1"></i> Activate
-                                        </button>
-                                    </form>
-                                @endif
+                            @if (!$user->is_active && isUserCan('activate', 'user'))
+                                <form action="{{ route('users.activate', $user) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" onclick="return confirm('Are you sure?')"
+                                        class="btn btn-sm btn-info">
+                                        <i class="bx bx-user-check me-1"></i> Activate
+                                    </button>
+                                </form>
                             @endif
+                        @endif
 
-                            @if (isUserCan('delete', 'user'))
-                                {!! deleteButton(route('users.destroy', $user)) !!}
-                            @endif
-                        </div>
+                        @if (isUserCan('delete', 'user'))
+                            {!! deleteButton(route('users.destroy', $user)) !!}
+                        @endif
                     </div>
-                    <hr>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -82,25 +77,23 @@
                         </div>
                         <div class="col-md-10">
                             <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <h3 class="h6 text-muted">Name</h3>
-                                    <div class="mb-2">{{ $user->name }}</div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <h3 class="h6 text-muted">Email</h3>
-                                    <div class="mb-2">{{ $user->email }}</div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <h3 class="h6 text-muted">Role</h3>
-                                    <div class="mb-2">{{ $user->getRoleName() ?? '-' }}</div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <h3 class="h6 text-muted">Status</h3>
-                                    <div class="mb-2">{!! userStatusBadge($user->is_active) !!}</div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <h3 class="h6 text-muted">Last Login</h3>
-                                    <div class="mb-2">{{ $lastLogin ?? '-' }}</div>
+                                <div class="col-xl-12 col-12">
+                                    <dl class="row mb-0 gx-2">
+                                        <dt class="col-sm-2 mb-sm-2 text-nowrap fw-medium text-heading">Name</dt>
+                                        <dd class="col-sm-10">{{ $user->name }}</dd>
+
+                                        <dt class="col-sm-2 mb-sm-2 text-nowrap fw-medium text-heading">Email</dt>
+                                        <dd class="col-sm-10">{{ $user->email }}</dd>
+
+                                        <dt class="col-sm-2 mb-sm-2 text-nowrap fw-medium text-heading">Role</dt>
+                                        <dd class="col-sm-10">{{ $user->getRoleName() ?? '-' }}</dd>
+
+                                        <dt class="col-sm-2 mb-sm-2 text-nowrap fw-medium text-heading">Status</dt>
+                                        <dd class="col-sm-10">{!! userStatusBadge($user->is_active) !!}</dd>
+
+                                        <dt class="col-sm-2 mb-sm-2 text-nowrap fw-medium text-heading">Last Login</dt>
+                                        <dd class="col-sm-10">{{ $lastLogin ?? '-' }}</dd>
+                                    </dl>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +104,6 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2 mb-2">Activity Timeline</h5>
-                    <hr>
                 </div>
                 <div class="card-body pt-0">
                     <ul class="timeline mb-0">
@@ -135,7 +127,8 @@
                                             </h2>
 
                                             <div id="accordion{{ $log->id }}" class="accordion-collapse collapse"
-                                                data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
+                                                data-bs-parent="#detailHistoryAccordion{{ $log->id }}"
+                                                style="">
                                                 <div class="accordion-body">
                                                     <hr>
                                                     <div class="row">
@@ -189,26 +182,36 @@
 
         <div class="col-md-3">
             @if ($lastActivity)
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header pb-0">
-                        <h5 class="card-title m-0 me-2 mb-2">Latest History</h5>
-                        <div class="d-flex align-items-center justify-content-between">
-                            <em><i class="{{ getIcon('clock') }}"></i>
-                                {{ humanDateTime($lastActivity->crated_at) }}</em>
-                            <em><i class="{{ getIcon('user') }}"></i> {{ $lastActivity->user->name }}</em>
+                <div class="card card-action mb-4">
+                    <div class="card-header align-items-center flex-wrap gap-2">
+                        <h5 class="card-action-title">Latest History</h5>
+                        <div class="card-action-element">
+                            <button class="btn btn-primary btn-sm" type="button">
+                                <i class="{{ getIcon('history') }}"></i>
+                                Show All Histories
+                            </button>
                         </div>
-                        <hr>
                     </div>
-                    <div class="card-body pt-0">
-                        <div class="mb-2">
-                            <div class="alert alert-warning mt-0" role="alert">
-                                <span>{!! $lastActivity->subject_description !!}</span>
+                    <div class="card-body">
+                        <div class="row">
+                            <dl class="row">
+                                <dd>
+                                    <i class="{{ getIcon('clock') }}"></i>
+                                    {{ humanDateTime($lastActivity->crated_at) }}
+                                </dd>
+
+                                <dd>
+                                    <i class="{{ getIcon('user') }}"></i>
+                                    {{ $lastActivity->user->name }}
+                                </dd>
+                            </dl>
+
+                            <div class="mb-2">
+                                <div class="alert alert-{{ getActionColor($lastActivity->action) }} mt-0" role="alert">
+                                    <span>{!! $lastActivity->subject_description !!}</span>
+                                </div>
                             </div>
                         </div>
-
-                        <a href="#">
-                            <i class="{{ getIcon('history') }}"></i> Show All Histories
-                        </a>
                     </div>
                 </div>
             @endif

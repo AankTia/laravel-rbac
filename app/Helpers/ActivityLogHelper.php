@@ -17,16 +17,31 @@ function actionTimelinePointColor($action)
         'update-role-permission' => 'timeline-point-warning',
     ];
 
-    // switch ($action) {
-    //     case 'delete-user':
-    //         $result = 'timeline-point-danger';
-    //         break;
-    //     default:
-    //         $result = 'timeline-point-info';
-
-
     if (array_key_exists($action, $timelinePointColorClass)) {
         return $timelinePointColorClass[$action];
+    } else {
+        return $default;
+    }
+}
+
+function getActionColor($action) {
+    $default = 'secondary';
+    $actionColors = [
+        'create' => 'primary',
+        // 'login' => 'timeline-point-success',
+        // 'logout' => 'timeline-point-dark',
+        'update' => 'warning',
+        // 'set-user-role' => 'timeline-point-primary',
+        // 'update-user-role' => 'timeline-point-warning',
+        // 'unset-user-role' => 'timeline-point-danger',
+        // 'delete' => 'timeline-point-danger',
+        // 'activate' => 'timeline-point-success',
+        // 'deactivate' => 'timeline-point-gray',
+        // 'update-role-permission' => 'timeline-point-warning',
+    ];
+
+    if (array_key_exists($action, $actionColors)) {
+        return $actionColors[$action];
     } else {
         return $default;
     }
