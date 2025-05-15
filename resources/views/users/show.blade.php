@@ -137,6 +137,7 @@
                                             <div id="accordion{{ $log->id }}" class="accordion-collapse collapse"
                                                 data-bs-parent="#detailHistoryAccordion{{ $log->id }}" style="">
                                                 <div class="accordion-body">
+                                                    <hr>
                                                     <div class="row">
                                                         @if (in_array($log->action, ['create', 'delete']))
                                                             @include(
@@ -157,23 +158,17 @@
                                                                 ]
                                                             )
                                                         @endif
-                                                        </row>
 
                                                         <div class="row">
-                                                            <div class="col-md-6 mb-3">
+                                                            <div class="col-md-12 mt-0 mb-3">
                                                                 <h3 class="h6 text-muted mb-2">IP Address</h3>
-                                                                <div class="mb-2">
-                                                                    <small>{{ $log->user_properties['ip_address'] }}</small>
-                                                                </div>
+                                                                <small>{{ $log->user_properties['ip_address'] }}</small>
                                                             </div>
 
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-12 mb-3">
                                                                 <h3 class="h6 text-muted mb-2">User Agent</h3>
-                                                                <div class="mb-2">
-                                                                    <small>{{ $log->user_properties['user_agent'] }}</small>
-                                                                </div>
+                                                                <small>{{ $log->user_properties['user_agent'] }}</small>
                                                             </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
