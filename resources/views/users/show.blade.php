@@ -187,51 +187,31 @@
             </div>
         </div>
 
+
         <div class="col-md-4">
-            @if ($user->creatorName() || $user->createdAt())
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title m-0 me-2 mb-2">Created</h5>
-                        <hr>
-
-                        <div class="d-flex align-items-center justify-content-between">
-                            @if ($user->createdAt())
-                                <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($user->created_at) }}</em>
-                            @endif
-                            @if ($user->creatorName())
-                                <em><i class="{{ getIcon('user') }}"></i> {{ $user->creatorName() }}</em>
-                            @endif
-                        </div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header pb-0">
+                    <h5 class="card-title m-0 me-2 mb-2">Latest History</h5>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <em><i class="{{ getIcon('clock') }}"></i>
+                            {{ humanDateTime($lastActivity->crated_at) }}</em>
+                        <em><i class="{{ getIcon('user') }}"></i> {{ $lastActivity->user->name }}</em>
                     </div>
+                    <hr>
                 </div>
-
-
-                @if ($user->lastUpdaterName() || $user->lastUpdate())
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title m-0 me-2 mb-2">Last Updated</h5>
-                            <hr>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <em><i class="{{ getIcon('clock') }}"></i> {{ humanDateTime($user->updated_at) }}</em>
-                                <em><i class="{{ getIcon('user') }}"></i> {{ $user->lastUpdaterName() }}</em>
-                            </div>
-
-                            @if ($lastActivity)
-                                <div class="mt-4 mb-4">
-                                    {{ $lastActivity->subject_description }}
-                                </div>
-
-                                {{-- @include('activity_logs.partials._details', ['activity' => $lastActivity]) --}}
-
-                                <a href="{{ route('users.activity-logs', $user) }}"
-                                    class="btn btn-sm btn-outline-primary mt-4">
-                                    <i class="{{ getIcon('history') }}"></i> Show All Histories
-                                </a>
-                            @endif
+                <div class="card-body pt-0">
+                    <div class="mb-2">
+                        <div class="alert alert-warning mt-0" role="alert">
+                            <h5 class="alert-heading mb-1">We need your attention!</h5>
+                            <span>{!! $lastActivity->subject_description !!}</span>
                         </div>
                     </div>
-                @endif
-            @endif
+
+                    <a href="#">
+                        <i class="{{ getIcon('history') }}"></i> Show All Histories
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
