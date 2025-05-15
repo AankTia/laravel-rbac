@@ -1,8 +1,8 @@
 <?php
 
-function permittedBackButton($route, $permission, $modue, $label = 'Back')
+function permittedBackButton($route, $permissionName, $modue, $label = 'Back')
 {
-    if (isUserCan($permission, $modue)) {
+    if (isUserCan($permissionName, $modue)) {
         $icon = getIcon('left-arrow');
 
         return <<<HTML
@@ -13,9 +13,9 @@ function permittedBackButton($route, $permission, $modue, $label = 'Back')
     }
 }
 
-function permittedCreateButton($route, $permission, $modue, $label = '')
+function permittedCreateButton($route, $permissionName, $modue, $label = '')
 {
-    if (isUserCan($permission, $modue)) {
+    if (isUserCan($permissionName, $modue)) {
         $icon = getIcon('create');
         return <<<HTML
                 <a href='{$route}' class='btn btn-sm btn-primary'>
@@ -25,10 +25,10 @@ function permittedCreateButton($route, $permission, $modue, $label = '')
     }
 }
 
-function permittedEditButton($route, $permission, $modue, $label = 'Edit')
+function permittedEditButton($route, $permissionName, $modue, $label = 'Edit')
 {
 
-    if (isUserCan($permission, $modue)) {
+    if (isUserCan($permissionName, $modue)) {
         $icon = getIcon('edit');
         return <<<HTML
             <a href='{$route}' class='btn btn-sm btn-warning'>
@@ -38,9 +38,9 @@ function permittedEditButton($route, $permission, $modue, $label = 'Edit')
     }
 }
 
-function permittedDeleteButton($route, $permission, $modue, $label = 'Delete')
+function permittedDeleteButton($route, $permissionName, $modue, $label = 'Delete')
 {
-    if (isUserCan($permission, $modue)) {
+    if (isUserCan($permissionName, $modue)) {
         $deleteIcon = getIcon('delete');
         $csrf = csrf_field();
         $method = method_field('DELETE');
@@ -57,37 +57,70 @@ function permittedDeleteButton($route, $permission, $modue, $label = 'Delete')
     }
 }
 
-function permittedActivateButton($route, $permission, $modue, $label = 'Activate')
+function permittedActivateButton($route, $permissionName, $modue, $label = 'Activate')
 {
     dd();
 }
 
-function permittedDeactivateButton($route, $permission, $modue, $label = 'Deactivate')
+function permittedDeactivateButton($route, $permissionName, $modue, $label = 'Deactivate')
 {
     dd();
 }
 
-function permittedCreateButtonIcon($route, $permission, $modue)
+function permittedShowButtonIcon($route, $permissionName, $modue)
+{
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('show');
+        return <<<HTML
+            <a href='{$route}' class='btn btn-icon btn-outline-primary mb-2'>
+                <span class="tf-icons {$icon}"></span>
+            </a>
+        HTML;
+    }
+}
+
+function permittedCreateButtonIcon($route, $permissionName, $modue)
 {
     dd();
 }
 
-function permittedEditButtonIcon($route, $permission, $modue)
+function permittedEditButtonIcon($route, $permissionName, $modue)
+{
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('edit');
+        return <<<HTML
+                <a href='{$route}' class='btn btn-icon btn-outline-warning mb-2'>
+                    <span class="tf-icons {$icon}"></span>
+                </a>
+            HTML;
+    }
+}
+
+function permittedDeleteButtonIcon($route, $permissionName, $modue)
+{
+    if (isUserCan($permissionName, $modue)) {
+        $icon = getIcon('delete');
+        $csrf = csrf_field();
+        $method = method_field('DELETE');
+
+        return <<<HTML
+            <form action="{$route}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                {$csrf}
+                {$method}
+                <button type="submit" onclick="return confirm('Are you sure to delete?')" class="btn btn-icon btn-outline-danger mb-2">
+                    <span class="tf-icons {$icon}"></span>
+                </button>
+            </form>
+        HTML;
+    }
+}
+
+function permittedActivateButtonIcon($route, $mododule, $permissionName)
 {
     dd();
 }
 
-function permittedDeleteButtonIcon($route, $permission, $modue)
-{
-    dd();
-}
-
-function permittedActivateButtonIcon($route, $mododule, $permission)
-{
-    dd();
-}
-
-function permittedDeactivateButtonIcon($route, $mododule, $permission)
+function permittedDeactivateButtonIcon($route, $mododule, $permissionName)
 {
     dd();
 }

@@ -35,8 +35,8 @@ class PermissionSeeder extends Seeder
             ['name' => 'Activate', 'slug' => 'activate', 'description' => 'Permission to activate resources'],
             ['name' => 'Deactivate', 'slug' => 'deactivate', 'description' => 'Permission to deactivate resources'],
             ['name' => 'Update Role Permission', 'slug' => 'update-role-permissions', 'description' => 'Permission to update Role Permissions resources'],
-            ['name' => 'Read Activity Logs', 'slug' => 'read-activity-log', 'description' => 'Permission to read Activity Logs resources'],
             ['name' => 'Delete User', 'slug' => 'delete-user', 'description' => 'Permission to delete user'],
+            ['name' => 'Read Log History', 'slug' => 'read-log-history', 'description' => 'Permission to read log history']
         ];
 
         foreach ($permissions as $permission) {
@@ -53,8 +53,8 @@ class PermissionSeeder extends Seeder
 
         $modulePermissions = [
             'dashboard' => ['read'],
-            'user' => ['read', 'create', 'update', 'delete', 'activate', 'deactivate', 'read-activity-log'],
-            'role' => ['read', 'create', 'update', 'delete', 'update-role-permissions', 'read-activity-log', 'delete-user']
+            'user' => ['read', 'create', 'update', 'delete', 'activate', 'deactivate', 'read-log-history'],
+            'role' => ['read', 'create', 'update', 'delete', 'update-role-permissions', 'read-log-history', 'delete-user']
         ];
 
         foreach ($modulePermissions as $modulSlug => $permissionSlugs) {
@@ -82,8 +82,8 @@ class PermissionSeeder extends Seeder
         $rolePermissionData = [
             'admin' => [
                 'dashboard' => ['read'],
-                'user' => ['read', 'create', 'update', 'activate', 'deactivate', 'read-activity-log'],
-                'role' => ['read', 'update-role-permissions', 'read-activity-log']
+                'user' => ['read', 'create', 'update', 'activate', 'deactivate', 'read-log-history'],
+                'role' => ['read', 'update-role-permissions', 'read-log-history']
             ],
             'viewer' => [
                 'dashboard' => ['read'],
