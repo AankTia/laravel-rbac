@@ -31,7 +31,7 @@
     </style>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between mb-4">
@@ -188,7 +188,7 @@
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm mb-4">
                 <div class="card-header pb-0">
                     <h5 class="card-title m-0 me-2 mb-2">Latest History</h5>
